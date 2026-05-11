@@ -106,10 +106,16 @@
                     $threshold = $scoringConfig->thresholdFor($score);
                 @endphp
                 <span style="display:none">{{ str_pad($score, 4, '0', STR_PAD_LEFT) }}</span>
+                <a href="/risk/show/{{ $risk->id }}">
                 <span class="badge"
-                      style="background:{{ $threshold['color'] }};color:#fff;padding:2px 8px;font-size:1rem">
+                      style="background:{{ $threshold['color'] }};
+                            color:{{ contrast_color($threshold['color']) }};
+                            padding:2px 8px;
+                            font-size:1rem;
+                            cursor:pointer">
                     {{ $score }}
                 </span>
+                </a>
             </td>
 
             {{-- Status --}}
