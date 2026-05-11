@@ -79,9 +79,9 @@
         <thead>
             <tr>
                 <th class="sortable-column sort-desc">{{ trans("cruds.risk.fields.score") }}</th>
-                <th class="sortable-column">{{ trans("cruds.risk.fields.status") }}</th>
-
                 <th class="sortable-column">{{ trans("cruds.risk.fields.name") }}</th>
+
+                <th class="sortable-column">{{ trans("cruds.risk.fields.status") }}</th>
                 <th class="sortable-column">{{ trans("cruds.risk.fields.owner") }}</th>
 
                 {{-- Colonnes intermédiaires selon la config --}}
@@ -117,18 +117,18 @@
                 </span>
                 </a>
             </td>
-
+            {{-- Name --}}
+            <td>
+                <span style="display:none">{{ $risk->name }}</span>
+                <a href="/risk/show/{{ $risk->id }}">{{ $risk->name }}</a>
+            </td>
             {{-- Status --}}
             <td>
                 <span class="badge {{ \App\Models\Risk::STATUS_COLORS[$risk->status] ?? 'secondary' }}">
                     {{ \App\Models\Risk::STATUS_LABELS[$risk->status] ?? $risk->status }}
                 </span>
             </td>
-
-            <td>
-                <span style="display:none">{{ $risk->name }}</span>
-                <a href="/risk/show/{{ $risk->id }}">{{ $risk->name }}</a>
-            </td>
+            {{-- Owner --}}
             <td>{{ $risk->owner?->name ?? '—' }}</td>
 
             {{-- Colonnes intermédiaires selon la config --}}
