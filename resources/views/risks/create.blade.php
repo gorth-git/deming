@@ -202,7 +202,7 @@
                             @foreach ($measures as $measure)
                                 <option value="{{ $measure->id }}"
                                     {{ in_array($measure->id, old('measure_ids', [])) ? 'selected' : '' }}>
-                                    {{ $measure->name }}
+                                    {{ $measure->clause }} - {{ $measure->name }}
                                 </option>
                             @endforeach
                         </select>

@@ -111,7 +111,7 @@
                 </a>
     	    &nbsp;
                 <a class="button primary" href="/alice/{{ $measure->id }}/edit">
-    	            <span class="mif-wrench"></span>
+    	            <span class="mif-pencil"></span>
     	            &nbsp;
     		    	{{ trans('common.edit') }}
                 </a>

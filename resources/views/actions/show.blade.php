@@ -61,9 +61,9 @@ form, table {
     	    	</div>
         		<div class="cell-4">
                     @foreach($action->measures as $measure)
-                        <a href="/alice/show/{{ $measure->id }}">{{ $measure->clause }}</a>
+                        <a href="/alice/show/{{ $measure->id }}">{{ $measure->clause }}</a> - {{ $measure->name }}
                         @if(!$loop->last)
-                        ,
+                        <br>
                         @endif
                     @endforeach
                 </div>
@@ -196,7 +196,7 @@ form, table {
 	            &nbsp;
                 @endif
                 <a class="button primary" href="/action/edit/{{ $action->id }}">
-    		            <span class="mif-wrench"></span>
+    		            <span class="mif-pencil"></span>
     		            &nbsp;
     			    	{{ trans('common.edit') }}
                 </a>

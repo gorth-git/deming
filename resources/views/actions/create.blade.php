@@ -55,12 +55,13 @@ form, table {
                     <strong>{{ trans('cruds.action.fields.clauses') }}</strong>
 		    	</div>
                 <div class="cell-4">
-                    <select data-role="select" name="measures[]" multiple>
+                    <select data-role="select" name="measures[]" data-filter="true" multiple>
                         @foreach($all_measures as $measure)
 						    <option
                                 value="{{ $measure->id }}"
-                                {{ ((old('measures')!=null) && in_array($measure->id, old('measures'))) ? 'selected' : '' }}
-                                    >{{ $measure->clause }}</option>
+                                {{ ((old('measures')!=null) && in_array($measure->id, old('measures'))) ? 'selected' : '' }}>
+                                {{ $measure->clause }} - {{ $measure->name }}
+                            </option>
 					    @endforeach
 					 </select>
 				</div>

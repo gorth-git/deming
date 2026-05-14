@@ -295,7 +295,7 @@ class ActionController extends Controller
 
         // Get all measures
         $all_measures = DB::table('measures')
-            ->select('id', 'clause')
+            ->select('id', 'clause', 'name')
             ->orderBy('id')
             ->get();
 
@@ -346,7 +346,7 @@ class ActionController extends Controller
 
         // Get all measures
         $all_measures = DB::table('measures')
-            ->select('id', 'clause')
+            ->select('id', 'clause', 'name')
             ->orderBy('id')
             ->get();
 

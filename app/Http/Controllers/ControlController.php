@@ -299,7 +299,7 @@ class ControlController extends Controller
 
         // get all clauses
         $all_measures = DB::table('measures')
-            ->select('id', 'clause')
+            ->select('id', 'clause', 'name')
             ->orderBy('clause')
             ->get();
 
@@ -528,7 +528,7 @@ class ControlController extends Controller
 
         // get all clauses
         $all_measures = DB::table('measures')
-            ->select('id', 'clause')
+            ->select('id', 'clause', 'name')
             ->orderBy('clause')
             ->get();
 

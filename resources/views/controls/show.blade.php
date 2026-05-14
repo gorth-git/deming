@@ -12,9 +12,9 @@
     	</div>
 		<div class="cell-lg-4 cell-md-5">
             @foreach($control->measures as $measure)
-                <a href="/alice/show/{{ $measure->id }}">{{ $measure->clause }}</a>
+                <a href="/alice/show/{{ $measure->id }}">{{ $measure->clause }}</a> - {{ $measure->name }}
                 @if(!$loop->last)
-                ,
+                <br>
                 @endif
             @endforeach
         </div>
@@ -278,7 +278,7 @@
 			@endif
 			@if (Auth::User()->role==1)
 			<a href="/bob/edit/{{ $control->id }}" class="button primary">
-				<span class="mif-wrench"></span>
+				<span class="mif-pencil"></span>
 				&nbsp;
     			{{ trans("common.edit") }}
 			</a>
