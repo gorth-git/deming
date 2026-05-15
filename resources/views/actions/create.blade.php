@@ -54,7 +54,7 @@ form, table {
 	    		<div class="cell-1">
                     <strong>{{ trans('cruds.action.fields.clauses') }}</strong>
 		    	</div>
-                <div class="cell-4">
+                <div class="cell-6">
                     <select data-role="select" name="measures[]" data-filter="true" multiple>
                         @foreach($all_measures as $measure)
 						    <option

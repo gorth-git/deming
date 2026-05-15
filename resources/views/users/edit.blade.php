@@ -42,7 +42,7 @@
 	    		<div class="cell-1">
 					<label>{{ trans('cruds.user.fields.language') }}</label>
 				</div>
-	    		<div class="cell-3">
+	    		<div class="cell-1">
 	    			<select name='language' data-role="select">
 	    				<option {{ (old('language',$user->language) =='de') ? 'selected' : ''}} >de</option>
 	    				<option {{ (old('language',$user->language) =='en') ? 'selected' : ''}} >en</option>
