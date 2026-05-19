@@ -7,10 +7,10 @@ pest()->extend(Tests\TestCase::class)
     ->use(RefreshDatabase::class)
     ->in('Feature');
 
-// Disable rate limiting for API tests
+// Disable rate limiting for all feature tests
 uses()->beforeEach(function () {
     $this->withoutMiddleware(ThrottleRequests::class);
-})->in('Feature/API');
+})->in('Feature/API', 'Feature/Web');
 
 expect()->extend('toBeOne', function () {
     return $this->toBe(1);

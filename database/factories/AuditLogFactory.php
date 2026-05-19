@@ -17,7 +17,7 @@ class AuditLogFactory extends Factory
             'subject_id' => $this->faker->numberBetween(1, 100),
             'subject_type' => 'App\\Models\\Control',
             'user_id' => User::factory(),
-            'properties' => ['{}'],
+            'properties' => ['description' => 'test log entry'],
             'host' => $this->faker->ipv4(),
         ];
     }

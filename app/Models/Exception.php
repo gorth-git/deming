@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -26,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Exception extends Model
 {
+    use HasFactory;
+
     // ── Statuts du workflow ───────────────────────────────────────────────────
     public const STATUS_DRAFT     = 0;
     public const STATUS_SUBMITTED = 1;
