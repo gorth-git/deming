@@ -2,7 +2,7 @@
 
 uses()->group('api');
 
-use App\Models\Domain;
+use App\Models\Control;
 use App\Models\Measure;
 use App\Models\User;
 use Laravel\Passport\Passport;
@@ -30,21 +30,19 @@ test('index is forbidden for non-api users', function () {
 });
 
 test('store creates a measure', function () {
-    $domain = Domain::factory()->create();
-
     $data = [
-        'domain_id' => $domain->id,
-        'clause' => '5.1.1',
-        'name' => 'Access Control Policy',
-        'objective' => 'Ensure access is controlled',
+        'name'        => 'Quarterly Access Review',
+        'objective'   => 'Review access rights quarterly',
+        'plan_date'   => '2026-06-01',
+        'periodicity' => 3,
     ];
 
     $response = $this->postJson('/api/measures', $data);
 
     $response->assertStatus(201)
-        ->assertJsonFragment(['clause' => '5.1.1']);
+        ->assertJsonFragment(['name' => 'Quarterly Access Review']);
 
-    $this->assertDatabaseHas('measures', ['clause' => '5.1.1']);
+    $this->assertDatabaseHas('measures', ['name' => 'Quarterly Access Review']);
 });
 
 test('show returns a single measure with controls', function () {
@@ -54,7 +52,7 @@ test('show returns a single measure with controls', function () {
 
     $response->assertStatus(200)
         ->assertJsonFragment(['id' => $measure->id])
-        ->assertJsonStructure(['controls']);
+        ->assertJsonStructure(['measures']);
 });
 
 test('update modifies a measure', function () {
@@ -62,8 +60,6 @@ test('update modifies a measure', function () {
 
     $response = $this->putJson("/api/measures/{$measure->id}", [
         'name' => 'Updated Measure Name',
-        'clause' => $measure->clause,
-        'domain_id' => $measure->domain_id,
     ]);
 
     $response->assertStatus(200);
@@ -71,16 +67,18 @@ test('update modifies a measure', function () {
 });
 
 test('store syncs controls when provided', function () {
-    $domain = Domain::factory()->create();
+    $control = Control::factory()->create();
 
     $response = $this->postJson('/api/measures', [
-        'domain_id' => $domain->id,
-        'clause' => '6.2.1',
-        'name' => 'Mobile Device Policy',
-        'controls' => [],
+        'name'      => 'Measure with Control',
+        'plan_date' => '2026-06-01',
+        'measures'  => [$control->id],
     ]);
 
     $response->assertStatus(201);
+
+    $measure = Measure::where('name', 'Measure with Control')->first();
+    expect($measure->controls()->count())->toBe(1);
 });
 
 test('destroy deletes a measure', function () {
