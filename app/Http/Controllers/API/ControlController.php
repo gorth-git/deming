@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Action;
-use App\Models\Document;
-use App\Models\Measure;
+use App\Models\Control;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -16,80 +14,49 @@ class ControlController extends Controller
     {
         abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $activities = Measure::all();
+        $controls = Control::all();
 
-        return response()->json($activities);
+        return response()->json($controls);
     }
 
     public function store(Request $request)
     {
         abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $measure = Measure::create($request->all());
-
-        if ($request->has('measures')) {
-            $measure->controls()->sync($request->input('measures', []));
-        }
-        if ($request->has('actions')) {
-            Action::where('measure_id', $measure->id)->update(['measure_id' => null]);
-            Action::whereIn('id', $request->input('actions', []))->update(['measure_id' => $measure->id]);
-        }
-        if ($request->has('documents')) {
-            Document::where('measure_id', $measure->id)->update(['measure_id' => null]);
-            Document::whereIn('id', $request->input('documents', []))->update(['measure_id' => $measure->id]);
-        }
-        if ($request->has('users')) {
-            $measure->users()->sync($request->input('users', []));
-        }
-        if ($request->has('groups')) {
-            $measure->groups()->sync($request->input('groups', []));
+        $control = Control::query()->create($request->all());
+        if ($request->has('controls')) {
+            $control->allMeasures()->sync($request->input('controls', []));
         }
 
-        return response()->json($measure, 201);
+        return response()->json($control, 201);
     }
 
-    public function show(Measure $measure)
+    public function show(Control $control)
     {
         abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $measure['measures'] = $measure->controls()->pluck('id');
+        $control['controls'] = $control->allMeasures()->pluck('id');
 
-        return response()->json($measure);
+        return response()->json($control);
     }
 
-    public function update(Request $request, Measure $measure)
+    public function update(Request $request, Control $control)
     {
         abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $measure->update($request->all());
-
-        if ($request->has('measures')) {
-            $measure->controls()->sync($request->input('measures', []));
-        }
-        if ($request->has('actions')) {
-            Action::where('measure_id', $measure->id)->update(['measure_id' => null]);
-            Action::whereIn('id', $request->input('actions', []))->update(['measure_id' => $measure->id]);
-        }
-        if ($request->has('documents')) {
-            Document::where('measure_id', $measure->id)->update(['measure_id' => null]);
-            Document::whereIn('id', $request->input('documents', []))->update(['measure_id' => $measure->id]);
-        }
-        if ($request->has('users')) {
-            $measure->users()->sync($request->input('users', []));
-        }
-        if ($request->has('groups')) {
-            $measure->groups()->sync($request->input('groups', []));
+        $control->update($request->all());
+        if ($request->has('controls')) {
+            $control->allMeasures()->sync($request->input('controls', []));
         }
 
         return response()->json();
     }
 
-    public function destroy(Measure $measure)
+    public function destroy(Control $control)
     {
         abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $measure->controls()->detach();
-        $measure->delete();
+        $control->delete();
 
         return response()->json();
     }
