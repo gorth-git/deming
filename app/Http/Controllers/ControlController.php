@@ -25,7 +25,7 @@ class ControlController extends Controller
     public function index(Request $request)
     {
         // Not for API
-        abort_if(Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Auth::user()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         // Domain filter
         $domain = $request->get('domain');
@@ -118,14 +118,14 @@ class ControlController extends Controller
         $scopes = DB::table('measures')
             ->whereNotNull('scope')
             ->where('scope', '<>', '');
-        if (Auth::User()->role === 5) {
+        if (Auth::user()->role === 5) {
             $scopes = $scopes
                 ->leftJoin('control_user', 'measures.id', '=', 'control_user.measure_id')
                 ->leftJoin('control_user_group', 'measures.id', '=', 'control_user_group.measure_id')
                 ->leftJoin('user_user_group', 'control_user_group.user_group_id', '=', 'user_user_group.user_group_id')
                 ->where(function ($query) {
-                    $query->where('control_user.user_id', '=', Auth::User()->id)
-                        ->orWhere('user_user_group.user_id', '=', Auth::User()->id);
+                    $query->where('control_user.user_id', '=', Auth::user()->id)
+                        ->orWhere('user_user_group.user_id', '=', Auth::user()->id);
                 });
         }
         $scopes = $scopes
@@ -147,14 +147,14 @@ class ControlController extends Controller
             ->leftjoin('domains', 'controls.domain_id', '=', 'domains.id');
 
         // Filter for auditee
-        if (Auth::User()->role === 5) {
+        if (Auth::user()->role === 5) {
             $measures = $measures
                 ->leftJoin('control_user', 'm1.id', '=', 'control_user.measure_id')
                 ->leftJoin('control_user_group', 'm1.id', '=', 'control_user_group.measure_id')
                 ->leftJoin('user_user_group', 'control_user_group.user_group_id', '=', 'user_user_group.user_group_id')
                 ->where(function ($query) {
-                    $query->where('control_user.user_id', '=', Auth::User()->id)
-                        ->orWhere('user_user_group.user_id', '=', Auth::User()->id);
+                    $query->where('control_user.user_id', '=', Auth::user()->id)
+                        ->orWhere('user_user_group.user_id', '=', Auth::user()->id);
                 });
         }
 
@@ -198,13 +198,13 @@ class ControlController extends Controller
                 ->where('m1.plan_date', '<', Carbon::today()->format('Y-m-d'))
                 ->whereIn('m1.status', [0, 1]);
         } elseif ($status === '1') {
-            if (Auth::User()->role === 5) {
+            if (Auth::user()->role === 5) {
                 $measures = $measures->whereIn('m1.status', [1, 2]);
             } else {
                 $measures = $measures->where('m1.status', 2);
             }
         } elseif ($status === '2') {
-            if (Auth::User()->role === 5) {
+            if (Auth::user()->role === 5) {
                 $measures = $measures->where('m1.status', 0);
             } else {
                 $measures = $measures->whereIn('m1.status', [0, 1]);
@@ -268,7 +268,7 @@ class ControlController extends Controller
     public function create()
     {
         abort_if(
-            (Auth::User()->role !== 1) && (Auth::User()->role !== 2),
+            (Auth::user()->role !== 1) && (Auth::user()->role !== 2),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -334,7 +334,7 @@ class ControlController extends Controller
     public function store(Request $request)
     {
         abort_if(
-            (Auth::User()->role !== 1) && (Auth::User()->role !== 2),
+            (Auth::user()->role !== 1) && (Auth::user()->role !== 2),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -391,22 +391,22 @@ class ControlController extends Controller
     public function show(int $id)
     {
         abort_if(
-            Auth::User()->isAPI(),
+            Auth::user()->isAPI(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
 
         abort_if(
-            Auth::User()->isAuditee() &&
+            Auth::user()->isAuditee() &&
                 ! (DB::table('control_user')
                     ->where('measure_id', $id)
-                    ->where('user_id', Auth::User()->id)
+                    ->where('user_id', Auth::user()->id)
                     ->exists()
                     ||
                 DB::table('control_user_group')
                     ->join('user_user_group', 'control_user_group.user_group_id', '=', 'user_user_group.user_group_id')
                     ->where('control_user_group.measure_id', $id)
-                    ->where('user_user_group.user_id', Auth::User()->id)
+                    ->where('user_user_group.user_id', Auth::user()->id)
                     ->exists()),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
@@ -455,7 +455,7 @@ class ControlController extends Controller
     public function edit(int $id)
     {
         abort_if(
-            ! Auth::User()->isAdmin(),
+            ! Auth::user()->isAdmin(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -543,7 +543,7 @@ class ControlController extends Controller
     public function clone(Request $request)
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -637,7 +637,7 @@ class ControlController extends Controller
     public function destroy(int $id)
     {
         abort_if(
-            Auth::User()->role !== 1,
+            Auth::user()->role !== 1,
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -735,7 +735,7 @@ class ControlController extends Controller
     public function domains(Request $request)
     {
         abort_if(
-            Auth::User()->role === 4 || Auth::User()->role === 5,
+            Auth::user()->role === 4 || Auth::user()->role === 5,
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -893,7 +893,7 @@ class ControlController extends Controller
     public function measures(Request $request)
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -955,7 +955,7 @@ class ControlController extends Controller
     public function attributes()
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -1008,7 +1008,7 @@ class ControlController extends Controller
     public function plan(int $id)
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -1083,7 +1083,7 @@ class ControlController extends Controller
     public function unplan(Request $request)
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -1124,7 +1124,7 @@ class ControlController extends Controller
     public function doPlan(Request $request)
     {
         abort_if(
-            Auth::User()->role !== 1 && Auth::User()->role !== 2,
+            Auth::user()->role !== 1 && Auth::user()->role !== 2,
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -1213,7 +1213,7 @@ class ControlController extends Controller
     public function doMake(Request $request)
     {
         abort_if(
-            Auth::User()->role === 4,
+            Auth::user()->role === 4,
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -1237,7 +1237,7 @@ class ControlController extends Controller
         $measure->score           = request('score');
         $measure->realisation_date = request('realisation_date');
 
-        if (Auth::User()->role === 1 || Auth::User()->role === 2) {
+        if (Auth::user()->role === 1 || Auth::user()->role === 2) {
             $measure->plan_date   = request('plan_date');
             $measure->action_plan = request('action_plan');
 
@@ -1268,7 +1268,7 @@ class ControlController extends Controller
             $measure->realisation_date = date('Y-m-d', strtotime('today'));
         }
 
-        if (Auth::User()->role === 5) {
+        if (Auth::user()->role === 5) {
             $measure->status = 1;
         } else {
             $measure->status = 2;
@@ -1280,7 +1280,7 @@ class ControlController extends Controller
                 $new_measure->note            = null;
                 $new_measure->score           = null;
                 $new_measure->status          = 0;
-                if (Auth::User()->isAdmin() || Auth::User()->isUser()) {
+                if (Auth::user()->isAdmin() || Auth::user()->isUser()) {
                     $new_measure->plan_date = request('next_date');
                 } else {
                     if ($measure->periodicity === -1) {
@@ -1316,7 +1316,7 @@ class ControlController extends Controller
     public function save(Request $request)
     {
         abort_if(
-            ! Auth::User()->isAdmin(),
+            ! Auth::user()->isAdmin(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -1384,7 +1384,7 @@ class ControlController extends Controller
     public function draft(Request $request)
     {
         abort_if(
-            Auth::User()->isAPI(),
+            Auth::user()->isAPI(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -1407,7 +1407,7 @@ class ControlController extends Controller
         $measure->note         = request('note');
         $measure->score        = request('score') === 0 ? null : request('score');
 
-        if (Auth::User()->isAdmin() || Auth::User()->isUser()) {
+        if (Auth::user()->isAdmin() || Auth::user()->isUser()) {
             $measure->plan_date   = request('plan_date');
             $measure->action_plan = request('action_plan');
         }
@@ -1424,7 +1424,7 @@ class ControlController extends Controller
     public function reject(Request $request)
     {
         abort_if(
-            ! (Auth::User()->isAdmin() || Auth::User()->isUser()),
+            ! (Auth::user()->isAdmin() || Auth::user()->isUser()),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -1461,7 +1461,7 @@ class ControlController extends Controller
     public function accept(Request $request)
     {
         abort_if(
-            ! (Auth::User()->role === 1 || Auth::User()->role === 2),
+            ! (Auth::user()->role === 1 || Auth::user()->role === 2),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -1517,7 +1517,7 @@ class ControlController extends Controller
     public function export()
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -1534,7 +1534,7 @@ class ControlController extends Controller
     public function tempo(Request $request)
     {
         abort_if(
-            ! Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            ! Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -1594,7 +1594,7 @@ class ControlController extends Controller
     public function template(Request $request)
     {
         abort_if(
-            Auth::User()->isAPI(),
+            Auth::user()->isAPI(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -1609,7 +1609,7 @@ class ControlController extends Controller
 
         $template_filename = storage_path('app/models/control_.docx');
         if (! file_exists($template_filename)) {
-            $template_filename = storage_path('app/models/control_' . Auth::User()->language . '.docx');
+            $template_filename = storage_path('app/models/control_' . Auth::user()->language . '.docx');
             if (! file_exists($template_filename)) {
                 $template_filename = storage_path('app/models/control_en.docx');
             }

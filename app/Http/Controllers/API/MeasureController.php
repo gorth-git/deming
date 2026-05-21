@@ -14,7 +14,7 @@ class MeasureController extends Controller
 {
     public function index()
     {
-        abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $activities = Measure::all();
 
@@ -23,7 +23,7 @@ class MeasureController extends Controller
 
     public function store(Request $request)
     {
-        abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $measure = Measure::create($request->all());
 
@@ -50,7 +50,7 @@ class MeasureController extends Controller
 
     public function show(Measure $measure)
     {
-        abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $measure['measures'] = $measure->controls()->pluck('id');
 
@@ -59,7 +59,7 @@ class MeasureController extends Controller
 
     public function update(Request $request, Measure $measure)
     {
-        abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $measure->update($request->all());
 
@@ -86,7 +86,7 @@ class MeasureController extends Controller
 
     public function destroy(Measure $measure)
     {
-        abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $measure->controls()->detach();
         $measure->delete();

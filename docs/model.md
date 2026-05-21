@@ -4,9 +4,12 @@ The key tables are the following:
 
 - attributes  
 - domains  
-- measures  
 - controls  
+- measures  
 - documents  
+
+> **Roles:** `controls` = **security measures** (requirements to implement).  
+> `measures` = **audit instances** (periodic verifications of those requirements).
 
 ## **Table Dependencies**
 
@@ -14,25 +17,25 @@ Overview: who uses what.
 
 ```mermaid
 flowchart LR
-    domains -->|"domain_id (1:N)"| measures
-    measures -->|"controls[ ] (N:N)"| controls
+    domains -->|"domain_id (1:N)"| controls
     controls -->|"measures[ ] (N:N)"| measures
-    attributes -.->|"optional"| measures
+    measures -->|"controls[ ] (N:N)"| controls
     attributes -.->|"optional"| controls
-    controls -.->|"next_id (self)"| controls
-    documents -.->|"optional"| controls
+    attributes -.->|"optional"| measures
+    measures -.->|"next_id (self)"| measures
+    documents -.->|"optional"| measures
 ```
 
 The detailed schema below describes the fields of each table.
 
 ```mermaid
 erDiagram
-    domains ||--o{ measures : "domain_id"
-    measures }o--o{ controls : "many-to-many"
-    attributes }o--o{ measures : "optional"
+    domains ||--o{ controls : "domain_id"
+    controls }o--o{ measures : "many-to-many"
     attributes }o--o{ controls : "optional"
-    controls o|--o| controls : "next_id"
-    documents }o--o| controls : "optional"
+    attributes }o--o{ measures : "optional"
+    measures o|--o| measures : "next_id"
+    documents }o--o| measures : "optional"
 
     domains {
         int id PK
@@ -45,16 +48,16 @@ erDiagram
         string name
         string values
     }
-    measures {
+    controls {
         int id PK
         int domain_id FK
         string name
         string clause
         string objective
-        array controls
+        array measures
         array attributes
     }
-    controls {
+    measures {
         int id PK
         int next_id FK
         string name
@@ -62,11 +65,12 @@ erDiagram
         date plan_date
         date realisation_date
         int status
-        array measures
+        array controls
         array attributes
     }
     documents {
         int id PK
+        int measure_id FK
     }
 ```
 
@@ -74,13 +78,14 @@ The relationships are as follows:
 
 | Link | Type | Description |
 | --- | --- | --- |
-| `domains` → `measures` | Foreign key (1:N) | Each measure references its domain via `domain_id` |
-| `measures` ↔ `controls` | Many-to-many (bidirectional) | Each measure lists its controls in `controls[]`; each control lists its measures in `measures[]` |
-| `attributes` → `measures` | Optional | The `attributes` field of a measure may contain a list of attribute IDs |
-| `attributes` → `controls` | Optional | Same for controls |
-| `controls` → `controls` | Self-reference via `next_id` | Allows chaining successive campaigns of the same control |
+| `domains` → `controls` | Foreign key (1:N) | Each security measure references its domain via `domain_id` |
+| `controls` ↔ `measures` | Many-to-many (bidirectional) | Each security measure lists its audit instances in `measures[]`; each audit instance lists its security measures in `controls[]` |
+| `attributes` → `controls` | Optional | The `attributes` field of a security measure may contain a list of attribute IDs |
+| `attributes` → `measures` | Optional | Same for audit instances |
+| `measures` → `measures` | Self-reference via `next_id` | Allows chaining successive campaigns of the same audit |
+| `documents` → `measures` | Optional (1:N) | Documents and evidence are attached to audit instances via `measure_id` |
 
-> **Note:** There is no exposed join table for the measures/controls relationship.  
+> **Note:** There is no exposed join table for the controls/measures relationship.  
 > IDs are directly embedded in each object on both sides.
 
 ---
@@ -88,7 +93,7 @@ The relationships are as follows:
 ## **attributes**
 
 Attributes are multi-value classification reference sets.  
-Each attribute defines a set of tags (prefixed with `#`) that can be associated with measures and controls.
+Each attribute defines a set of tags (prefixed with `#`) that can be associated with security measures and audit instances.
 
 | Field | Type | Description |
 | --- | --- | --- |
@@ -114,7 +119,7 @@ Example:
 
 ## **domains**
 
-Domains group measures by thematic area.  
+Domains group security measures by thematic area.  
 Each domain belongs to a regulatory or methodological framework (`framework`).
 
 | Field | Type | Description |
@@ -141,25 +146,25 @@ Example:
 
 ---
 
-## **measures**
+## **controls**
 
 Security measures describe the requirements to be implemented.  
-Each measure belongs to a domain and is verified by one or more controls.
+Each security measure belongs to a domain and is verified by one or more audit instances.
 
 | Field | Type | Description |
 | --- | --- | --- |
 | `id` | integer | Unique identifier (PK) |
 | `domain_id` | integer | Reference to `domains.id` (FK, required) |
-| `name` | string | Name of the measure, often with article number (e.g., *Art.21.2.a – Risk Analysis*) |
+| `name` | string | Name of the security measure, often with article number (e.g., *Art.21.2.a – Risk Analysis*) |
 | `clause` | string | Short identifier of the normative clause (e.g., `NIS2-Art.21.2.a`) |
-| `objective` | string | Expected objective of this measure |
+| `objective` | string | Expected objective of this security measure |
 | `input` | string \| null | Data or resources required for implementation |
 | `model` | string \| null | Recommended operational model or method |
 | `indicator` | string \| null | Structured performance indicator (Target, Frequency, Owner) |
 | `action_plan` | string \| null | Associated action or treatment plan |
 | `standard` | string \| null | Reference to an external standard (e.g., ISO 27001) |
 | `attributes` | array \| null | List of associated attribute IDs; `null` if none |
-| `controls` | array | List of control IDs verifying this measure |
+| `measures` | array | List of audit instance IDs verifying this security measure |
 | `created_at` | datetime | Creation date |
 | `updated_at` | datetime | Last modification date |
 
@@ -178,39 +183,38 @@ Example:
   "action_plan": "Risk treatment plan approved by Management",
   "standard": null,
   "attributes": null,
-  "controls": [1]
+  "measures": [1]
 }
 ```
 
 ---
 
-## **controls**
+## **measures**
 
-Controls describe periodic operational verifications.  
-A control checks whether one or more measures are properly applied.  
+Audit instances describe periodic operational verifications.  
+An audit instance checks whether one or more security measures are properly applied.  
 It contains planning, execution, and result data.
 
 | Field | Type | Description |
 | --- | --- | --- |
 | `id` | integer | Unique identifier (PK) |
 | `name` | string | Title of the verification |
-| `objective` | string \| null | Specific objective of this control |
+| `objective` | string \| null | Specific objective of this audit instance |
 | `input` | string \| null | Data or evidence required for execution |
 | `model` | string \| null | Operating procedure |
-| `indicator` | string \| null | Result indicator |
-| `action_plan` | string \| null | Corrective actions if the control fails |
+| `action_plan` | string \| null | Corrective actions if the audit fails |
 | `periodicity` | integer \| null | Frequency in months (e.g., `12` = annual, `3` = quarterly) |
 | `plan_date` | date \| null | Planned execution date (`YYYY-MM-DD`) |
-| `realisation_date` | date \| null | Actual execution date of the last control |
+| `realisation_date` | date \| null | Actual execution date |
 | `observations` | string \| null | Free comments on the result |
-| `score` | number \| null | Numeric score from the evaluation; `null` if not performed |
-| `note` | string \| null | Additional qualitative note |
-| `status` | integer | Current status of the control (see below) |
-| `next_id` | integer \| null | ID of the next control in the historical chain (self FK) |
+| `score` | number \| null | Numeric score from the evaluation; `null` if not yet performed |
+| `note` | number \| null | Additional qualitative note |
+| `status` | integer | Current status of the audit instance (see below) |
+| `next_id` | integer \| null | ID of the next audit instance in the historical chain (self FK) |
 | `standard` | string \| null | External normative reference |
 | `attributes` | array \| null | List of associated attribute IDs; `null` if none |
 | `scope` | string \| null | Scope of application (entity, site, system) |
-| `measures` | array | List of measure IDs verified by this control |
+| `controls` | array | List of security measure IDs verified by this audit instance |
 | `created_at` | datetime | Creation date |
 | `updated_at` | datetime | Last modification date |
 
@@ -218,11 +222,9 @@ It contains planning, execution, and result data.
 
 | Value | Meaning |
 | --- | --- |
-| `0` | Not performed / To be planned |
-| `1` | In progress |
-| `2` | Performed |
-| `3` | Validated / Compliant |
-| `4` | Non-compliant |
+| `0` | To do / Not yet performed (`realisation_date` is null) |
+| `1` | Proposed (auditee submitted a result, pending validation) |
+| `2` | Done / Completed (`realisation_date` is set) |
 
 Example:
 
@@ -236,12 +238,12 @@ Example:
   "plan_date": "2026-07-31",
   "realisation_date": "2025-03-25",
   "score": null,
-  "status": 0,
+  "status": 2,
   "next_id": null,
   "standard": null,
   "attributes": null,
   "scope": null,
-  "measures": [1]
+  "controls": [1]
 }
 ```
 
@@ -249,4 +251,5 @@ Example:
 
 ## **documents**
 
-The `documents` table is intended to store attachments and documentary evidence associated with controls or measures.
+The `documents` table stores attachments and documentary evidence associated with audit instances.  
+Each document is linked to a `measures` record via `measure_id`.

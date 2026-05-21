@@ -25,7 +25,7 @@ class MeasureImportController extends Controller
     public function show()
     {
         // Only for Administrator
-        abort_if(Auth::User()->role !== 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Auth::user()->role !== 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $models = Storage::disk('local')->files('repository');
 
@@ -49,7 +49,7 @@ class MeasureImportController extends Controller
 
     public function download(Request $request)
     {
-        abort_if(Auth::User()->role !== 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Auth::user()->role !== 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         \Log::debug('download called');
 
@@ -89,7 +89,7 @@ class MeasureImportController extends Controller
     public function import(Request $request)
     {
         // Only for Administrator
-        abort_if(Auth::User()->role !== 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Auth::user()->role !== 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $request->validate([
             'file' => 'required_without:model|mimes:xls,xlsx',

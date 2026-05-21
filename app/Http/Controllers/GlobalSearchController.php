@@ -18,7 +18,7 @@ class GlobalSearchController extends Controller
     public function search(Request $request)
     {
         // Not for API
-        abort_if(Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Auth::user()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $term = $request->input('search');
         if ($term === null) {
@@ -29,7 +29,7 @@ class GlobalSearchController extends Controller
 
         foreach ($this->models as $model) {
             // Auditee only search on measures (audit instances)
-            if (Auth::User()->isAuditee() && $model !== \App\Models\Measure::class) {
+            if (Auth::user()->isAuditee() && $model !== \App\Models\Measure::class) {
                 continue;
             }
 
@@ -37,7 +37,7 @@ class GlobalSearchController extends Controller
             $fields = $model::$searchable;
 
             // Auditee only search on assigned measures (audit instances)
-            if (Auth::User()->isAuditee()) {
+            if (Auth::user()->isAuditee()) {
                 $userId = Auth::id();
                 $query = $query->where(function($q) use ($userId) {
                     $q->whereExists(function($subQ) use ($userId) {

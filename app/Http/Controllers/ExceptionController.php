@@ -45,7 +45,7 @@ class ExceptionController extends Controller
     public function index(Request $request): View
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -76,10 +76,10 @@ class ExceptionController extends Controller
         ]);
 
         $exceptions  = $query->paginate(50)->withQueryString();
-        $measures    = Control::query()->orderBy('name')->get();
+        $controls    = Control::query()->orderBy('name')->get();
         $filters     = $request->only(['status', 'measure_id', 'expired']);
 
-        return view('exceptions.index', compact('exceptions', 'measures', 'filters'));
+        return view('exceptions.index', compact('exceptions', 'controls', 'filters'));
     }
 
     // =========================================================================
@@ -89,21 +89,21 @@ class ExceptionController extends Controller
     public function create(): View
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
 
-        $measures = Control::query()->orderBy('name')->get();
+        $controls = Control::query()->orderBy('name')->get();
         $statuses = Exception::STATUS_LABELS;
 
-        return view('exceptions.create', compact('measures', 'statuses'));
+        return view('exceptions.create', compact('controls', 'statuses'));
     }
 
     public function store(Request $request): RedirectResponse
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -125,7 +125,7 @@ class ExceptionController extends Controller
     public function show(int $id): View
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -143,7 +143,7 @@ class ExceptionController extends Controller
     public function edit(int $id): View
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -157,16 +157,16 @@ class ExceptionController extends Controller
             'Une exception soumise ou approuvée ne peut pas être modifiée.'
         );
 
-        $measures = Control::query()->orderBy('name')->get();
+        $controls = Control::query()->orderBy('name')->get();
         $statuses = Exception::STATUS_LABELS;
 
-        return view('exceptions.edit', compact('exception', 'measures', 'statuses'));
+        return view('exceptions.edit', compact('exception', 'controls', 'statuses'));
     }
 
     public function update(Request $request): RedirectResponse
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -202,7 +202,7 @@ class ExceptionController extends Controller
     public function destroy(int $id): RedirectResponse
     {
         abort_if(
-            !Auth::User()->isAdmin(),
+            !Auth::user()->isAdmin(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -220,7 +220,7 @@ class ExceptionController extends Controller
     public function submit(Request $request): RedirectResponse
     {
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -250,7 +250,7 @@ class ExceptionController extends Controller
     public function approve(Request $request): RedirectResponse
     {
         abort_if(
-            !Auth::User()->isAdmin(),
+            !Auth::user()->isAdmin(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -286,7 +286,7 @@ class ExceptionController extends Controller
     public function reject(Request $request): RedirectResponse
     {
         abort_if(
-            !Auth::User()->isAdmin(),
+            !Auth::user()->isAdmin(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );

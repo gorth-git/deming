@@ -22,7 +22,7 @@ class MeasureController extends Controller
     public function index(Request $request): View
     {
         // Not for API
-        abort_if(Auth::User()->isAPI(),
+        abort_if(Auth::user()->isAPI(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -127,7 +127,7 @@ class MeasureController extends Controller
      */
     public function create()
     {
-        abort_if(!Auth::User()->isAdmin() && !Auth::User()->isUser(),
+        abort_if(!Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -159,7 +159,7 @@ class MeasureController extends Controller
      */
     public function store(Request $request)
     {
-        abort_if(!Auth::User()->isAdmin() && !Auth::User()->isUser(),
+        abort_if(!Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -196,19 +196,19 @@ class MeasureController extends Controller
      */
     public function show(int $id)
     {
-        abort_if(Auth::User()->isAPI(),
+        abort_if(Auth::user()->isAPI(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
 
         // Auditee: must have an assigned measure on this control
         abort_if(
-            (Auth::User()->isAuditee()) &&
+            (Auth::user()->isAuditee()) &&
             ! DB::table('measures')
                 ->join('control_measure', 'control_measure.measure_id', '=', 'measures.id')
                 ->join('control_user', 'control_user.measure_id', '=', 'measures.id')
                 ->where('control_measure.control_id', $id)
-                ->where('control_user.user_id', Auth::User()->id)
+                ->where('control_user.user_id', Auth::user()->id)
                 ->exists(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
@@ -235,7 +235,7 @@ class MeasureController extends Controller
      */
     public function edit(int $id)
     {
-        abort_if(!Auth::User()->isAdmin() && !Auth::User()->isUser(),
+        abort_if(!Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -271,7 +271,7 @@ class MeasureController extends Controller
      */
     public function clone(int $id)
     {
-        abort_if(!Auth::User()->isAdmin() && !Auth::User()->isUser(),
+        abort_if(!Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -317,7 +317,7 @@ class MeasureController extends Controller
      */
     public function update(Request $request)
     {
-        abort_if(!Auth::User()->isAdmin() && !Auth::User()->isUser(),
+        abort_if(!Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -356,9 +356,9 @@ class MeasureController extends Controller
     public function destroy(Request $request)
     {
         abort_if(
-            (Auth::User()->role === 3) ||
-            (Auth::User()->role === 4) ||
-            (Auth::User()->role === 5),
+            (Auth::user()->role === 3) ||
+            (Auth::user()->role === 4) ||
+            (Auth::user()->role === 5),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -390,9 +390,9 @@ class MeasureController extends Controller
     public function plan(Request $request): View
     {
         abort_if(
-            (Auth::User()->role === 3) ||
-            (Auth::User()->role === 4) ||
-            (Auth::User()->role === 5),
+            (Auth::user()->role === 3) ||
+            (Auth::user()->role === 4) ||
+            (Auth::user()->role === 5),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -468,9 +468,9 @@ class MeasureController extends Controller
     public function activate(Request $request): RedirectResponse
     {
         abort_if(
-            (Auth::User()->role === 3) ||
-            (Auth::User()->role === 4) ||
-            (Auth::User()->role === 5),
+            (Auth::user()->role === 3) ||
+            (Auth::user()->role === 4) ||
+            (Auth::user()->role === 5),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -524,9 +524,9 @@ class MeasureController extends Controller
     public function disable(Request $request)
     {
         abort_if(
-            (Auth::User()->role === 3) ||
-            (Auth::User()->role === 4) ||
-            (Auth::User()->role === 5),
+            (Auth::user()->role === 3) ||
+            (Auth::user()->role === 4) ||
+            (Auth::user()->role === 5),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -553,9 +553,9 @@ class MeasureController extends Controller
     public function export()
     {
         abort_if(
-            (Auth::User()->role === 3) ||
-            (Auth::User()->role === 4) ||
-            (Auth::User()->role === 5),
+            (Auth::user()->role === 3) ||
+            (Auth::user()->role === 4) ||
+            (Auth::user()->role === 5),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );

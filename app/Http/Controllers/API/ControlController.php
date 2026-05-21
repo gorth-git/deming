@@ -12,7 +12,7 @@ class ControlController extends Controller
 {
     public function index()
     {
-        abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $controls = Control::all();
 
@@ -21,7 +21,7 @@ class ControlController extends Controller
 
     public function store(Request $request)
     {
-        abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $control = Control::query()->create($request->all());
         if ($request->has('controls')) {
@@ -33,7 +33,7 @@ class ControlController extends Controller
 
     public function show(Control $control)
     {
-        abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $control['controls'] = $control->allMeasures()->pluck('id');
 
@@ -42,7 +42,7 @@ class ControlController extends Controller
 
     public function update(Request $request, Control $control)
     {
-        abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $control->update($request->all());
         if ($request->has('controls')) {
@@ -54,7 +54,7 @@ class ControlController extends Controller
 
     public function destroy(Control $control)
     {
-        abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $control->allMeasures()->detach();
         $control->delete();

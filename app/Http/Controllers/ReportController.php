@@ -22,7 +22,7 @@ class ReportController extends Controller
     {
         // For administrators and users only
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -46,7 +46,7 @@ class ReportController extends Controller
     {
         // For administrators and users only
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -127,7 +127,7 @@ class ReportController extends Controller
     {
         // For administrators and users only
         abort_if(
-            !Auth::User()->isAdmin() && !Auth::User()->isUser(),
+            !Auth::user()->isAdmin() && !Auth::user()->isUser(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -143,7 +143,7 @@ class ReportController extends Controller
             ->toArray();
 
         // Get all security measures (controls) with scope
-        $measures = DB::table('controls')
+        $controls = DB::table('controls')
             ->select(
                 [
                     'domains.title',
@@ -190,21 +190,21 @@ class ReportController extends Controller
             $sheet->getStyle(chr(ord('D') + $i))->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
         }
 
-        // loop on measures
+        // loop on controls
         $cur_clause = null;
         $row = 1;
-        foreach ($measures as $measure) {
-            if ($cur_clause !== $measure->clause) {
-                $cur_clause = $measure->clause;
+        foreach ($controls as $control) {
+            if ($cur_clause !== $control->clause) {
+                $cur_clause = $control->clause;
                 $row++;
-                $sheet->setCellValue("A{$row}", $measure->title);
-                $sheet->setCellValue("B{$row}", $measure->clause);
-                $sheet->setCellValue("C{$row}", $measure->name);
+                $sheet->setCellValue("A{$row}", $control->title);
+                $sheet->setCellValue("B{$row}", $control->clause);
+                $sheet->setCellValue("C{$row}", $control->name);
             }
             // find row
-            $key = array_search($measure->scope, $scopes);
+            $key = array_search($control->scope, $scopes);
             $col = chr(ord('D') + $key);
-            $sheet->setCellValue("{$col}{$row}", $measure->plan_date);
+            $sheet->setCellValue("{$col}{$row}", $control->plan_date);
         }
 
         // export to XLSX
@@ -223,7 +223,7 @@ class ReportController extends Controller
         string $start_date,
         string $end_date
     ) {
-        $controls = Measure::where(
+        $measures = Measure::where(
             [
                 ['realisation_date','>=',$start_date],
                 ['realisation_date','<',$end_date],
@@ -231,13 +231,13 @@ class ReportController extends Controller
         );
 
         if ($framework !== null) {
-            $controls = $controls
+            $measures = $measures
                 ->join('control_measure', 'measures.id', '=', 'control_measure.measure_id')
                 ->join('controls', 'control_measure.control_id', '=', 'controls.id')
                 ->join('domains', 'controls.domain_id', '=', 'domains.id')
                 ->where('domains.framework', '=', $framework);
         }
-        $controls = $controls
+        $measures = $measures
             ->where('status', 2)
             ->orderBy('realisation_date')
             ->get();
@@ -266,17 +266,17 @@ class ReportController extends Controller
         $table->addCell(2000, ['bgColor' => '#FFD5CA'])
             ->addText(trans('cruds.control.fields.score'), ['bold' => true], ['align' => 'center']);
 
-        foreach ($controls as $control) {
+        foreach ($measures as $measure) {
             $table->addRow();
-            $table->addCell(2500)->addText($control->controls()->get()->implode('clause', ', '));
-            $table->addCell(12500)->addText(str_replace('&', 'x', $control->name));
-            $table->addCell(2800)->addText($control->realisation_date, null, ['align' => 'center']);
-            $table->addCell(12500)->addText($control->scope);
+            $table->addCell(2500)->addText($measure->controls()->get()->implode('clause', ', '));
+            $table->addCell(12500)->addText(str_replace('&', 'x', $measure->name));
+            $table->addCell(2800)->addText($measure->realisation_date, null, ['align' => 'center']);
+            $table->addCell(12500)->addText($measure->scope);
             $table->addCell(2000)->addText(
                 '⬤',
-                ($control->score === 1 ? ['color' => '#FF0000'] :
-                ($control->score === 2 ? ['color' => '#FF8000'] :
-                ($control->score === 3 ? ['color' => '#00CC00'] : null))),
+                ($measure->score === 1 ? ['color' => '#FF0000'] :
+                ($measure->score === 2 ? ['color' => '#FF8000'] :
+                ($measure->score === 3 ? ['color' => '#00CC00'] : null))),
                 ['align' => 'center']
             );
         }
@@ -300,7 +300,7 @@ class ReportController extends Controller
         $domains = $domains->get()->toArray();
 
         // get status report (audit instances)
-        $controls = DB::table('measures as c1')
+        $measures = DB::table('measures as c1')
             ->select([
                 'c1.id',
                 'c1.score',
@@ -310,13 +310,13 @@ class ReportController extends Controller
             ->whereNull('c2.next_id')
             ->where('c1.status', 2);
         if ($framework !== null) {
-            $controls = $controls
+            $measures = $measures
                 ->join('control_measure', 'c1.id', '=', 'control_measure.measure_id')
                 ->join('controls', 'control_measure.control_id', '=', 'controls.id')
                 ->join('domains', 'controls.domain_id', '=', 'domains.id')
                 ->where('domains.framework', '=', $framework);
         }
-        $controls = $controls->get();
+        $measures = $measures->get();
 
         // Fetch security measures (controls) for all audit instances in one query
         $controlMeasures = DB::table('control_measure')
@@ -327,7 +327,7 @@ class ReportController extends Controller
                 'clause',
             ])
             ->join('controls', 'controls.id', '=', 'control_id')
-            ->whereIn('measure_id', $controls->pluck('id'))
+            ->whereIn('measure_id', $measures->pluck('id'))
             ->orderBy('clause')
             ->get();
 
@@ -335,8 +335,8 @@ class ReportController extends Controller
         $measuresByControlId = $controlMeasures->groupBy('measure_id');
 
         // map clauses
-        foreach ($controls as $control) {
-            $control->measures = $measuresByControlId->get($control->id, collect())->map(function ($controlMeasure) {
+        foreach ($measures as $measure) {
+            $measure->controls = $measuresByControlId->get($measure->id, collect())->map(function ($controlMeasure) {
                 return [
                     'id' => $controlMeasure->control_id,
                     'domain_id' => $controlMeasure->domain_id,
@@ -366,10 +366,10 @@ class ReportController extends Controller
         $i = 0;
         foreach ($domains as $domain) {
             $domains[$i] = $domain->title;
-            foreach ($controls as $control) {
-                foreach ($control->measures as $measure) {
-                    if ($measure['domain_id'] === $domain->id) {
-                        $values[3 - $control->score][$i] += 1;
+            foreach ($measures as $measure) {
+                foreach ($measure->controls as $control) {
+                    if ($control['domain_id'] === $domain->id) {
+                        $values[3 - $measure->score][$i] += 1;
                     }
                 }
             }

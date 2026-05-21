@@ -116,9 +116,9 @@ class UserController extends Controller
         // Allow only admin or the owner of the profile to edit
         $this->authorizeAdminOrOwner($user);
 
-        $controls = Measure::select('id', 'name')->whereNull('realisation_date')->orderBy('name')->get();
+        $measures = Measure::select('id', 'name')->whereNull('realisation_date')->orderBy('name')->get();
 
-        return view('users.edit', compact('user', 'controls'));
+        return view('users.edit', compact('user', 'measures'));
     }
 
     /**

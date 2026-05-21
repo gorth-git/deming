@@ -1,12 +1,15 @@
 # Modèle de données
 
-Les tables clés sont les suivantes
+Les tables clés sont les suivantes :
 
 - attributes
 - domains
-- measures
 - controls
+- measures
 - documents
+
+> **Rôles :** `controls` = **mesures de sécurité** (exigences à mettre en œuvre).  
+> `measures` = **instances d'audit** (vérifications périodiques de ces exigences).
 
 ## Dépendances entre tables
 
@@ -14,25 +17,25 @@ Vue d'ensemble : qui utilise quoi.
 
 ```mermaid
 flowchart LR
-    domains -->|"domain_id (1:N)"| measures
-    measures -->|"controls[ ] (N:N)"| controls
+    domains -->|"domain_id (1:N)"| controls
     controls -->|"measures[ ] (N:N)"| measures
-    attributes -.->|"optionnel"| measures
+    measures -->|"controls[ ] (N:N)"| controls
     attributes -.->|"optionnel"| controls
-    controls -.->|"next_id (self)"| controls
-    documents -.->|"optionnel"| controls
+    attributes -.->|"optionnel"| measures
+    measures -.->|"next_id (self)"| measures
+    documents -.->|"optionnel"| measures
 ```
 
 Le schéma détaillé ci-dessous décrit les champs de chaque table.
 
 ```mermaid
 erDiagram
-    domains ||--o{ measures : "domain_id"
-    measures }o--o{ controls : "many-to-many"
-    attributes }o--o{ measures : "optionnel"
+    domains ||--o{ controls : "domain_id"
+    controls }o--o{ measures : "many-to-many"
     attributes }o--o{ controls : "optionnel"
-    controls o|--o| controls : "next_id"
-    documents }o--o| controls : "optionnel"
+    attributes }o--o{ measures : "optionnel"
+    measures o|--o| measures : "next_id"
+    documents }o--o| measures : "optionnel"
 
     domains {
         int id PK
@@ -45,16 +48,16 @@ erDiagram
         string name
         string values
     }
-    measures {
+    controls {
         int id PK
         int domain_id FK
         string name
         string clause
         string objective
-        array controls
+        array measures
         array attributes
     }
-    controls {
+    measures {
         int id PK
         int next_id FK
         string name
@@ -62,11 +65,12 @@ erDiagram
         date plan_date
         date realisation_date
         int status
-        array measures
+        array controls
         array attributes
     }
     documents {
         int id PK
+        int measure_id FK
     }
 ```
 
@@ -74,21 +78,22 @@ Les relations sont les suivantes :
 
 | Lien | Type | Description |
 | --- | --- | --- |
-| `domains` → `measures` | Clé étrangère (1:N) | Chaque mesure référence son domaine via `domain_id` |
-| `measures` ↔ `controls` | Many-to-many (bidirectionnel) | Chaque mesure liste ses contrôles dans `controls[]` ; chaque contrôle liste ses mesures dans `measures[]` |
-| `attributes` → `measures` | Optionnel | Le champ `attributes` d'une mesure peut contenir une liste d'IDs d'attributs |
-| `attributes` → `controls` | Optionnel | Idem pour les contrôles |
-| `controls` → `controls` | Auto-référence via `next_id` | Permet de chaîner les campagnes successives d'un même contrôle |
+| `domains` → `controls` | Clé étrangère (1:N) | Chaque mesure de sécurité référence son domaine via `domain_id` |
+| `controls` ↔ `measures` | Many-to-many (bidirectionnel) | Chaque mesure de sécurité liste ses instances d'audit dans `measures[]` ; chaque instance d'audit liste ses mesures de sécurité dans `controls[]` |
+| `attributes` → `controls` | Optionnel | Le champ `attributes` d'une mesure de sécurité peut contenir une liste d'IDs d'attributs |
+| `attributes` → `measures` | Optionnel | Idem pour les instances d'audit |
+| `measures` → `measures` | Auto-référence via `next_id` | Permet de chaîner les campagnes successives d'un même audit |
+| `documents` → `measures` | Optionnel (1:N) | Les documents et preuves sont attachés aux instances d'audit via `measure_id` |
 
-> **Note :** il n'y a pas de table de jonction exposée pour la relation measures/controls.
+> **Note :** il n'y a pas de table de jonction exposée pour la relation controls/measures.  
 > Les IDs sont directement embarqués dans chaque objet des deux côtés.
 
 ---
 
 ## attributes
 
-Les attributs sont des référentiels de classification multi-valeurs.
-Chaque attribut définit un ensemble de tags (préfixés `#`) qui peuvent être associés aux mesures et aux contrôles.
+Les attributs sont des référentiels de classification multi-valeurs.  
+Chaque attribut définit un ensemble de tags (préfixés `#`) qui peuvent être associés aux mesures de sécurité et aux instances d'audit.
 
 | Champ | Type | Description |
 | --- | --- | --- |
@@ -114,7 +119,7 @@ Exemple :
 
 ## domains
 
-Les domaines regroupent les mesures par thématique.
+Les domaines regroupent les mesures de sécurité par thématique.  
 Chaque domaine appartient à un cadre réglementaire ou méthodologique (`framework`).
 
 | Champ | Type | Description |
@@ -141,10 +146,10 @@ Exemple :
 
 ---
 
-## measures
+## controls
 
-Les mesures de sécurité décrivent les exigences à mettre en œuvre.
-Chaque mesure appartient à un domaine et est vérifiée par un ou plusieurs contrôles.
+Les mesures de sécurité décrivent les exigences à mettre en œuvre.  
+Chaque mesure de sécurité appartient à un domaine et est vérifiée par une ou plusieurs instances d'audit.
 
 | Champ | Type | Description |
 | --- | --- | --- |
@@ -152,14 +157,14 @@ Chaque mesure appartient à un domaine et est vérifiée par un ou plusieurs con
 | `domain_id` | integer | Référence vers `domains.id` (FK, obligatoire) |
 | `name` | string | Nom de la mesure, souvent avec le numéro d'article (ex : *Art.21.2.a - Analyse de Risques*) |
 | `clause` | string | Identifiant court de la clause normative (ex : `NIS2-Art.21.2.a`) |
-| `objective` | string | Objectif attendu par cette mesure |
+| `objective` | string | Objectif attendu par cette mesure de sécurité |
 | `input` | string \| null | Données ou ressources nécessaires à la mise en œuvre |
 | `model` | string \| null | Modèle ou méthode opérationnelle recommandée |
 | `indicator` | string \| null | Indicateur de performance structuré (Target, Frequency, Owner) |
 | `action_plan` | string \| null | Plan d'action ou traitement associé |
 | `standard` | string \| null | Référence à une norme externe (ex : ISO 27001) |
 | `attributes` | array \| null | Liste d'IDs d'attributs associés ; `null` si aucun |
-| `controls` | array | Liste des IDs de contrôles qui vérifient cette mesure |
+| `measures` | array | Liste des IDs d'instances d'audit qui vérifient cette mesure de sécurité |
 | `created_at` | datetime | Date de création |
 | `updated_at` | datetime | Date de dernière modification |
 
@@ -178,39 +183,38 @@ Exemple :
   "action_plan": "Plan de traitement des risques validé par Direction",
   "standard": null,
   "attributes": null,
-  "controls": [1]
+  "measures": [1]
 }
 ```
 
 ---
 
-## controls
+## measures
 
-Les contrôles décrivent les vérifications opérationnelles périodiques.
-Un contrôle vérifie qu'une ou plusieurs mesures sont bien appliquées.
-Il porte les données de planification, de réalisation et de résultat.
+Les instances d'audit décrivent les vérifications opérationnelles périodiques.  
+Une instance d'audit vérifie qu'une ou plusieurs mesures de sécurité sont bien appliquées.  
+Elle porte les données de planification, de réalisation et de résultat.
 
 | Champ | Type | Description |
 | --- | --- | --- |
 | `id` | integer | Identifiant unique (PK) |
 | `name` | string | Intitulé de la vérification |
-| `objective` | string \| null | Objectif spécifique de ce contrôle |
+| `objective` | string \| null | Objectif spécifique de cette instance d'audit |
 | `input` | string \| null | Données ou preuves nécessaires à la réalisation |
-| `model` | string \| null | Mode opératoire du contrôle |
-| `indicator` | string \| null | Indicateur de résultat |
-| `action_plan` | string \| null | Actions correctives si le contrôle échoue |
+| `model` | string \| null | Mode opératoire de l'audit |
+| `action_plan` | string \| null | Actions correctives si l'audit échoue |
 | `periodicity` | integer \| null | Fréquence en mois (ex : `12` = annuel, `3` = trimestriel) |
 | `plan_date` | date \| null | Date prévue de réalisation (`YYYY-MM-DD`) |
-| `realisation_date` | date \| null | Date effective de réalisation du dernier contrôle |
+| `realisation_date` | date \| null | Date effective de réalisation |
 | `observations` | string \| null | Commentaires libres sur le résultat |
 | `score` | number \| null | Score numérique issu de l'évaluation ; `null` si non réalisé |
-| `note` | string \| null | Note qualitative complémentaire |
-| `status` | integer | État courant du contrôle (voir ci-dessous) |
-| `next_id` | integer \| null | ID du contrôle suivant dans la chaîne historique (FK self) |
+| `note` | number \| null | Note qualitative complémentaire |
+| `status` | integer | État courant de l'instance d'audit (voir ci-dessous) |
+| `next_id` | integer \| null | ID de l'instance suivante dans la chaîne historique (FK self) |
 | `standard` | string \| null | Référence normative externe |
 | `attributes` | array \| null | Liste d'IDs d'attributs associés ; `null` si aucun |
 | `scope` | string \| null | Périmètre d'application (entité, site, système) |
-| `measures` | array | Liste des IDs de mesures vérifiées par ce contrôle |
+| `controls` | array | Liste des IDs de mesures de sécurité vérifiées par cette instance d'audit |
 | `created_at` | datetime | Date de création |
 | `updated_at` | datetime | Date de dernière modification |
 
@@ -218,11 +222,9 @@ Il porte les données de planification, de réalisation et de résultat.
 
 | Valeur | Signification |
 | --- | --- |
-| `0` | Non réalisé / À planifier |
-| `1` | En cours |
-| `2` | Réalisé |
-| `3` | Validé / Conforme |
-| `4` | Non conforme |
+| `0` | À réaliser / Non planifié (`realisation_date` est null) |
+| `1` | Proposé (l'audité a soumis un résultat, en attente de validation) |
+| `2` | Réalisé / Terminé (`realisation_date` est renseignée) |
 
 Exemple :
 
@@ -236,12 +238,12 @@ Exemple :
   "plan_date": "2026-07-31",
   "realisation_date": "2025-03-25",
   "score": null,
-  "status": 0,
+  "status": 2,
   "next_id": null,
   "standard": null,
   "attributes": null,
   "scope": null,
-  "measures": [1]
+  "controls": [1]
 }
 ```
 
@@ -249,5 +251,5 @@ Exemple :
 
 ## documents
 
-La table `documents` est destinée à stocker les pièces jointes et preuves documentaires associées aux contrôles ou aux mesures.
-
+La table `documents` stocke les pièces jointes et preuves documentaires associées aux instances d'audit.  
+Chaque document est lié à un enregistrement `measures` via `measure_id`.

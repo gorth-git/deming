@@ -29,7 +29,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        abort_if(Auth::User()->isAPI(),Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Auth::user()->isAPI(),Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         // Fetch counts and data using optimized queries
         $activeDomainsCount = $this->getActiveDomainsCount();
@@ -420,32 +420,32 @@ class HomeController extends Controller
             });
         }
 
-        $controls = $query->get();
+        $measures = $query->get();
 
-        return $controls->flatMap(function ($control) {
-            $expanded = collect([$control]);
+        return $measures->flatMap(function ($measure) {
+            $expanded = collect([$measure]);
 
-            if ($control->realisation_date === null) {
-                if ($control->periodicity === -1) {
+            if ($measure->realisation_date === null) {
+                if ($measure->periodicity === -1) {
                     for ($i = 1; $i <= 32; $i++) {
-                        $repeatedControl = clone $control;
-                        $repeatedControl->id = null;
-                        $repeatedControl->score = null;
-                        $repeatedControl->observations = null;
-                        $repeatedControl->realisation_date = null;
-                        $repeatedControl->plan_date = Carbon::parse($control->plan_date)->addDays($i * 7);
-                        $expanded->push($repeatedControl);
+                        $repeatedMeasure = clone $measure;
+                        $repeatedMeasure->id = null;
+                        $repeatedMeasure->score = null;
+                        $repeatedMeasure->observations = null;
+                        $repeatedMeasure->realisation_date = null;
+                        $repeatedMeasure->plan_date = Carbon::parse($measure->plan_date)->addDays($i * 7);
+                        $expanded->push($repeatedMeasure);
                     }
                 }
-                else if ($control->periodicity > 0 && $control->periodicity <= 12) {
-                    for ($i = 1; $i <= 12 / $control->periodicity; $i++) {
-                        $repeatedControl = clone $control;
-                        $repeatedControl->id = null;
-                        $repeatedControl->score = null;
-                        $repeatedControl->observations = null;
-                        $repeatedControl->realisation_date = null;
-                        $repeatedControl->plan_date = Carbon::parse($control->plan_date)->addMonthsNoOverflow($i * $control->periodicity);
-                        $expanded->push($repeatedControl);
+                else if ($measure->periodicity > 0 && $measure->periodicity <= 12) {
+                    for ($i = 1; $i <= 12 / $measure->periodicity; $i++) {
+                        $repeatedMeasure = clone $measure;
+                        $repeatedMeasure->id = null;
+                        $repeatedMeasure->score = null;
+                        $repeatedMeasure->observations = null;
+                        $repeatedMeasure->realisation_date = null;
+                        $repeatedMeasure->plan_date = Carbon::parse($measure->plan_date)->addMonthsNoOverflow($i * $measure->periodicity);
+                        $expanded->push($repeatedMeasure);
                     }
                 }
             }

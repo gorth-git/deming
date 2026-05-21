@@ -87,7 +87,7 @@ class DomainController extends Controller
     public function create()
     {
         // Only for administrator role
-        abort_if(!Auth::User()->isAdmin(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAdmin(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('domains.create');
     }
@@ -102,7 +102,7 @@ class DomainController extends Controller
     public function store(Request $request)
     {
         // Only for administrator role
-        abort_if(!Auth::User()->isAdmin(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAdmin(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $this->validate(
             $request,
@@ -146,7 +146,7 @@ class DomainController extends Controller
     public function edit(int $id)
     {
         // Only for administrator role
-        abort_if(!Auth::User()->isAdmin(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAdmin(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $domain = Domain::find($id);
 
@@ -164,7 +164,7 @@ class DomainController extends Controller
     public function update(Request $request, Domain $domain)
     {
         // Only for administrator role
-        abort_if(!Auth::User()->isAdmin(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAdmin(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $this->validate(
             $request,
@@ -193,7 +193,7 @@ class DomainController extends Controller
     public function destroy(Domain $domain)
     {
         // Only for administrator role
-        abort_if(!Auth::User()->isAdmin(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Auth::user()->isAdmin(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         // Has measures ?
         if (DB::table('measures')
@@ -221,7 +221,7 @@ class DomainController extends Controller
     public function export(): BinaryFileResponse
     {
         abort_if(
-            !Auth::User()->isAdmin(),
+            !Auth::user()->isAdmin(),
             Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return Excel::download(new DomainsExport(), 'domains.xlsx');

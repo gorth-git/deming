@@ -26,7 +26,7 @@ class ActionController extends Controller
     public function index(Request $request)
     {
         // Admin, user, auditor or auditee
-        abort_if(Auth::User()->isAPI(),
+        abort_if(Auth::user()->isAPI(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -87,7 +87,7 @@ class ActionController extends Controller
         }
 
         // filter on auditee actions
-        if (Auth::User()->isAuditee()) {
+        if (Auth::user()->isAuditee()) {
             $userId = Auth::id();
             $actions = $actions->where(function($query) use ($userId) {
                 // Actions assignées directement à l'utilisateur
@@ -156,7 +156,7 @@ class ActionController extends Controller
     public function save(Request $request)
     {
         abort_if(
-            ! ((Auth::User()->role === 1) || (Auth::User()->role === 2)),
+            ! ((Auth::user()->role === 1) || (Auth::user()->role === 2)),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -194,7 +194,7 @@ class ActionController extends Controller
         $action->update();
 
         // Sync measures
-        $action->measures()->sync($request->input('measures', []));
+        $action->controls()->sync($request->input('measures', []));
 
         // Sync owners
         $action->owners()->sync($request->input('owners', []));
@@ -212,7 +212,7 @@ class ActionController extends Controller
     public function update(Request $request)
     {
         abort_if(
-            ! ((Auth::User()->role === 1) || (Auth::User()->role === 2)),
+            ! ((Auth::user()->role === 1) || (Auth::user()->role === 2)),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -242,9 +242,9 @@ class ActionController extends Controller
     public function show(int $id)
     {
         abort_if(
-            ! ((Auth::User()->role === 1) ||
-            (Auth::User()->role === 2) ||
-            (Auth::User()->role === 3)),
+            ! ((Auth::user()->role === 1) ||
+            (Auth::user()->role === 2) ||
+            (Auth::user()->role === 3)),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -270,9 +270,9 @@ class ActionController extends Controller
     public function edit(int $id)
     {
         abort_if(
-            ! ((Auth::User()->role === 1) ||
-            (Auth::User()->role === 2) ||
-            (Auth::User()->role === 3)),
+            ! ((Auth::user()->role === 1) ||
+            (Auth::user()->role === 2) ||
+            (Auth::user()->role === 3)),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -328,8 +328,8 @@ class ActionController extends Controller
     public function create()
     {
         abort_if(
-            ! ((Auth::User()->role === 1) ||
-            (Auth::User()->role === 2)),
+            ! ((Auth::user()->role === 1) ||
+            (Auth::user()->role === 2)),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -373,8 +373,8 @@ class ActionController extends Controller
     public function store(Request $request)
     {
         abort_if(
-            ! ((Auth::User()->role === 1) ||
-            (Auth::User()->role === 2)),
+            ! ((Auth::user()->role === 1) ||
+            (Auth::user()->role === 2)),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -398,7 +398,7 @@ class ActionController extends Controller
         $action->save();
 
         // Sync measures
-        $action->measures()->sync($request->input('measures', []));
+        $action->controls()->sync($request->input('measures', []));
 
         // Sync owners
         $action->owners()->sync($request->input('owners', []));
@@ -417,9 +417,9 @@ class ActionController extends Controller
     public function close(int $id)
     {
         abort_if(
-            ! ((Auth::User()->role === 1) ||
-            (Auth::User()->role === 2) ||
-            (Auth::User()->role === 3)),
+            ! ((Auth::user()->role === 1) ||
+            (Auth::user()->role === 2) ||
+            (Auth::user()->role === 3)),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -445,9 +445,9 @@ class ActionController extends Controller
     public function doClose(Request $request)
     {
         abort_if(
-            ! ((Auth::User()->role === 1) ||
-            (Auth::User()->role === 2) ||
-            (Auth::User()->role === 3)),
+            ! ((Auth::user()->role === 1) ||
+            (Auth::user()->role === 2) ||
+            (Auth::user()->role === 3)),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -475,7 +475,7 @@ class ActionController extends Controller
     {
         // For administrators and users only
         abort_if(
-            Auth::User()->role !== 1 && Auth::User()->role !== 2,
+            Auth::user()->role !== 1 && Auth::user()->role !== 2,
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -493,7 +493,7 @@ class ActionController extends Controller
     {
         // For administrators and users only
         abort_if(
-            Auth::User()->role !== 1 && Auth::User()->role !== 2,
+            Auth::user()->role !== 1 && Auth::user()->role !== 2,
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
@@ -528,8 +528,8 @@ class ActionController extends Controller
     public function chart(Request $request)
     {
         abort_if(
-            ! ((Auth::User()->role === 1) ||
-            (Auth::User()->role === 2)),
+            ! ((Auth::user()->role === 1) ||
+            (Auth::user()->role === 2)),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'
         );
