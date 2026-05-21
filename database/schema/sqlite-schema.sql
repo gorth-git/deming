@@ -138,8 +138,8 @@ CREATE UNIQUE INDEX "tags_name_unique" on "attributes"("name");
 CREATE TABLE IF NOT EXISTS "control_measure"(
   "control_id" integer not null,
   "measure_id" integer not null,
-  foreign key("control_id") references "measures"("id"),
-  foreign key("measure_id") references "controls"("id")
+  foreign key("control_id") references "controls"("id"),
+  foreign key("measure_id") references "measures"("id")
 );
 CREATE TABLE IF NOT EXISTS "controls"(
   "id" integer primary key autoincrement not null,
@@ -289,7 +289,6 @@ CREATE TABLE IF NOT EXISTS "risk_scoring_configs"(
 CREATE INDEX "risk_scoring_configs_is_active_index" on "risk_scoring_configs"(
   "is_active"
 );
-INSERT INTO "risk_scoring_configs" VALUES(1,'ISO 27005','probability_x_impact',1,'[{"value":1,"label":"Rare","description":""},{"value":2,"label":"Unlikely","description":""},{"value":3,"label":"Possible","description":""},{"value":4,"label":"Likely","description":""},{"value":5,"label":"Very Likely","description":""}]','[{"value":1,"label":"Negligible","description":""},{"value":2,"label":"Low","description":""},{"value":3,"label":"Moderate","description":""},{"value":4,"label":"High","description":""},{"value":5,"label":"Critical","description":""}]','[{"value":0,"label":"Offline","description":""},{"value":1,"label":"Internal","description":""},{"value":2,"label":"Internet","description":""}]','[{"value":1,"label":"None","description":""},{"value":2,"label":"Known","description":""},{"value":3,"label":"Exploitable (int)","description":""},{"value":4,"label":"Exploitable (ext)","description":""}]','[{"level":"low","label":"Low","max":4,"color":"#27ae60"},{"level":"medium","label":"Medium","max":9,"color":"#f39c12"},{"level":"high","label":"High","max":16,"color":"#e74c3c"},{"level":"critical","label":"Critical","max":null,"color":"#c0392b"}]','2026-01-01 00:00:00','2026-01-01 00:00:00');
 CREATE TABLE IF NOT EXISTS "measures"(
   "id" integer primary key autoincrement not null,
   "name" varchar not null,
@@ -377,3 +376,4 @@ INSERT INTO migrations VALUES(37,'2026_04_07_152854_create_risk_scoring_table',2
 INSERT INTO migrations VALUES(38,'2026_04_16_081633_change_note_precision_in_controls_table',2);
 INSERT INTO migrations VALUES(39,'2026_04_23_160957_create_exceptions_table',2);
 INSERT INTO migrations VALUES(40,'2026_05_21_000001_swap_measures_controls_tables',2);
+INSERT INTO migrations VALUES(41,'2026_05_21_000002_fix_control_measure_foreign_keys',2);

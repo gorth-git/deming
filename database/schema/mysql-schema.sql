@@ -101,8 +101,8 @@ CREATE TABLE `control_measure` (
   `measure_id` int(10) unsigned NOT NULL,
   KEY `control_measure_control_id_foreign` (`control_id`),
   KEY `control_measure_measure_id_foreign` (`measure_id`),
-  CONSTRAINT `control_measure_control_id_foreign` FOREIGN KEY (`control_id`) REFERENCES `measures` (`id`),
-  CONSTRAINT `control_measure_measure_id_foreign` FOREIGN KEY (`measure_id`) REFERENCES `controls` (`id`)
+  CONSTRAINT `control_measure_control_id_foreign` FOREIGN KEY (`control_id`) REFERENCES `controls` (`id`),
+  CONSTRAINT `control_measure_measure_id_foreign` FOREIGN KEY (`measure_id`) REFERENCES `measures` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `control_user`;
@@ -523,3 +523,4 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (80,'2026_04_07_152
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (81,'2026_04_16_081633_change_note_precision_in_controls_table',7);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (83,'2026_04_23_160957_create_exceptions_table',8);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (84,'2026_05_21_000001_swap_measures_controls_tables',9);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (85,'2026_05_21_000002_fix_control_measure_foreign_keys',10);
