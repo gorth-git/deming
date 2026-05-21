@@ -67,7 +67,7 @@ class ActionController extends Controller
 
         // Build query
         $actions = DB::table('actions')
-            ->leftjoin('controls', 'control_id', '=', 'controls.id');
+            ->leftjoin('measures', 'measure_id', '=', 'measures.id');
 
         // filter on type
         if (($type !== null) && (strlen($type) > 0)) {
@@ -97,19 +97,19 @@ class ActionController extends Controller
                         ->whereColumn('action_user.action_id', 'actions.id')
                         ->where('action_user.user_id', $userId);
                 })
-                    // OU actions liées à des contrôles assignés à l'utilisateur
+                    // OU actions liées à des mesures assignées à l'utilisateur
                     ->orWhereExists(function($q) use ($userId) {
                         $q->select(DB::raw(1))
                             ->from('control_user')
-                            ->whereColumn('control_user.control_id', 'actions.control_id')
+                            ->whereColumn('control_user.measure_id', 'actions.measure_id')
                             ->where('control_user.user_id', $userId);
                     })
-                    // OU actions liées à des contrôles assignés via un groupe
+                    // OU actions liées à des mesures assignées via un groupe
                     ->orWhereExists(function($q) use ($userId) {
                         $q->select(DB::raw(1))
                             ->from('control_user_group')
                             ->join('user_user_group', 'user_user_group.user_group_id', '=', 'control_user_group.user_group_id')
-                            ->whereColumn('control_user_group.control_id', 'actions.control_id')
+                            ->whereColumn('control_user_group.measure_id', 'actions.measure_id')
                             ->where('user_user_group.user_id', $userId);
                     });
             });
@@ -293,8 +293,8 @@ class ActionController extends Controller
             ->pluck('scope')
             ->toArray();
 
-        // Get all measures
-        $all_measures = DB::table('measures')
+        // Get all security measures (controls)
+        $all_measures = DB::table('controls')
             ->select('id', 'clause', 'name')
             ->orderBy('id')
             ->get();
@@ -344,8 +344,8 @@ class ActionController extends Controller
             ->pluck('scope')
             ->toArray();
 
-        // Get all measures
-        $all_measures = DB::table('measures')
+        // Get all security measures (controls)
+        $all_measures = DB::table('controls')
             ->select('id', 'clause', 'name')
             ->orderBy('id')
             ->get();

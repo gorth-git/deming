@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Measure;
+use App\Models\Control;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -14,49 +14,49 @@ class MeasureController extends Controller
     {
         abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $measures = Measure::all();
+        $controls = Control::all();
 
-        return response()->json($measures);
+        return response()->json($controls);
     }
 
     public function store(Request $request)
     {
         abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $measure = Measure::query()->create($request->all());
+        $control = Control::query()->create($request->all());
         if ($request->has('controls')) {
-            $measure->allControls()->sync($request->input('controls', []));
+            $control->allMeasures()->sync($request->input('controls', []));
         }
 
-        return response()->json($measure, 201);
+        return response()->json($control, 201);
     }
 
-    public function show(Measure $measure)
+    public function show(Control $control)
     {
         abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $measure['controls'] = $measure->allControls()->pluck('id');
+        $control['controls'] = $control->allMeasures()->pluck('id');
 
-        return response()->json($measure);
+        return response()->json($control);
     }
 
-    public function update(Request $request, Measure $measure)
+    public function update(Request $request, Control $control)
     {
         abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $measure->update($request->all());
+        $control->update($request->all());
         if ($request->has('controls')) {
-            $measure->allControls()->sync($request->input('controls', []));
+            $control->allMeasures()->sync($request->input('controls', []));
         }
 
         return response()->json();
     }
 
-    public function destroy(Measure $measure)
+    public function destroy(Control $control)
     {
         abort_if(!Auth::User()->isAPI(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $measure->delete();
+        $control->delete();
 
         return response()->json();
     }

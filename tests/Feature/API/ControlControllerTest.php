@@ -1,5 +1,7 @@
 <?php
 
+uses()->group('api');
+
 use App\Models\Control;
 use App\Models\Measure;
 use App\Models\User;

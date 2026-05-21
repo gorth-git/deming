@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Control;
+use App\Models\Measure;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -134,32 +134,31 @@ class ReportController extends Controller
 
 
         // Get all scopes
-        $scopes = DB::table('controls')
+        $scopes = DB::table('measures')
             ->select('scope')
-            //->whereNull('realisation_date')
             ->whereIn('status', [0,1])
             ->distinct()
             ->orderBy('scope')
             ->pluck('scope')
             ->toArray();
 
-        // Get all measures with scope
-        $measures = DB::table('measures')
+        // Get all security measures (controls) with scope
+        $measures = DB::table('controls')
             ->select(
                 [
                     'domains.title',
-                    'measures.clause',
-                    'measures.name',
-                    'controls.scope',
-                    'controls.plan_date',
+                    'controls.clause',
+                    'controls.name',
+                    'measures.scope',
+                    'measures.plan_date',
                 ]
             )
-            ->leftjoin('domains', 'measures.domain_id', '=', 'domains.id')
-            ->leftjoin('control_measure', 'control_measure.measure_id', '=', 'measures.id')
-            ->leftjoin('controls', 'control_measure.control_id', '=', 'controls.id')
-            ->whereIn('controls.status', [0,1])
+            ->leftjoin('domains', 'controls.domain_id', '=', 'domains.id')
+            ->leftjoin('control_measure', 'control_measure.control_id', '=', 'controls.id')
+            ->leftjoin('measures', 'control_measure.measure_id', '=', 'measures.id')
+            ->whereIn('measures.status', [0,1])
             ->orderBy('domains.title')
-            ->orderBy('measures.clause')
+            ->orderBy('controls.clause')
             ->get();
 
         // create XLSX
@@ -224,7 +223,7 @@ class ReportController extends Controller
         string $start_date,
         string $end_date
     ) {
-        $controls = Control::where(
+        $controls = Measure::where(
             [
                 ['realisation_date','>=',$start_date],
                 ['realisation_date','<',$end_date],
@@ -233,9 +232,9 @@ class ReportController extends Controller
 
         if ($framework !== null) {
             $controls = $controls
-                ->join('control_measure', 'controls.id', '=', 'control_measure.control_id')
-                ->join('measures', 'control_measure.measure_id', '=', 'measures.id')
-                ->join('domains', 'measures.domain_id', '=', 'domains.id')
+                ->join('control_measure', 'measures.id', '=', 'control_measure.measure_id')
+                ->join('controls', 'control_measure.control_id', '=', 'controls.id')
+                ->join('domains', 'controls.domain_id', '=', 'domains.id')
                 ->where('domains.framework', '=', $framework);
         }
         $controls = $controls
@@ -269,7 +268,7 @@ class ReportController extends Controller
 
         foreach ($controls as $control) {
             $table->addRow();
-            $table->addCell(2500)->addText($control->measures()->get()->implode('clause', ', '));
+            $table->addCell(2500)->addText($control->controls()->get()->implode('clause', ', '));
             $table->addCell(12500)->addText(str_replace('&', 'x', $control->name));
             $table->addCell(2800)->addText($control->realisation_date, null, ['align' => 'center']);
             $table->addCell(12500)->addText($control->scope);
@@ -300,46 +299,46 @@ class ReportController extends Controller
         }
         $domains = $domains->get()->toArray();
 
-        // get status report
-        $controls = DB::table('controls as c1')
+        // get status report (audit instances)
+        $controls = DB::table('measures as c1')
             ->select([
                 'c1.id',
                 'c1.score',
                 'c1.realisation_date',
             ])
-            ->leftJoin('controls as c2', 'c1.next_id', '=', 'c2.id')
+            ->leftJoin('measures as c2', 'c1.next_id', '=', 'c2.id')
             ->whereNull('c2.next_id')
             ->where('c1.status', 2);
         if ($framework !== null) {
             $controls = $controls
-                ->join('control_measure', 'c1.id', '=', 'control_measure.control_id')
-                ->join('measures', 'control_measure.measure_id', '=', 'measures.id')
-                ->join('domains', 'measures.domain_id', '=', 'domains.id')
+                ->join('control_measure', 'c1.id', '=', 'control_measure.measure_id')
+                ->join('controls', 'control_measure.control_id', '=', 'controls.id')
+                ->join('domains', 'controls.domain_id', '=', 'domains.id')
                 ->where('domains.framework', '=', $framework);
         }
         $controls = $controls->get();
 
-        // Fetch measures for all controls in one query
+        // Fetch security measures (controls) for all audit instances in one query
         $controlMeasures = DB::table('control_measure')
             ->select([
-                'control_id',
                 'measure_id',
+                'control_id',
                 'domain_id',
                 'clause',
             ])
-            ->join('measures', 'measures.id', '=', 'measure_id')
-            ->whereIn('control_id', $controls->pluck('id'))
+            ->join('controls', 'controls.id', '=', 'control_id')
+            ->whereIn('measure_id', $controls->pluck('id'))
             ->orderBy('clause')
             ->get();
 
-        // Group measures by control_id
-        $measuresByControlId = $controlMeasures->groupBy('control_id');
+        // Group by measure_id (audit instance id)
+        $measuresByControlId = $controlMeasures->groupBy('measure_id');
 
         // map clauses
         foreach ($controls as $control) {
             $control->measures = $measuresByControlId->get($control->id, collect())->map(function ($controlMeasure) {
                 return [
-                    'id' => $controlMeasure->measure_id,
+                    'id' => $controlMeasure->control_id,
                     'domain_id' => $controlMeasure->domain_id,
                     'clause' => $controlMeasure->clause,
                 ];
@@ -513,8 +512,8 @@ class ReportController extends Controller
         if ($framework !== null) {
             $actions = $actions
                 ->join('action_measure', 'actions.id', '=', 'action_measure.action_id')
-                ->join('measures', 'measures.id', '=', 'action_measure.measure_id')
-                ->join('domains', 'domains.id', '=', 'measures.domain_id')
+                ->join('controls', 'controls.id', '=', 'action_measure.control_id')
+                ->join('domains', 'domains.id', '=', 'controls.domain_id')
                 ->where('domains.framework', '=', $framework);
         }
         // get it

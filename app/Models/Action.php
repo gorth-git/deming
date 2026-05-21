@@ -57,7 +57,7 @@ class Action extends Model
 
     public function measures()
     {
-        return $this->belongsToMany(Measure::class, 'action_measure', 'action_id');
+        return $this->belongsToMany(Control::class, 'action_measure', 'action_id', 'control_id');
     }
 
     // Computer progress history of an action
