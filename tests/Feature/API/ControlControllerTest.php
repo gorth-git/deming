@@ -57,7 +57,7 @@ test('store syncs measures when provided', function () {
         'clause'    => '5.1.2',
         'name'      => 'Control with Measure',
         'objective' => 'Test',
-        'controls'  => [$measure->id],
+        'measures'  => [$measure->id],
     ]);
 
     $response->assertStatus(201);
@@ -73,7 +73,7 @@ test('show returns a single control with measures', function () {
 
     $response->assertStatus(200)
         ->assertJsonFragment(['id' => $control->id])
-        ->assertJsonStructure(['controls']);
+        ->assertJsonStructure(['measures']);
 });
 
 test('update modifies a control', function () {

@@ -52,7 +52,7 @@ test('show returns a single measure with controls', function () {
 
     $response->assertStatus(200)
         ->assertJsonFragment(['id' => $measure->id])
-        ->assertJsonStructure(['measures']);
+        ->assertJsonStructure(['controls']);
 });
 
 test('update modifies a measure', function () {
@@ -72,7 +72,7 @@ test('store syncs controls when provided', function () {
     $response = $this->postJson('/api/measures', [
         'name'      => 'Measure with Control',
         'plan_date' => '2026-06-01',
-        'measures'  => [$control->id],
+        'controls'  => [$control->id],
     ]);
 
     $response->assertStatus(201);
