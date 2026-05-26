@@ -11,15 +11,14 @@ return new class extends Migration
     {
         $driver = DB::getDriverName();
 
-        if (! in_array($driver, ['mysql', 'mariadb'])) {
+        if (! in_array($driver, ['mysql', 'mariadb', 'pgsql'])) {
             return;
         }
 
-        // After the table swap (2026_05_21_000001), MySQL auto-updated FK targets
-        // during RENAME TABLE, leaving them semantically inverted:
-        //   control_id → measures  (should be → controls)
-        //   measure_id → controls  (should be → measures)
-        // Drop and recreate with correct targets.
+        // After the table swap (2026_05_21_000001):
+        // - MySQL/MariaDB: RENAME TABLE auto-updates FK targets, leaving them semantically inverted.
+        // - PostgreSQL: FKs were dropped in _000001 before the value swap and must be recreated.
+        // In both cases: drop and recreate with correct targets.
         Schema::table('control_measure', function (Blueprint $table) {
             $table->dropForeign(['control_id']);
             $table->dropForeign(['measure_id']);
@@ -32,7 +31,7 @@ return new class extends Migration
     {
         $driver = DB::getDriverName();
 
-        if (! in_array($driver, ['mysql', 'mariadb'])) {
+        if (! in_array($driver, ['mysql', 'mariadb', 'pgsql'])) {
             return;
         }
 
