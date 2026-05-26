@@ -2,8 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.8 (Debian 15.8-0+deb12u1)
--- Dumped by pg_dump version 15.8 (Debian 15.8-0+deb12u1)
+\restrict GQUxUO3V0jYzsoHzrfr7NdCevv2S7WIw8OaeAUmQlZeifsoL30Tz7cEAPkM6KWt
+
+-- Dumped from database version 15.18 (Debian 15.18-0+deb12u1)
+-- Dumped by pg_dump version 15.18 (Debian 15.18-0+deb12u1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -26,7 +28,17 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.action_measure (
     action_id integer NOT NULL,
-    measure_id integer NOT NULL
+    control_id integer NOT NULL
+);
+
+
+--
+-- Name: action_risk; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.action_risk (
+    risk_id integer NOT NULL,
+    action_id integer NOT NULL
 );
 
 
@@ -54,7 +66,7 @@ CREATE TABLE public.actions (
     name character varying(255),
     cause text,
     remediation text,
-    control_id integer,
+    measure_id integer,
     creation_date date,
     due_date date,
     close_date date,
@@ -150,7 +162,7 @@ CREATE TABLE public.control_measure (
 --
 
 CREATE TABLE public.control_user (
-    control_id integer NOT NULL,
+    measure_id integer NOT NULL,
     user_id bigint NOT NULL
 );
 
@@ -160,7 +172,7 @@ CREATE TABLE public.control_user (
 --
 
 CREATE TABLE public.control_user_group (
-    control_id integer NOT NULL,
+    measure_id integer NOT NULL,
     user_group_id integer NOT NULL
 );
 
@@ -170,6 +182,27 @@ CREATE TABLE public.control_user_group (
 --
 
 CREATE TABLE public.controls (
+    id integer NOT NULL,
+    domain_id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    clause character varying(255) NOT NULL,
+    objective text,
+    input text,
+    model text,
+    indicator text,
+    action_plan text,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    standard character varying(255),
+    attributes character varying(1024)
+);
+
+
+--
+-- Name: measures; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.measures (
     id integer NOT NULL,
     name character varying(255) NOT NULL,
     objective text,
@@ -182,7 +215,7 @@ CREATE TABLE public.controls (
     realisation_date date,
     observations text,
     score integer,
-    note numeric(5,2),
+    note numeric(9,2),
     created_at timestamp(0) without time zone,
     updated_at timestamp(0) without time zone,
     next_id integer,
@@ -210,7 +243,7 @@ CREATE SEQUENCE public.controls_id_seq
 -- Name: controls_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.controls_id_seq OWNED BY public.controls.id;
+ALTER SEQUENCE public.controls_id_seq OWNED BY public.measures.id;
 
 
 --
@@ -219,7 +252,7 @@ ALTER SEQUENCE public.controls_id_seq OWNED BY public.controls.id;
 
 CREATE TABLE public.documents (
     id bigint NOT NULL,
-    control_id integer NOT NULL,
+    measure_id integer NOT NULL,
     filename character varying(255) NOT NULL,
     mimetype character varying(255) NOT NULL,
     size integer NOT NULL,
@@ -283,23 +316,56 @@ ALTER SEQUENCE public.domains_id_seq OWNED BY public.domains.id;
 
 
 --
--- Name: measures; Type: TABLE; Schema: public; Owner: -
+-- Name: exceptions; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.measures (
-    id integer NOT NULL,
-    domain_id integer NOT NULL,
+CREATE TABLE public.exceptions (
+    id bigint NOT NULL,
+    control_id integer,
     name character varying(255) NOT NULL,
-    clause character varying(255) NOT NULL,
-    objective text,
-    input text,
-    model text,
-    indicator text,
-    action_plan text,
+    description text,
+    justification text,
+    compensating_controls text,
+    start_date date,
+    end_date date,
+    status smallint DEFAULT '0'::smallint NOT NULL,
+    created_by bigint,
+    submitted_by bigint,
+    submitted_at timestamp(0) without time zone,
+    approved_by bigint,
+    approved_at timestamp(0) without time zone,
+    approval_comment text,
     created_at timestamp(0) without time zone,
-    updated_at timestamp(0) without time zone,
-    standard character varying(255),
-    attributes character varying(1024)
+    updated_at timestamp(0) without time zone
+);
+
+
+--
+-- Name: exceptions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.exceptions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: exceptions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.exceptions_id_seq OWNED BY public.exceptions.id;
+
+
+--
+-- Name: measure_risk; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.measure_risk (
+    risk_id integer NOT NULL,
+    measure_id integer NOT NULL
 );
 
 
@@ -320,7 +386,7 @@ CREATE SEQUENCE public.measures_id_seq
 -- Name: measures_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.measures_id_seq OWNED BY public.measures.id;
+ALTER SEQUENCE public.measures_id_seq OWNED BY public.controls.id;
 
 
 --
@@ -424,6 +490,23 @@ ALTER SEQUENCE public.oauth_clients_id_seq OWNED BY public.oauth_clients.id;
 
 
 --
+-- Name: oauth_device_codes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.oauth_device_codes (
+    id character(80) NOT NULL,
+    user_id bigint,
+    client_id uuid NOT NULL,
+    user_code character(8) NOT NULL,
+    scopes text NOT NULL,
+    revoked boolean NOT NULL,
+    user_approved_at timestamp(0) without time zone,
+    last_polled_at timestamp(0) without time zone,
+    expires_at timestamp(0) without time zone
+);
+
+
+--
 -- Name: oauth_personal_access_clients; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -512,6 +595,103 @@ CREATE SEQUENCE public.personal_access_tokens_id_seq
 --
 
 ALTER SEQUENCE public.personal_access_tokens_id_seq OWNED BY public.personal_access_tokens.id;
+
+
+--
+-- Name: risk_scoring_configs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.risk_scoring_configs (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    formula character varying(255) NOT NULL,
+    is_active boolean DEFAULT false NOT NULL,
+    probability_levels json NOT NULL,
+    impact_levels json NOT NULL,
+    exposure_levels json,
+    vulnerability_levels json,
+    risk_thresholds json NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+--
+-- Name: risk_scoring_configs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.risk_scoring_configs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: risk_scoring_configs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.risk_scoring_configs_id_seq OWNED BY public.risk_scoring_configs.id;
+
+
+--
+-- Name: risks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.risks (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    description text,
+    owner_id integer,
+    probability smallint DEFAULT '1'::smallint NOT NULL,
+    probability_comment text,
+    impact smallint DEFAULT '1'::smallint NOT NULL,
+    impact_comment text,
+    status character varying(255) DEFAULT 'not_evaluated'::character varying NOT NULL,
+    status_comment text,
+    review_frequency smallint DEFAULT '12'::smallint NOT NULL,
+    next_review_at date,
+    exposure smallint,
+    vulnerability smallint,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    CONSTRAINT risks_status_check CHECK (((status)::text = ANY ((ARRAY['not_evaluated'::character varying, 'not_accepted'::character varying, 'temporarily_accepted'::character varying, 'accepted'::character varying, 'mitigated'::character varying, 'transferred'::character varying, 'avoided'::character varying])::text[])))
+);
+
+
+--
+-- Name: COLUMN risks.exposure; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.risks.exposure IS 'v2 - BSI 200-3';
+
+
+--
+-- Name: COLUMN risks.vulnerability; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.risks.vulnerability IS 'v2 - BSI 200-3';
+
+
+--
+-- Name: risks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.risks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: risks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.risks_id_seq OWNED BY public.risks.id;
 
 
 --
@@ -641,7 +821,7 @@ ALTER TABLE ONLY public.audit_logs ALTER COLUMN id SET DEFAULT nextval('public.a
 -- Name: controls id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.controls ALTER COLUMN id SET DEFAULT nextval('public.controls_id_seq'::regclass);
+ALTER TABLE ONLY public.controls ALTER COLUMN id SET DEFAULT nextval('public.measures_id_seq'::regclass);
 
 
 --
@@ -659,10 +839,17 @@ ALTER TABLE ONLY public.domains ALTER COLUMN id SET DEFAULT nextval('public.doma
 
 
 --
+-- Name: exceptions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.exceptions ALTER COLUMN id SET DEFAULT nextval('public.exceptions_id_seq'::regclass);
+
+
+--
 -- Name: measures id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.measures ALTER COLUMN id SET DEFAULT nextval('public.measures_id_seq'::regclass);
+ALTER TABLE ONLY public.measures ALTER COLUMN id SET DEFAULT nextval('public.controls_id_seq'::regclass);
 
 
 --
@@ -694,6 +881,20 @@ ALTER TABLE ONLY public.personal_access_tokens ALTER COLUMN id SET DEFAULT nextv
 
 
 --
+-- Name: risk_scoring_configs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.risk_scoring_configs ALTER COLUMN id SET DEFAULT nextval('public.risk_scoring_configs_id_seq'::regclass);
+
+
+--
+-- Name: risks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.risks ALTER COLUMN id SET DEFAULT nextval('public.risks_id_seq'::regclass);
+
+
+--
 -- Name: user_groups id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -705,6 +906,14 @@ ALTER TABLE ONLY public.user_groups ALTER COLUMN id SET DEFAULT nextval('public.
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: action_risk action_risk_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.action_risk
+    ADD CONSTRAINT action_risk_pkey PRIMARY KEY (risk_id, action_id);
 
 
 --
@@ -724,10 +933,10 @@ ALTER TABLE ONLY public.audit_logs
 
 
 --
--- Name: controls controls_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: measures controls_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.controls
+ALTER TABLE ONLY public.measures
     ADD CONSTRAINT controls_pkey PRIMARY KEY (id);
 
 
@@ -748,18 +957,34 @@ ALTER TABLE ONLY public.domains
 
 
 --
--- Name: measures measures_clause_unique; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: exceptions exceptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.measures
+ALTER TABLE ONLY public.exceptions
+    ADD CONSTRAINT exceptions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: measure_risk measure_risk_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.measure_risk
+    ADD CONSTRAINT measure_risk_pkey PRIMARY KEY (risk_id, measure_id);
+
+
+--
+-- Name: controls measures_clause_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.controls
     ADD CONSTRAINT measures_clause_unique UNIQUE (clause);
 
 
 --
--- Name: measures measures_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: controls measures_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.measures
+ALTER TABLE ONLY public.controls
     ADD CONSTRAINT measures_pkey PRIMARY KEY (id);
 
 
@@ -796,6 +1021,22 @@ ALTER TABLE ONLY public.oauth_clients
 
 
 --
+-- Name: oauth_device_codes oauth_device_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_device_codes
+    ADD CONSTRAINT oauth_device_codes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_device_codes oauth_device_codes_user_code_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.oauth_device_codes
+    ADD CONSTRAINT oauth_device_codes_user_code_unique UNIQUE (user_code);
+
+
+--
 -- Name: oauth_personal_access_clients oauth_personal_access_clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -825,6 +1066,22 @@ ALTER TABLE ONLY public.personal_access_tokens
 
 ALTER TABLE ONLY public.personal_access_tokens
     ADD CONSTRAINT personal_access_tokens_token_unique UNIQUE (token);
+
+
+--
+-- Name: risk_scoring_configs risk_scoring_configs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.risk_scoring_configs
+    ADD CONSTRAINT risk_scoring_configs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: risks risks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.risks
+    ADD CONSTRAINT risks_pkey PRIMARY KEY (id);
 
 
 --
@@ -879,7 +1136,7 @@ ALTER TABLE ONLY public.users
 -- Name: control_id_fk_5920381; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX control_id_fk_5920381 ON public.control_user USING btree (control_id);
+CREATE INDEX control_id_fk_5920381 ON public.control_user USING btree (measure_id);
 
 
 --
@@ -904,6 +1161,20 @@ CREATE INDEX oauth_clients_user_id_index ON public.oauth_clients USING btree (us
 
 
 --
+-- Name: oauth_device_codes_client_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX oauth_device_codes_client_id_index ON public.oauth_device_codes USING btree (client_id);
+
+
+--
+-- Name: oauth_device_codes_user_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX oauth_device_codes_user_id_index ON public.oauth_device_codes USING btree (user_id);
+
+
+--
 -- Name: oauth_refresh_tokens_access_token_id_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -922,6 +1193,34 @@ CREATE INDEX password_resets_email_index ON public.password_resets USING btree (
 --
 
 CREATE INDEX personal_access_tokens_tokenable_type_tokenable_id_index ON public.personal_access_tokens USING btree (tokenable_type, tokenable_id);
+
+
+--
+-- Name: risk_scoring_configs_is_active_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX risk_scoring_configs_is_active_index ON public.risk_scoring_configs USING btree (is_active);
+
+
+--
+-- Name: risks_next_review_at_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX risks_next_review_at_index ON public.risks USING btree (next_review_at);
+
+
+--
+-- Name: risks_owner_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX risks_owner_id_index ON public.risks USING btree (owner_id);
+
+
+--
+-- Name: risks_status_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX risks_status_index ON public.risks USING btree (status);
 
 
 --
@@ -944,7 +1243,7 @@ ALTER TABLE ONLY public.action_measure
 --
 
 ALTER TABLE ONLY public.action_measure
-    ADD CONSTRAINT action_measure_measure_id_foreign FOREIGN KEY (measure_id) REFERENCES public.measures(id);
+    ADD CONSTRAINT action_measure_measure_id_foreign FOREIGN KEY (control_id) REFERENCES public.controls(id);
 
 
 --
@@ -968,7 +1267,7 @@ ALTER TABLE ONLY public.action_user
 --
 
 ALTER TABLE ONLY public.actions
-    ADD CONSTRAINT actions_control_id_foreign FOREIGN KEY (control_id) REFERENCES public.controls(id);
+    ADD CONSTRAINT actions_control_id_foreign FOREIGN KEY (measure_id) REFERENCES public.measures(id);
 
 
 --
@@ -976,7 +1275,7 @@ ALTER TABLE ONLY public.actions
 --
 
 ALTER TABLE ONLY public.control_user
-    ADD CONSTRAINT control_id_fk_49294573 FOREIGN KEY (control_id) REFERENCES public.controls(id) ON DELETE CASCADE;
+    ADD CONSTRAINT control_id_fk_49294573 FOREIGN KEY (measure_id) REFERENCES public.measures(id) ON DELETE CASCADE;
 
 
 --
@@ -1000,7 +1299,7 @@ ALTER TABLE ONLY public.control_measure
 --
 
 ALTER TABLE ONLY public.control_user_group
-    ADD CONSTRAINT control_user_group_control_id_foreign FOREIGN KEY (control_id) REFERENCES public.controls(id);
+    ADD CONSTRAINT control_user_group_control_id_foreign FOREIGN KEY (measure_id) REFERENCES public.measures(id);
 
 
 --
@@ -1016,22 +1315,54 @@ ALTER TABLE ONLY public.control_user_group
 --
 
 ALTER TABLE ONLY public.documents
-    ADD CONSTRAINT documents_control_id_foreign FOREIGN KEY (control_id) REFERENCES public.controls(id);
+    ADD CONSTRAINT documents_control_id_foreign FOREIGN KEY (measure_id) REFERENCES public.measures(id);
 
 
 --
--- Name: controls fk_controls_next_id; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: exceptions exceptions_approved_by_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.controls
-    ADD CONSTRAINT fk_controls_next_id FOREIGN KEY (next_id) REFERENCES public.controls(id);
+ALTER TABLE ONLY public.exceptions
+    ADD CONSTRAINT exceptions_approved_by_foreign FOREIGN KEY (approved_by) REFERENCES public.users(id) ON DELETE SET NULL;
 
 
 --
--- Name: measures measures_domain_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: exceptions exceptions_created_by_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.exceptions
+    ADD CONSTRAINT exceptions_created_by_foreign FOREIGN KEY (created_by) REFERENCES public.users(id) ON DELETE SET NULL;
+
+
+--
+-- Name: exceptions exceptions_measure_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.exceptions
+    ADD CONSTRAINT exceptions_measure_id_foreign FOREIGN KEY (control_id) REFERENCES public.controls(id) ON DELETE SET NULL;
+
+
+--
+-- Name: exceptions exceptions_submitted_by_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.exceptions
+    ADD CONSTRAINT exceptions_submitted_by_foreign FOREIGN KEY (submitted_by) REFERENCES public.users(id) ON DELETE SET NULL;
+
+
+--
+-- Name: measures fk_controls_next_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.measures
+    ADD CONSTRAINT fk_controls_next_id FOREIGN KEY (next_id) REFERENCES public.measures(id);
+
+
+--
+-- Name: controls measures_domain_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.controls
     ADD CONSTRAINT measures_domain_id_foreign FOREIGN KEY (domain_id) REFERENCES public.domains(id);
 
 
@@ -1063,12 +1394,16 @@ ALTER TABLE ONLY public.user_user_group
 -- PostgreSQL database dump complete
 --
 
+\unrestrict GQUxUO3V0jYzsoHzrfr7NdCevv2S7WIw8OaeAUmQlZeifsoL30Tz7cEAPkM6KWt
+
 --
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.8 (Debian 15.8-0+deb12u1)
--- Dumped by pg_dump version 15.8 (Debian 15.8-0+deb12u1)
+\restrict qq4WoJrU5rJDc8SgNXgfpfyEAhMdomFpKf9fYFiARZOLTknUgUU5Eoi9bTS45mh
+
+-- Dumped from database version 15.18 (Debian 15.18-0+deb12u1)
+-- Dumped by pg_dump version 15.18 (Debian 15.18-0+deb12u1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1120,6 +1455,13 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 32	2025_04_29_123908_add_user_group	2
 34	2025_05_27_152856_change_actions	3
 35	2025_07_31_090259_alter_note_on_controls_table	3
+36	2024_06_01_000001_create_oauth_device_codes_table	4
+37	2026_04_07_151247_create_risk_table	4
+38	2026_04_07_152854_create_risk_scoring_table	4
+39	2026_04_16_081633_change_note_precision_in_controls_table	4
+40	2026_04_23_160957_create_exceptions_table	4
+41	2026_05_21_000001_swap_measures_controls_tables	4
+42	2026_05_21_000002_fix_control_measure_foreign_keys	4
 \.
 
 
@@ -1127,10 +1469,12 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 35, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 42, true);
 
 
 --
 -- PostgreSQL database dump complete
 --
+
+\unrestrict qq4WoJrU5rJDc8SgNXgfpfyEAhMdomFpKf9fYFiARZOLTknUgUU5Eoi9bTS45mh
 
