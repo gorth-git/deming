@@ -31,6 +31,15 @@ return new class extends Migration
         // New: control_id → controls (security measures)
         //      measure_id → measures (audit instances)
         // Solution: swap the column VALUES
+        // PostgreSQL enforces FK constraints immediately (no session-level disable);
+        // drop them here — migration _000002 will recreate with correct targets.
+        if ($driver === 'pgsql') {
+            Schema::table('control_measure', function (Blueprint $table) {
+                $table->dropForeign(['control_id']);
+                $table->dropForeign(['measure_id']);
+            });
+        }
+
         DB::statement('ALTER TABLE control_measure ADD COLUMN swap_tmp INTEGER NULL');
         DB::statement('UPDATE control_measure SET swap_tmp = control_id');
         DB::statement('UPDATE control_measure SET control_id = measure_id');
@@ -127,6 +136,15 @@ return new class extends Migration
         });
 
         // Reverse step 2: swap back control_measure column values
+        // PostgreSQL: migration _000002 down() restores FKs pointing to the swapped tables;
+        // drop them again before the reverse UPDATE so constraints aren't violated.
+        if ($driver === 'pgsql') {
+            Schema::table('control_measure', function (Blueprint $table) {
+                $table->dropForeign(['control_id']);
+                $table->dropForeign(['measure_id']);
+            });
+        }
+
         DB::statement('ALTER TABLE control_measure ADD COLUMN swap_tmp INTEGER NULL');
         DB::statement('UPDATE control_measure SET swap_tmp = control_id');
         DB::statement('UPDATE control_measure SET control_id = measure_id');
@@ -144,6 +162,15 @@ return new class extends Migration
             DB::statement('PRAGMA foreign_keys = ON');
         } elseif (in_array($driver, ['mysql', 'mariadb'])) {
             DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        }
+
+        // PostgreSQL: MySQL auto-follows FK targets during RENAME; PostgreSQL does not.
+        // Recreate FKs pointing to the original (restored) table names.
+        if ($driver === 'pgsql') {
+            Schema::table('control_measure', function (Blueprint $table) {
+                $table->foreign('control_id')->references('id')->on('controls');
+                $table->foreign('measure_id')->references('id')->on('measures');
+            });
         }
     }
 };
