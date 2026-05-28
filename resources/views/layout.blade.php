@@ -181,6 +181,7 @@
                             request()->is('domains*')||
                             request()->is('users*')||
                             request()->is('group*')||
+                            request()->is('risk/scoring*')||
                             request()->is('alice/import*')||
                             request()->is('doc*')||
                             request()->is('config*')||

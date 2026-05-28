@@ -350,8 +350,8 @@ return [
         'create'         => 'New Risk',
         'edit'           => 'Edit Risk',
         'matrix'         => 'Risk Matrix',
-        'singular'       => 'risk',
-        'plural'         => 'risks',
+        'singular'       => 'Risk',
+        'plural'         => 'Risks',
 
         // Risk levels (displayed in badges and counters)
         'levels' => [
