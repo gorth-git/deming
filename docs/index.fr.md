@@ -68,9 +68,9 @@ Deming permet de répondre à ces exigences et de conserver les informations doc
 
 ## Definitions
 
-**Mesures de sécurité** (en anglais « Control ») : ensemble de dispositions à mettre en œuvre. Ce sont les mesures à prendre pour mettre en œuvre la politique de sécurité.
+**Mesures de sécurité** (en anglais « controls ») : ensemble de dispositions à mettre en œuvre. Ce sont les mesures à prendre pour mettre en œuvre la politique de sécurité.
 
-**Contrôle** ou Mesurage (en anglais « Measurement ») : processus d’obtention relative à l’efficacité d’un SMSI et de mesures de sécurité, à l’aide d’une méthode d’évaluation, d’une fonction d’évaluation, d’un modèle analytique, et de critère de décisions [ISO/IEC 27004].
+**Contrôle** ou Mesurage (en anglais « measurement ») : processus d’obtention relative à l’efficacité d’un SMSI et de mesures de sécurité, à l’aide d’une méthode d’évaluation, d’une fonction d’évaluation, d’un modèle analytique, et de critère de décisions [ISO/IEC 27004].
 
 **Indicateur** : résultat de l’application d’un modèle analytique à une ou plusieurs variables en relation avec les critères de décision ou d’un besoin d’information [ISO/IEC 27004].
 
