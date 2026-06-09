@@ -9,11 +9,11 @@
         "firebase/php-jwt": "^7.0",
         "directorytree/ldaprecord-laravel": "^3.4",
         "erusev/parsedown": "^1.7",
-        "laravel/framework": "^11.9",
+        "laravel/framework": "^13.10",
         "laravel/passport": "^13",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.16",
-        "laravel/tinker": "^2.9",
+        "laravel/tinker": "^3.0",
         "laravel/ui": "^4.5",
         "maatwebsite/excel": "^3.1",
         "phpmailer/phpmailer": "^6.9.2",
@@ -28,10 +28,10 @@
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
         "nunomaduro/phpinsights": "^2.12",
-        "pestphp/pest": "^3.8",
-        "pestphp/pest-plugin-laravel": "^3.2",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0",
         "phpstan/phpstan": "*",
-        "phpunit/phpunit": "^11.0.1"
+        "phpunit/phpunit": "^12.0"
     },
     "autoload": {
       "files": ["app/Helpers/color_helpers.php"],
