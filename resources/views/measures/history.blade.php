@@ -4,7 +4,7 @@
 <div class="row">
     <div class="cell-lg-6 cell-md-12">
 
-        <div data-role="panel" data-title-caption="{{ trans('cruds.control.history') }}" data-collapsible="false" data-title-icon="<span class='mif-stacked-bar-chart'></span>">
+        <div data-role="panel" data-title-caption="{{ trans('cruds.measure.history') }}" data-collapsible="false" data-title-icon="<span class='mif-stacked-bar-chart'></span>">
 
             <canvas id="canvas-status" width="600" height="300px" class="chartjs-render-monitor">
             </canvas>
@@ -253,7 +253,7 @@
 </div>
 
     <div class="cell-lg-6 cell-md-12">
-        <div data-role="panel" data-title-caption="{{ trans('cruds.control.calendar') }}" data-collapsible="false" data-title-icon="<span class='mif-calendar'></span>">
+        <div data-role="panel" data-title-caption="{{ trans('cruds.measure.calendar') }}" data-collapsible="false" data-title-icon="<span class='mif-calendar'></span>">
 
             <?php
             if (Request::get('date')!==null)

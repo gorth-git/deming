@@ -3,7 +3,7 @@
 @section('title', $control->name)
 
 @section("content")
-<div data-role="panel" data-title-caption="{{ trans('cruds.measure.edit') }}" data-collapsible="false" data-title-icon="<span class='mif-books'></span>">
+<div data-role="panel" data-title-caption="{{ trans('cruds.control.edit') }}" data-collapsible="false" data-title-icon="<span class='mif-books'></span>">
 
 @include('partials.errors')
 
@@ -12,7 +12,7 @@
 	<div class="grid">
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.measure.fields.domain') }}</strong>
+	    		<strong>{{ trans('cruds.control.fields.domain') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-8">
 			<select name="domain_id" data-role="select">
@@ -28,7 +28,7 @@
 		</div>
 		<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.measure.fields.clause') }}</strong>
+	    		<strong>{{ trans('cruds.control.fields.clause') }}</strong>
 	    	</div>
 			<div class="cell-lg-3 cell-md-5">
 				<input type="text" name="clause" data-role="input"
@@ -39,7 +39,7 @@
 
 		<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.measure.fields.name') }}</strong>
+	    		<strong>{{ trans('cruds.control.fields.name') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-8">
 				<input type="text" name="name" data-role="input"
@@ -50,7 +50,7 @@
 
 		<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.measure.fields.objective') }}</strong>
+	    		<strong>{{ trans('cruds.control.fields.objective') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-8">
                 <textarea name="objective" class="easymde" id="mde1">{{ $errors->has('objective') ?  old('objective') : $control->objective }}</textarea>
@@ -59,7 +59,7 @@
 
 		<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.measure.fields.attributes') }}</strong>
+	    		<strong>{{ trans('cruds.control.fields.attributes') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-8">
 				<select data-role="select" name="attributes[]" data-filter="true" multiple>
@@ -72,7 +72,7 @@
 
 		<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.measure.fields.input') }}</strong>
+	    		<strong>{{ trans('cruds.control.fields.input') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-8">
                 <textarea name="input" class="easymde" id="input">{{ $errors->has('input') ?  old('input') : $control->input }}</textarea>
@@ -80,7 +80,7 @@
 		</div>
 		<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.measure.fields.model') }}</strong>
+	    		<strong>{{ trans('cruds.control.fields.model') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-8">
 				<textarea class="textarea" name="model" rows="3" data-role="textarea" data-clear-button="false">{{ $errors->has('model') ?  old('model') : $control->model }}</textarea>
@@ -88,7 +88,7 @@
 		</div>
 		<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.measure.fields.indicator') }}</strong>
+	    		<strong>{{ trans('cruds.control.fields.indicator') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-8">
 				<textarea name="indicator" rows="3" data-role="textarea" data-clear-button="false">{{ $errors->has('indicator') ?  old('indicator') : $control->indicator }}</textarea>
@@ -96,7 +96,7 @@
 		</div>
 		<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.measure.fields.action_plan') }}</strong>
+	    		<strong>{{ trans('cruds.control.fields.action_plan') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-8">
                 <textarea name="action_plan" class="easymde" id="action_plan">{{ $errors->has('action_plan') ?  old('action_plan') : $control->action_plan }}</textarea>

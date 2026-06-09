@@ -121,12 +121,12 @@
                     >
                     <thead>
                         <tr>
-                            <th data-sortable="true">{{ trans('cruds.control.fields.clauses') }}</th>
-                            <th data-sortable="true">{{ trans('cruds.control.fields.name') }}</th>
-                            <th data-sortable="true">{{ trans('cruds.control.fields.scope') }}</th>
-                            <th data-sortable="true">{{ trans('cruds.control.fields.score') }}</th>
-                            <th data-sortable="true">{{ trans('cruds.control.fields.realisation_date') }}</th>
-                            <th data-sortable="true" data-sort-dir="asc">{{ trans('cruds.control.fields.plan_date') }}</th>
+                            <th data-sortable="true">{{ trans('cruds.measure.fields.clauses') }}</th>
+                            <th data-sortable="true">{{ trans('cruds.measure.fields.name') }}</th>
+                            <th data-sortable="true">{{ trans('cruds.measure.fields.scope') }}</th>
+                            <th data-sortable="true">{{ trans('cruds.measure.fields.score') }}</th>
+                            <th data-sortable="true">{{ trans('cruds.measure.fields.realisation_date') }}</th>
+                            <th data-sortable="true" data-sort-dir="asc">{{ trans('cruds.measure.fields.plan_date') }}</th>
                         </tr>
                     </thead>
                     <tbody>

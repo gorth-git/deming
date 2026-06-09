@@ -3,7 +3,7 @@
 @section('title', $measure->name)
 
 @section("content")
-<div data-role="panel" data-title-caption='{{ trans("cruds.control.edit")}}' data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
+<div data-role="panel" data-title-caption='{{ trans("cruds.measure.edit")}}' data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
 
     @include('partials.errors')
 
@@ -15,7 +15,7 @@
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.control.fields.clauses") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.clauses") }}</strong>
 				</div>
 	    		<div class="cell-lg-6 cell-md-10">
                     <select id="controls" name="controls[]" data-role="select" data-filter="true" multiple>
@@ -31,13 +31,13 @@
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.control.fields.name") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.name") }}</strong>
 	    		</div>
                 <div class="cell-lg-4 cell-md-6">
 					<input type="text" data-role="input" name="name" value="{{ $measure->name }}" maxlength="255">
 				</div>
                 <div class="cell-lg-1 cell-md-1" align="right">
-		    		<strong>{{ trans("cruds.control.fields.scope") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.scope") }}</strong>
                 </div>
                 <div class="cell-lg-1 cell-md-3">
 					<input type="text" name="scope" data-role="input" autocomplete="off" maxlength="32"
@@ -48,7 +48,7 @@
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.control.fields.objective") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.objective") }}</strong>
 		    	</div>
 				<div class="cell-lg-6 cell-md-10">
                     <textarea name="objective" class="easymde" id="objective">{{ $errors->has('objective') ?  old('objective') : $measure->objective }}</textarea>
@@ -57,7 +57,7 @@
 
 			<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans('cruds.control.fields.attributes') }}</strong>
+		    		<strong>{{ trans('cruds.measure.fields.attributes') }}</strong>
 		    	</div>
 				<div class="cell-lg-6 cell-md-10">
                     <select data-role="select" id="attributes" data-filter="true" name="attributes[]" multiple>
@@ -72,7 +72,7 @@
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.control.fields.input") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.input") }}</strong>
 		    	</div>
 				<div class="cell-lg-6 cell-md-10">
                     <textarea name="input" class="easymde" id="input">{{ $errors->has('input') ?  old('input') : $measure->input }}</textarea>
@@ -80,7 +80,7 @@
 			</div>
 			<div class="row">
                 <div class="cell-lg-1 cell-md-2">
-                    <strong>{{ trans('cruds.control.fields.model') }}</strong>
+                    <strong>{{ trans('cruds.measure.fields.model') }}</strong>
                 </div>
                 <div class="cell-lg-6 cell-md-10">
                     <textarea class="textarea" name="model" rows="3" data-role="textarea" data-clear-button="false">{{ $errors->has('model') ?  old('model') : $measure->model }}</textarea>
@@ -89,7 +89,7 @@
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.control.fields.plan_date") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.plan_date") }}</strong>
 		    	</div>
 				<div class="cell-lg-2 cell-md-3">
 					<input
@@ -102,7 +102,7 @@
                 <div class="cell-lg-1 cell-md-2">
                 </div>
                 <div class="cell-lg-1 cell-md-2" align="right">
-		    		<strong>{{ trans("cruds.control.fields.realisation_date") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.realisation_date") }}</strong>
 		    	</div>
 				<div class="cell-lg-2 cell-md-3">
 					<input
@@ -117,7 +117,7 @@
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.control.fields.observations") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.observations") }}</strong>
 		    	</div>
 				<div class="cell-lg-6 cell-md-10">
 					<textarea name="observations" rows="5" data-role="textarea" data-clear-button="false">{{ $errors->has('observations') ?  old('observations') : $measure->observations }}</textarea>
@@ -126,7 +126,7 @@
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.control.fields.evidence") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.evidence") }}</strong>
 		    	</div>
 				<div class="cell-lg-6 cell-md-10">
 					<div class="dropzone dropzone-previews" id="dropzoneFileUpload"></div>
@@ -135,7 +135,7 @@
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.control.fields.note") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.note") }}</strong>
 		    	</div>
                 <div class="cell-lg-2 cell-md-2">
                     <input
@@ -153,7 +153,7 @@
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.control.fields.indicator") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.indicator") }}</strong>
 		    	</div>
                 <div class="cell-lg-6 cell-md-10">
                     <textarea class="textarea" name="indicator" rows="3" data-role="textarea" data-clear-button="false">{{ $errors->has('indicator') ?  old('indicator') : $measure->indicator }}</textarea>
@@ -162,7 +162,7 @@
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.control.fields.score") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.score") }}</strong>
 		    	</div>
                 <div class="cell-lg-6 cell-md-10">
 					<input type="radio" name="score" value="3" data-role="radio" data-append="<font color='green'>{{ trans('common.green') }}</font>" {{ ($measure->score==3) ? 'checked' : '' }}/>
@@ -173,7 +173,7 @@
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.control.fields.action_plan") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.action_plan") }}</strong>
 		    	</div>
 				<div class="cell-lg-6 cell-md-10">
                     <textarea name="action_plan" class="easymde" id="action_plan">{{ $errors->has('action_plan') ?  old('action_plan') : $measure->action_plan }}</textarea>
@@ -183,7 +183,7 @@
 
 			<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans('cruds.control.fields.periodicity') }}</strong>
+		    		<strong>{{ trans('cruds.measure.fields.periodicity') }}</strong>
 		    	</div>
                 <div class="cell-lg-2 cell-md-2">
                     <select data-role="select" id="periodicity" name="periodicity">
@@ -220,7 +220,7 @@
 
 			<div class="row">
                 <div class="cell-lg-1 cell-md-2">
-                    <strong>{{ trans('cruds.control.fields.owners') }}</strong>
+                    <strong>{{ trans('cruds.measure.fields.owners') }}</strong>
                 </div>
                 <div class="cell-lg-6 cell-md-10">
                     <select data-role="select" name="owners[]" id="owners" data-filter="true" multiple>

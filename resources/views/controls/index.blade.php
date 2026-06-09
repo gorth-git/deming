@@ -1,7 +1,7 @@
 @extends("layout")
 
 @section("content")
-<div data-role="panel" data-title-caption="{{ trans('cruds.measure.index') }}" data-collapsible="false" data-title-icon="<span class='mif-books'></span>">
+<div data-role="panel" data-title-caption="{{ trans('cruds.control.index') }}" data-collapsible="false" data-title-icon="<span class='mif-books'></span>">
 		<div class="grid">
             <div class="row mb-3">
 				<div class="cell-5">
@@ -44,10 +44,10 @@
                 data-role="table">
 		   <thead>
 			    <tr>
-					<th class="sortable-column sort-asc" width="10%">{{ trans('cruds.measure.fields.domain') }}</th>
-					<th class="sortable-column sort-asc" width="10%">{{ trans('cruds.measure.fields.clause') }}</th>
-					<th class="sortable-column sort-asc" width="60%">{{ trans('cruds.measure.fields.name') }}</th>
-					<th class="sortable-column sort-asc" data-cls-column="text-center" width="10%"># {{ trans('cruds.control.title') }}</th>
+					<th class="sortable-column sort-asc" width="10%">{{ trans('cruds.control.fields.domain') }}</th>
+					<th class="sortable-column sort-asc" width="10%">{{ trans('cruds.control.fields.clause') }}</th>
+					<th class="sortable-column sort-asc" width="60%">{{ trans('cruds.control.fields.name') }}</th>
+					<th class="sortable-column sort-asc" data-cls-column="text-center" width="10%"># {{ trans('cruds.measure.title') }}</th>
 					<th width="10%"></th>
 			    </tr>
 		    </thead>

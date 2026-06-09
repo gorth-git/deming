@@ -1,12 +1,12 @@
 @extends("layout")
 
 @section("content")
-    <div data-role="panel" data-title-caption='{{ trans("cruds.control.list")}}' data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
+    <div data-role="panel" data-title-caption='{{ trans("cruds.measure.list")}}' data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
     <div class="grid mb-2">
         <div class="row">
             <div class="cell-lg-2 cell-md-1">
                 <select id='domain' name="domain_id" data-role="select">
-                    <option value="0">-- {{ trans("cruds.control.fields.choose_domain")}} --</option>
+                    <option value="0">-- {{ trans("cruds.measure.fields.choose_domain")}} --</option>
                     @foreach ($domains as $domain)
                         <option value="{{ $domain->id }}"
                             @if (intval(Session::get("domain"))==$domain->id)
@@ -20,7 +20,7 @@
 
             <div class="cell-lg-2 cell-md-1">
                 <select id='clause' name="clause" data-role="select">
-                    <option value="none">-- {{ trans("cruds.control.fields.choose_clause")}} --</option>
+                    <option value="none">-- {{ trans("cruds.measure.fields.choose_clause")}} --</option>
                     @foreach ($clauses as $clause)
                         <option
                             @if (Session::get("clause")==trim($clause))
@@ -34,7 +34,7 @@
 
             <div class="cell-lg-2 cell-md-1">
                 <select id='scope' name="scope" data-role="select">
-                    <option value="none">-- {{ trans("cruds.control.fields.choose_scope")}} --</option>
+                    <option value="none">-- {{ trans("cruds.measure.fields.choose_scope")}} --</option>
                     @foreach ($scopes as $scope)
                         <option
                             @if (Session::get("scope")==$scope)
@@ -52,7 +52,7 @@
                         @if (Session::get("period")==="99")
                             selected
                         @endif
-                    >-- {{ trans("cruds.control.fields.choose_period") }} --</option>
+                    >-- {{ trans("cruds.measure.fields.choose_period") }} --</option>
                         @for ($i = -12; $i < 12; $i++)
                             <option value="{{ $i }}"
                             @if ((Session::get("period"))==strval($i))
@@ -65,9 +65,9 @@
                     </select>
                 </div>
             <div class="cell-lg-3 cell-md-2 mt-2">
-                 <input type="radio" data-role="radio" data-append="{{ trans("cruds.control.fields.status_all") }}" value="0" id="status0" {{ (Session::get("status")=="0") ? 'checked' : '' }}>
-                 <input type="radio" data-role="radio" data-append="{{ trans("cruds.control.fields.status_done") }}" value="1" id="status1" {{ (Session::get("status")=="1") ? 'checked' : '' }}>
-                 <input type="radio" data-role="radio" data-append="{{ trans("cruds.control.fields.status_todo") }}" value="2" id="status2" {{ (Session::get("status")=="2") ? 'checked' : '' }}>
+                 <input type="radio" data-role="radio" data-append="{{ trans("cruds.measure.fields.status_all") }}" value="0" id="status0" {{ (Session::get("status")=="0") ? 'checked' : '' }}>
+                 <input type="radio" data-role="radio" data-append="{{ trans("cruds.measure.fields.status_done") }}" value="1" id="status1" {{ (Session::get("status")=="1") ? 'checked' : '' }}>
+                 <input type="radio" data-role="radio" data-append="{{ trans("cruds.measure.fields.status_todo") }}" value="2" id="status2" {{ (Session::get("status")=="2") ? 'checked' : '' }}>
             </div>
             <div class="cell-lg-1 cell-md-2" align="right">
 			@if ((Auth::User()->role==1)||(Auth::User()->role==2))
@@ -93,13 +93,13 @@
        >
         <thead>
             <tr>
-                <th class="sortable-column" width="5%">{{ trans("cruds.control.fields.clauses") }}</th>
-                <th width="40%">{{ trans("cruds.control.fields.name") }}</th>
-                <th class="sortable-column" width="10%">{{ trans("cruds.control.fields.scope") }}</th>
-                <th class="sortable-column" width="5%">{{ trans("cruds.control.fields.score") }}</th>
-                <th class="sortable-column sort-asc"  width="5%">{{ trans("cruds.control.fields.planned") }}</th>
-                <th class="sortable-column sort-asc"  width="5%">{{ trans("cruds.control.fields.realized") }}</th>
-                <th class="sortable-column"  width="5%">{{ trans("cruds.control.fields.next") }}</th>
+                <th class="sortable-column" width="5%">{{ trans("cruds.measure.fields.clauses") }}</th>
+                <th width="40%">{{ trans("cruds.measure.fields.name") }}</th>
+                <th class="sortable-column" width="10%">{{ trans("cruds.measure.fields.scope") }}</th>
+                <th class="sortable-column" width="5%">{{ trans("cruds.measure.fields.score") }}</th>
+                <th class="sortable-column sort-asc"  width="5%">{{ trans("cruds.measure.fields.planned") }}</th>
+                <th class="sortable-column sort-asc"  width="5%">{{ trans("cruds.measure.fields.realized") }}</th>
+                <th class="sortable-column"  width="5%">{{ trans("cruds.measure.fields.next") }}</th>
             </tr>
         </thead>
         <tbody>

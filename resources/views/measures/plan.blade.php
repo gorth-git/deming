@@ -3,7 +3,7 @@
 @section('title', $measure->name)
 
 @section("content")
-<div data-role="panel" data-title-caption="{{ trans('cruds.control.plan') }}" data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
+<div data-role="panel" data-title-caption="{{ trans('cruds.measure.plan') }}" data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
 
     @include('partials.errors')
 
@@ -15,7 +15,7 @@
     <div class="grid">
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans("cruds.control.fields.clauses") }}</strong>
+        		<strong>{{ trans("cruds.measure.fields.clauses") }}</strong>
         	</div>
     		<div class="cell-lg-4 cell-md-5">
                 @foreach($measure->controls as $control)
@@ -29,14 +29,14 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.control.fields.name') }}</strong>
+        		<strong>{{ trans('cruds.measure.fields.name') }}</strong>
         	</div>
     		<div class="cell-lg-4 cell-md-5">
         		{{ $measure->name }}
     		</div>
             @if ($measure->scope!==null)
     		<div class="cell-lg-1 cell-md-2" align="right">
-        		<strong>{{ trans("cruds.control.fields.scope") }}</strong>
+        		<strong>{{ trans("cruds.measure.fields.scope") }}</strong>
         	</div>
     		<div class="cell-lg-1 cell-md-2">
                 <a href="/bob/index?scope={{ $measure->scope }}">
@@ -47,7 +47,7 @@
     	</div>
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.control.fields.objective') }}</strong>
+        		<strong>{{ trans('cruds.measure.fields.objective') }}</strong>
         	</div>
             <div class="cell-lg-6 cell-md-10">
                 {!! \Parsedown::instance()->text($measure->objective) !!}
@@ -56,7 +56,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-    			<strong>{{ trans('cruds.control.fields.plan_date') }}</strong>
+    			<strong>{{ trans('cruds.measure.fields.plan_date') }}</strong>
         	</div>
     		<div class="cell-lg-2 cell-md-3">
     			<input type="text" data-role="calendarpicker" name="plan_date" value="{{
@@ -72,7 +72,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.control.fields.periodicity') }}</strong>
+        		<strong>{{ trans('cruds.measure.fields.periodicity') }}</strong>
         	</div>
     		<div class="cell-lg-2 cell-md-3">
     			<select name="periodicity" data-role="select">
@@ -88,7 +88,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-    			<strong>{{ trans('cruds.control.fields.owners') }}</strong>
+    			<strong>{{ trans('cruds.measure.fields.owners') }}</strong>
         	</div>
             <div class="cell-lg-4 cell-md-8">
                 <select data-role="select" name="owners[]" id="owners" multiple>

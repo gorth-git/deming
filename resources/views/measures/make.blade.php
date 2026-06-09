@@ -12,7 +12,7 @@
 @endsection
 
 @section("content")
-<div data-role="panel" data-title-caption="{{ trans('cruds.control.make') }}" data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
+<div data-role="panel" data-title-caption="{{ trans('cruds.measure.make') }}" data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
 
 @include('partials.errors')
 
@@ -23,7 +23,7 @@
 	<div class="grid">
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.control.fields.clauses') }}</strong>
+	    		<strong>{{ trans('cruds.measure.fields.clauses') }}</strong>
 	    	</div>
     		<div class="cell-lg-4 cell-md-5">
                 @foreach($measure->controls as $control)
@@ -37,14 +37,14 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.control.fields.name') }}</strong>
+	    		<strong>{{ trans('cruds.measure.fields.name') }}</strong>
 	    	</div>
     		<div class="cell-lg-5 cell-md-5">
 				{{ $measure->name }}
 			</div>
             @if ($measure->scope!==null)
             <div class="cell-2">
-	    		<strong>{{ trans("cruds.control.fields.scope") }}</strong>
+	    		<strong>{{ trans("cruds.measure.fields.scope") }}</strong>
 	    		&nbsp;
     			{{ $measure->scope }}
     		</div>
@@ -53,7 +53,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.control.fields.objective') }}</strong>
+	    		<strong>{{ trans('cruds.measure.fields.objective') }}</strong>
 	    	</div>
             <div class="cell-lg-6 cell-md-10">
                 {!! \Parsedown::instance()->text($measure->objective) !!}
@@ -62,7 +62,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.control.fields.input') }}</strong>
+	    		<strong>{{ trans('cruds.measure.fields.input') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-10">
                 {!! \Parsedown::instance()->text($measure->input) !!}
@@ -71,7 +71,7 @@
 
         <div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.control.fields.model') }}</strong>
+	    		<strong>{{ trans('cruds.measure.fields.model') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-10">
 				<pre>{{ $measure->model }}</pre>
@@ -81,7 +81,7 @@
         <div class="row">
 
 			<div class="cell-lg-1 cell-md-2">
-				<b>{{ trans('cruds.control.fields.plan_date') }}</b>
+				<b>{{ trans('cruds.measure.fields.plan_date') }}</b>
 			</div>
             <div class="cell-lg-2 cell-md-4">
                 @if ((Auth::User()->role === 1)||(Auth::User()->role === 2))
@@ -97,7 +97,7 @@
                 @endif
 			</div>
             <div class="cell-lg-2 cell-md-3" align="right">
-	    		<strong>{{ trans('cruds.control.fields.realisation_date') }}</strong>
+	    		<strong>{{ trans('cruds.measure.fields.realisation_date') }}</strong>
 	    	</div>
             <div class="cell-lg-2 cell-md-3">
 				<input type="text"
@@ -114,7 +114,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.control.fields.observations') }}</strong>
+	    		<strong>{{ trans('cruds.measure.fields.observations') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-10">
                 <textarea name="observations" rows="5" data-role="textarea" data-clear-button="false">{{ count($errors)>0 ?  old('observations') : $measure->observations }}</textarea>
@@ -123,9 +123,9 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.control.fields.evidence') }}</strong>
+	    		<strong>{{ trans('cruds.measure.fields.evidence') }}</strong>
 	    		<br>
-                <a target="_new" href="/bob/template/{{ $measure->id }}" id="checklist-link">{{ trans('cruds.control.checklist') }}</a>
+                <a target="_new" href="/bob/template/{{ $measure->id }}" id="checklist-link">{{ trans('cruds.measure.checklist') }}</a>
 	    	</div>
 			<div class="cell-lg-6 cell-md-10">
 				<div class="dropzone dropzone-previews" id="dropzoneFileUpload"></div>
@@ -134,7 +134,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.control.fields.note') }}</strong>
+	    		<strong>{{ trans('cruds.measure.fields.note') }}</strong>
 	    	</div>
             <div class="cell-lg-2 cell-md-3">
                 <input
@@ -152,7 +152,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.control.fields.indicator') }}</strong>
+	    		<strong>{{ trans('cruds.measure.fields.indicator') }}</strong>
 	    	</div>
             <div class="cell-lg-6 cell-md-10">
 				<pre>{{ $measure->indicator }}</pre>
@@ -162,7 +162,7 @@
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
 	    		<strong>
-	    			{{ trans('cruds.control.fields.score') }}
+	    			{{ trans('cruds.measure.fields.score') }}
 	    		</strong>
 	    	</div>
             <div class="cell-lg-6 cell-md-10">
@@ -176,12 +176,12 @@
             <div class="cell-lg-1 cell-md-2">
             </div>
             <div class="cell-3">
-                <input type="checkbox" name="add_action_plan" data-role="checkbox" id="toggleTextarea" data-append="{{ trans('cruds.control.create_action') }}"/>
+                <input type="checkbox" name="add_action_plan" data-role="checkbox" id="toggleTextarea" data-append="{{ trans('cruds.measure.create_action') }}"/>
             </div>
         </div>
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.control.fields.action_plan') }}</strong>
+	    		<strong>{{ trans('cruds.measure.fields.action_plan') }}</strong>
 	    	</div>
             <div class="cell-lg-6 cell-md-10">
                 <textarea name="action_plan" class="form-control easymde disabled-editor" id="action_plan">{{ $errors->count()>0 ?  old('action_plan') : $measure->action_plan }}</textarea>
@@ -191,7 +191,7 @@
 		@if ($measure->periodicity!==0)
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans('cruds.control.fields.next') }}</strong>
+	    		<strong>{{ trans('cruds.measure.fields.next') }}</strong>
 	    	</div>
             <div class="cell-ld-2 cell-md-3">
                 @if ((Auth::User()->role === 1)||(Auth::User()->role === 2))

@@ -1,7 +1,7 @@
 @extends("layout")
 
 @section("content")
-<div data-role="panel" data-title-caption="{{ trans('cruds.control.radar') }}" data-collapsible="false" data-title-icon="<span class='mif-pie-chart'></span>">
+<div data-role="panel" data-title-caption="{{ trans('cruds.measure.radar') }}" data-collapsible="false" data-title-icon="<span class='mif-pie-chart'></span>">
 
 <div class="grid">
     <div class="row">
@@ -21,7 +21,7 @@
                   <thead>
                   <tr>
                     <th width="80%">{{ $attribute->name }}</th>
-                    <th width="20%">{{ trans("cruds.control.fields.note") }}</th>
+                    <th width="20%">{{ trans("cruds.measure.fields.note") }}</th>
                   </tr>
                   </thead>
                   <tbody>

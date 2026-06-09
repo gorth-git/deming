@@ -66,7 +66,7 @@ return [
         'choose' => 'Choose an attribute',
         'title' => 'Attribute'
     ],
-     'control' => [
+     'measure' => [
          'description' => '',
          'fields' => [
             'action_plan' => 'Action Plan',
@@ -127,7 +127,7 @@ return [
      'notification' => [
          'subject' => 'Measurement list to carry out',
      ],
-     'measure' => [
+     'control' => [
          'title' => 'Control',
          'fields' => [
              'domain' => 'Domain',
@@ -205,7 +205,8 @@ return [
          'controls_export' => 'Export controls',
          'import' => 'Import',
          'actions_export' => 'Export action plans',
-     ],
+         'risks_export' => 'Export risk register',
+    ],
     'group' => [
          'index' => 'List of groups',
          'add' => 'Add a user group',

@@ -3,12 +3,12 @@
 @section('title', $measure->name)
 
 @section("content")
-<div data-role="panel" data-title-caption="{{ trans('cruds.control.title_singular') }}" data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
+<div data-role="panel" data-title-caption="{{ trans('cruds.measure.title_singular') }}" data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
 
 <div class="grid">
 	<div class="row">
 		<div class="cell-lg-1 cell-md-2">
-    		<strong>{{ trans("cruds.control.fields.clauses") }}</strong>
+    		<strong>{{ trans("cruds.measure.fields.clauses") }}</strong>
     	</div>
 		<div class="cell-lg-4 cell-md-5">
             @foreach($measure->controls as $control)
@@ -21,7 +21,7 @@
     </div>
 	<div class="row">
 		<div class="cell-lg-1 cell-md-2">
-    		<strong>{{ trans("cruds.control.fields.name") }}</strong>
+    		<strong>{{ trans("cruds.measure.fields.name") }}</strong>
     	</div>
         @if ($measure->scope===null)
 		<div class="cell-lg-6 cell-md-8">
@@ -32,7 +32,7 @@
     		 {{ $measure->name }}
 		</div>
 		<div class="cell-lg-1 cell-md-2" align="right">
-    		<strong>{{ trans("cruds.control.fields.scope") }}</strong>
+    		<strong>{{ trans("cruds.measure.fields.scope") }}</strong>
     	</div>
 		<div class="cell-lg-1 cell-md-2">
             <a href="/bob/index?scope={{ $measure->scope }}">
@@ -43,7 +43,7 @@
 	</div>
 	<div class="row">
 		<div class="cell-lg-1 cell-md-2">
-    		<strong>{{ trans("cruds.control.fields.objective") }}</strong>
+    		<strong>{{ trans("cruds.measure.fields.objective") }}</strong>
     	</div>
 		<div class="cell-lg-7 cell-md-9">
             {!! \Parsedown::instance()->text($measure->objective) !!}
@@ -53,7 +53,7 @@
 	@if ($measure->attributes!=null)
 	<div class="row">
 		<div class="cell-lg-1 cell-md-2">
-    		<strong>{{ trans("cruds.control.fields.attributes") }}</strong>
+    		<strong>{{ trans("cruds.measure.fields.attributes") }}</strong>
     	</div>
 		<div class="cell-lg-7 cell-md-9">
     		{{ $measure->attributes }}
@@ -63,7 +63,7 @@
 
 	<div class="row">
 		<div class="cell-lg-1 cell-md-2">
-    		<strong>{{ trans("cruds.control.fields.input") }}</strong>
+    		<strong>{{ trans("cruds.measure.fields.input") }}</strong>
     	</div>
 		<div class="cell-lg-7 cell-md-9">
             {!! \Parsedown::instance()->text($measure->input) !!}
@@ -72,7 +72,7 @@
 
 	<div class="row">
 		<div class="cell-lg-1 cell-md-2">
-    		<strong>{{ trans("cruds.control.fields.model") }}</strong>
+    		<strong>{{ trans("cruds.measure.fields.model") }}</strong>
     	</div>
 		<div class="cell-lg-7 cell-md-9">
 			<pre>{!! $measure->model !!}</pre>
@@ -81,14 +81,14 @@
 
 	<div class="row">
 		<div class="cell-lg-1 cell-md-2">
-    		<strong>{{ trans("cruds.control.fields.plan_date") }}</strong>
+    		<strong>{{ trans("cruds.measure.fields.plan_date") }}</strong>
     	</div>
 		<div class="cell-lg-1 cell-md-2 no-wrap">
     		{{ $measure->plan_date }}
 		</div>
 
 		<div class="cell-lg-1 cell-md-2 text-right">
-    		<strong>{{ trans("cruds.control.fields.realisation_date") }}</strong>
+    		<strong>{{ trans("cruds.measure.fields.realisation_date") }}</strong>
     	</div>
 		<div class="cell-lg-1 cell-md-2 no-wrap">
     		{{ $measure->realisation_date }}
@@ -122,7 +122,7 @@
 	@if ($measure->observations!=null)
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans("cruds.control.fields.observations") }}</strong>
+	    		<strong>{{ trans("cruds.measure.fields.observations") }}</strong>
 	    	</div>
 			<div class="cell-lg-5 cell-md-9">
 				<pre>{!! $measure->observations !!}</pre>
@@ -133,7 +133,7 @@
 	@if ($documents->isNotEmpty())
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans("cruds.control.fields.evidence") }}</strong>
+	    		<strong>{{ trans("cruds.measure.fields.evidence") }}</strong>
 	    	</div>
 			<div class="cell-lg-5 cell-md-8">
 				@foreach ($documents as $document)
@@ -148,7 +148,7 @@
 
 	<div class="row">
 		<div class="cell-lg-1 cell-md-2">
-    		<strong>{{ trans("cruds.control.fields.note") }}</strong>
+    		<strong>{{ trans("cruds.measure.fields.note") }}</strong>
     	</div>
 		<div class="cell-2">
 			{{ fmod($measure->note, 1) == 0 ? intval($measure->note) : $measure->note }}
@@ -158,7 +158,7 @@
 
 	<div class="row">
 		<div class="cell-lg-1 cell-md-2">
-    		<strong>{{ trans("cruds.control.fields.indicator") }}</strong>
+    		<strong>{{ trans("cruds.measure.fields.indicator") }}</strong>
     	</div>
 		<div class="cell-lg-6 cell-md-8">
 			<pre>{{ $measure->indicator }}</pre>
@@ -168,7 +168,7 @@
 	@if ($measure->score!==null)
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans("cruds.control.fields.score") }}</strong>
+	    		<strong>{{ trans("cruds.measure.fields.score") }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-8">
                 @if ($measure->score==1)
@@ -195,7 +195,7 @@
 	@if (($measure->realisation_date!=null)&&($measure->score!=3))
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-	    		<strong>{{ trans("cruds.control.fields.action_plan") }}</strong>
+	    		<strong>{{ trans("cruds.measure.fields.action_plan") }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-8">
                 {!! \Parsedown::instance()->text($measure->action_plan) !!}
@@ -205,7 +205,7 @@
 
 	<div class="row">
 		<div class="cell-lg-1 cell-md-2">
-    		<strong>{{ trans('cruds.control.fields.periodicity') }}</strong>
+    		<strong>{{ trans('cruds.measure.fields.periodicity') }}</strong>
     	</div>
 		<div class="cell-lg-6 cell-md-8">
 			@if ($measure->periodicity==0) {{ trans("common.once") }} @endif
@@ -219,7 +219,7 @@
 
 	<div class="row">
 		<div class="cell-lg-1 cell-md-2">
-    		<strong>{{ trans('cruds.control.fields.owners') }}</strong>
+    		<strong>{{ trans('cruds.measure.fields.owners') }}</strong>
     	</div>
 		<div class="cell-lg-6 cell-md-8">
             @foreach($measure->groups as $group)

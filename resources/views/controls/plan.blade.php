@@ -3,7 +3,7 @@
 @section('title', $control->name)
 
 @section("content")
-<div data-role="panel" data-title-caption="{{ trans('cruds.measure.plan') }}" data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
+<div data-role="panel" data-title-caption="{{ trans('cruds.control.plan') }}" data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
 
 @include('partials.errors')
 
@@ -13,7 +13,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans("cruds.control.fields.clauses") }}</strong>
+        		<strong>{{ trans("cruds.measure.fields.clauses") }}</strong>
         	</div>
     		<div class="cell-lg-6 cell-md-8">
     			<select data-role="select" name="controls[]" multiple>
@@ -28,13 +28,13 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.measure.fields.name') }}</strong>
+        		<strong>{{ trans('cruds.control.fields.name') }}</strong>
         	</div>
             <div class="cell-lg-4 cell-md-5">
     			<input type="text" class="input" name="name" value="{{ old('name', $control->name) }}" maxlength='255'>
     		</div>
             <div class="cell-lg-1 cell-md-1" align="right">
-        		<strong>{{ trans('cruds.control.fields.scope') }}</strong>
+        		<strong>{{ trans('cruds.measure.fields.scope') }}</strong>
         	</div>
     		<div class="cell-lg-1 cell-md-2">
     			<input type="text" name="scope" data-role="input" autocomplete="on" size="32"
@@ -44,7 +44,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.measure.fields.objective') }}</strong>
+        		<strong>{{ trans('cruds.control.fields.objective') }}</strong>
         	</div>
             <div class="cell-lg-6 cell-md-8">
                 <textarea name="objective" class="easymde" id="objetive">{{ old('objective', optional($control)->objective) }}</textarea>
@@ -53,7 +53,7 @@
 
     		<div class="row">
         		<div class="cell-lg-1 cell-md-2">
-    	    		<strong>{{ trans('cruds.measure.fields.attributes') }}</strong>
+    	    		<strong>{{ trans('cruds.control.fields.attributes') }}</strong>
     	    	</div>
                 <div class="cell-lg-6 cell-md-8">
     				<select data-role="select" name="attributes[]" data-filter="true" multiple>
@@ -66,7 +66,7 @@
 
         	<div class="row">
         		<div class="cell-lg-1 cell-md-2">
-    				<strong>{{ trans("cruds.measure.fields.input") }}</strong>
+    				<strong>{{ trans("cruds.control.fields.input") }}</strong>
     			</div>
                 <div class="cell-lg-6 cell-md-8">
                     <textarea name="input" class="easymde" id="input">{{ old('input', optional($control)->input) }}</textarea>
@@ -75,7 +75,7 @@
 
         	<div class="row">
         		<div class="cell-lg-1 cell-md-2">
-    				<strong>{{ trans("cruds.measure.fields.model") }}</strong>
+    				<strong>{{ trans("cruds.control.fields.model") }}</strong>
     			</div>
     			<div class="cell-lg-6 cell-md-8">
     				<textarea name="model" rows="3" data-role="textarea" data-clear-button="false">{{ old('model', optional($control)->model) }}</textarea>
@@ -84,7 +84,7 @@
 
         	<div class="row">
         		<div class="cell-lg-1 cell-md-2">
-    				<strong>{{ trans("cruds.measure.fields.indicator") }}</strong>
+    				<strong>{{ trans("cruds.control.fields.indicator") }}</strong>
     			</div>
     			<div class="cell-lg-6 cell-md-8">
     				<textarea name="indicator" rows="3" data-role="textarea" data-clear-button="false">{{ old('indicator', optional($control)->indicator) }}</textarea>
@@ -93,7 +93,7 @@
 
         	<div class="row">
         		<div class="cell-lg-1 cell-md-2">
-    				<strong>{{ trans("cruds.measure.fields.action_plan") }}</strong>
+    				<strong>{{ trans("cruds.control.fields.action_plan") }}</strong>
     			</div>
     			<div class="cell-lg-6 cell-md-8">
                     <textarea name="action_plan" class="easymde" id="action_plan">{{ old('action_plan', optional($control)->action_plan) }}</textarea>
@@ -102,7 +102,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-    			<strong>{{ trans('cruds.control.fields.plan_date') }}</strong>
+    			<strong>{{ trans('cruds.measure.fields.plan_date') }}</strong>
         	</div>
     		<div class="cell-lg-3 cell-md-4">
     			<input type="text" data-role="calendarpicker" name="plan_date"
@@ -114,7 +114,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.measure.fields.periodicity') }}</strong>
+        		<strong>{{ trans('cruds.control.fields.periodicity') }}</strong>
         	</div>
     		<div class="cell-lg-3 cell-md-4">
     			<select name="periodicity" data-role="select">
@@ -130,7 +130,7 @@
 
     <div class="row">
     	<div class="cell-lg-1 cell-md-2">
-    		<strong>{{ trans('cruds.control.fields.owners') }}</strong>
+    		<strong>{{ trans('cruds.measure.fields.owners') }}</strong>
     	</div>
     	<div class="cell-lg-5 cell-md-7">
             <select data-role="select" name="owners[]" id="owners" multiple>

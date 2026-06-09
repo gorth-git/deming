@@ -3,14 +3,14 @@
 @section('title', $control->name)
 
 @section("content")
-<div data-role="panel" data-title-caption="{{ trans('cruds.measure.show') }}" data-collapsible="false" data-title-icon="<span class='mif-books'></span>">
+<div data-role="panel" data-title-caption="{{ trans('cruds.control.show') }}" data-collapsible="false" data-title-icon="<span class='mif-books'></span>">
 
     @include('partials.errors')
 
     <div class="grid">
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.measure.fields.domain') }}</strong>
+        		<strong>{{ trans('cruds.control.fields.domain') }}</strong>
         	</div>
             <div class="cell-lg-7 cell-md-9">
     			<a href="/domains/{{$control->domain_id}}">
@@ -23,7 +23,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.measure.fields.clause') }}</strong> - <strong>{{ trans('cruds.measure.fields.name') }}</strong>
+        		<strong>{{ trans('cruds.control.fields.clause') }}</strong> - <strong>{{ trans('cruds.control.fields.name') }}</strong>
         	</div>
             <div class="cell-lg-7 cell-md-9">
     			{{ $control->clause }} - {{ $control->name }}
@@ -32,7 +32,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.measure.fields.objective') }}</strong>
+        		<strong>{{ trans('cruds.control.fields.objective') }}</strong>
         	</div>
             <div class="cell-lg-7 cell-md-9">
                 {!! \Parsedown::instance()->text($control->objective) !!}
@@ -42,7 +42,7 @@
     	@if ($control->attributes!=null)
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans("cruds.measure.fields.attributes") }}</strong>
+        		<strong>{{ trans("cruds.control.fields.attributes") }}</strong>
         	</div>
             <div class="cell-lg-7 cell-md-9">
         		{{ $control->attributes }}
@@ -52,7 +52,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.measure.fields.input') }}</strong>
+        		<strong>{{ trans('cruds.control.fields.input') }}</strong>
         	</div>
             <div class="cell-lg-7 cell-md-9">
                 {!! \Parsedown::instance()->text($control->input) !!}
@@ -61,7 +61,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.measure.fields.model') }}</strong>
+        		<strong>{{ trans('cruds.control.fields.model') }}</strong>
         	</div>
             <div class="cell-lg-7 cell-md-9">
     			<pre>{{ $control->model }}</pre>
@@ -71,7 +71,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.measure.fields.indicator') }}</strong>
+        		<strong>{{ trans('cruds.control.fields.indicator') }}</strong>
         	</div>
     		<div class="cell-lg-6 cell-md-9">
     			<pre>{{ $control->indicator }}</pre>
@@ -80,7 +80,7 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.measure.fields.action_plan') }}</strong>
+        		<strong>{{ trans('cruds.control.fields.action_plan') }}</strong>
         	</div>
     		<div class="cell-lg-6 cell-md-9">
                 {!! \Parsedown::instance()->text($control->action_plan) !!}
@@ -143,7 +143,7 @@
 <div>
     <br>
 </div>
-    <div data-role="panel" data-title-caption="{{ trans('cruds.control.title') }}" data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
+    <div data-role="panel" data-title-caption="{{ trans('cruds.measure.title') }}" data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
 
         <div>
             <table id="controls" class="table striped row-hover cell-border"
@@ -155,10 +155,10 @@
 			   <thead>
                     <tr class="row-hover">
                         <th class="sortable-column sort-asc" width="65%">{{ trans("cruds.welcome.controls") }}</th>
-                        <th class="sortable-column sort-asc" width="65%">{{ trans("cruds.control.fields.scope") }}</th>
-                        <th class="sortable-column sort-asc" width="5%">{{ trans("cruds.control.fields.score") }}</th>
-                        <th class="sortable-column sort-asc" width="15%">{{ trans("cruds.control.fields.plan_date") }}</th>
-                        <th class="sortable-column sort-asc" width="15%">{{ trans("cruds.control.fields.realisation_date") }}</th>
+                        <th class="sortable-column sort-asc" width="65%">{{ trans("cruds.measure.fields.scope") }}</th>
+                        <th class="sortable-column sort-asc" width="5%">{{ trans("cruds.measure.fields.score") }}</th>
+                        <th class="sortable-column sort-asc" width="15%">{{ trans("cruds.measure.fields.plan_date") }}</th>
+                        <th class="sortable-column sort-asc" width="15%">{{ trans("cruds.measure.fields.realisation_date") }}</th>
 				    </tr>
 			    </thead>
 			    <tbody>
