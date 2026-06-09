@@ -3,10 +3,8 @@ set -e
 
 cd /var/www/deming
 
-DB_H="mysql"
-
 echo "Waiting for MySQL to be ready..."
-until mysqladmin ping -h"${DB_H}" --silent 2>/dev/null; do
+until mysqladmin ping -h"${DB_HOST}" --silent 2>/dev/null; do
     echo "  Not ready, retrying in 3s..."
     sleep 3
 done
