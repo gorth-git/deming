@@ -3,10 +3,10 @@ docs_dir: docs
 # Project information
 site_name: Deming
 site_description: Information System made easy !
-site_url: https://dbarzin.githubs.io/deming/
+site_url: https://sourcentis.githubs.io/deming/
 
 # Repository
-repo_url: https://github.com/dbarzin/deming
+repo_url: https://github.com/sourcentis/deming
 edit_uri: edit/master/docs
 
 # Copyright

@@ -4,12 +4,12 @@ This document contains the evolutions planned in 2026
 
 ## Important
 
-* [x] Dashboard for auditees : https://github.com/dbarzin/deming/discussions/556
-* [x] Risks register : https://github.com/dbarzin/deming/discussions/562
-* [ ] Security exceptions : https://github.com/dbarzin/deming/issues/590
+* [x] Dashboard for auditees : https://github.com/sourcentis/deming/discussions/556
+* [x] Risks register : https://github.com/sourcentis/deming/discussions/562
+* [ ] Security exceptions : https://github.com/sourcentis/deming/issues/590
 * [ ] Configurable control scoring system
 * [ ] Export set of controls for audit
-* [ ] Send notifications to Slack with Laravel Notification Framework : https://github.com/dbarzin/deming/discussions/540
+* [ ] Send notifications to Slack with Laravel Notification Framework : https://github.com/sourcentis/deming/discussions/540
 * [ ] Non-regression tests
  
 ## Improvements

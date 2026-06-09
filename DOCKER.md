@@ -73,7 +73,7 @@ to container port 80.
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/dbarzin/deming.git
+git clone https://github.com/sourcentis/deming.git
 cd deming
 
 # 2. Create the environment file
@@ -635,10 +635,10 @@ docker compose exec deming php artisan env
 
 ## Useful References
 
-- **Project repository:** https://github.com/dbarzin/deming
-- **Official documentation:** https://dbarzin.github.io/deming/
-- **API documentation:** https://dbarzin.github.io/deming/api/
-- **Issue tracker:** https://github.com/dbarzin/deming/issues
-- **Discussions:** https://github.com/dbarzin/deming/discussions
+- **Project repository:** https://github.com/sourcentis/deming
+- **Official documentation:** https://sourcentis.github.io/deming/
+- **API documentation:** https://sourcentis.github.io/deming/api/
+- **Issue tracker:** https://github.com/sourcentis/deming/issues
+- **Discussions:** https://github.com/sourcentis/deming/discussions
 - **License:** GPL-3.0
 
