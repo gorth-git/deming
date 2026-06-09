@@ -1587,7 +1587,7 @@ class MeasureController extends Controller
         return view('radar.measures')
             ->with('clauses', $clauses)
             ->with('scopes', $scopes)
-            ->with('measures', $controls);
+            ->with('controls', $controls);
     }
 
     public function template(Request $request)
