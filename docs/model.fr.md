@@ -7,9 +7,11 @@ Les tables clés sont les suivantes :
 - controls
 - measures
 - documents
+- risks
 
 > **Rôles :** `controls` = **mesures de sécurité** (exigences à mettre en œuvre).  
-> `measures` = **instances d'audit** (vérifications périodiques de ces exigences).
+> `measures` = **instances d'audit** (vérifications périodiques de ces exigences).  
+> `risks` = **risques de sécurité de l'information** (registre ISO 27001 §6.1.2).
 
 ## Dépendances entre tables
 
@@ -24,6 +26,9 @@ flowchart LR
     attributes -.->|"optionnel"| measures
     measures -.->|"next_id (self)"| measures
     documents -.->|"optionnel"| measures
+    risks -->|"owner_id (1:N)"| users
+    risks -->|"control_risk (N:N)"| controls
+    controls -->|"control_risk (N:N)"| risks
 ```
 
 Le schéma détaillé ci-dessous décrit les champs de chaque table.
@@ -36,6 +41,8 @@ erDiagram
     attributes }o--o{ measures : "optionnel"
     measures o|--o| measures : "next_id"
     documents }o--o| measures : "optionnel"
+    risks }o--o{ controls : "control_risk"
+    users ||--o{ risks : "owner_id"
 
     domains {
         int id PK
@@ -56,6 +63,7 @@ erDiagram
         string objective
         array measures
         array attributes
+        array risks
     }
     measures {
         int id PK
@@ -72,6 +80,17 @@ erDiagram
         int id PK
         int measure_id FK
     }
+    risks {
+        int id PK
+        int owner_id FK
+        string name
+        string status
+        int probability
+        int impact
+        int review_frequency
+        date next_review_at
+        array controls
+    }
 ```
 
 Les relations sont les suivantes :
@@ -84,9 +103,12 @@ Les relations sont les suivantes :
 | `attributes` → `measures` | Optionnel | Idem pour les instances d'audit |
 | `measures` → `measures` | Auto-référence via `next_id` | Permet de chaîner les campagnes successives d'un même audit |
 | `documents` → `measures` | Optionnel (1:N) | Les documents et preuves sont attachés aux instances d'audit via `measure_id` |
+| `risks` ↔ `controls` | Many-to-many via `control_risk` | Un risque mitigé doit être lié à au moins un contrôle de sécurité ; la liste est stockée dans `controls[]` du risque |
+| `users` → `risks` | Optionnel (1:N) | Chaque risque peut être attribué à un propriétaire (`owner_id`) responsable de la revue périodique |
 
 > **Note :** il n'y a pas de table de jonction exposée pour la relation controls/measures.  
-> Les IDs sont directement embarqués dans chaque objet des deux côtés.
+> Les IDs sont directement embarqués dans chaque objet des deux côtés.  
+> La table pivot `control_risk` relie les risques aux mesures de sécurité.
 
 ---
 
@@ -253,3 +275,67 @@ Exemple :
 
 La table `documents` stocke les pièces jointes et preuves documentaires associées aux instances d'audit.  
 Chaque document est lié à un enregistrement `measures` via `measure_id`.
+
+---
+
+## risks
+
+Le registre des risques enregistre les risques de sécurité de l'information conformément aux exigences de la norme ISO 27001:2022 §6.1.2 et §8.2.  
+Chaque risque est évalué selon une méthode de scoring configurable, optionnellement assigné à un propriétaire, et soumis à un cycle de revue périodique.  
+Un risque avec le statut *Mitigé* doit être lié à au moins un contrôle de sécurité via la table pivot `control_risk`.
+
+| Champ | Type | Description |
+| --- | --- | --- |
+| `id` | integer | Identifiant unique (PK) |
+| `name` | string | Intitulé court et identifiable du risque (obligatoire) |
+| `description` | string \| null | Description détaillée du risque |
+| `owner_id` | integer \| null | Référence vers `users.id` — responsable de la revue périodique |
+| `probability` | integer | Niveau de probabilité (1 à N, formules standard) |
+| `probability_comment` | string \| null | Commentaire libre sur l'évaluation de la probabilité |
+| `impact` | integer | Niveau de gravité si le risque se matérialise (1 à N) |
+| `impact_comment` | string \| null | Commentaire libre sur l'évaluation de l'impact |
+| `exposure` | integer \| null | Accessibilité du système (formule BSI 200-3 : 0 = hors réseau, 1 = interne, 2 = Internet) |
+| `vulnerability` | integer \| null | Niveau d'exploitabilité des failles connues (formule BSI 200-3 uniquement) |
+| `status` | enum | Décision de traitement (voir valeurs ci-dessous) |
+| `status_comment` | string \| null | Commentaire libre sur la décision de traitement |
+| `review_frequency` | integer | Intervalle en mois entre deux revues (défaut : 12) |
+| `next_review_at` | date \| null | Date prévue de la prochaine revue |
+| `controls` | array | Liste des IDs de contrôles de sécurité liés à ce risque (via `control_risk`) |
+| `created_at` | datetime | Date de création |
+| `updated_at` | datetime | Date de dernière modification |
+| `deleted_at` | datetime \| null | Date de suppression logique |
+
+### Valeurs du champ `status`
+
+| Valeur | Signification |
+| --- | --- |
+| `not_evaluated` | Non évalué |
+| `not_accepted` | Non accepté — un plan d'action lié est requis |
+| `temporarily_accepted` | Accepté temporairement |
+| `accepted` | Accepté |
+| `mitigated` | Mitigé — au moins un contrôle de sécurité lié est requis |
+| `transferred` | Transféré (assurance, tiers) |
+| `avoided` | Évité |
+
+Exemple :
+
+```json
+{
+  "id": 1,
+  "name": "Accès non autorisé aux données sensibles",
+  "description": "Risque d'exfiltration de données via des identifiants compromis.",
+  "owner_id": 3,
+  "probability": 3,
+  "impact": 4,
+  "exposure": null,
+  "vulnerability": null,
+  "status": "mitigated",
+  "status_comment": "Politique de contrôle d'accès déployée au T1.",
+  "review_frequency": 12,
+  "next_review_at": "2027-06-01",
+  "controls": [12, 15],
+  "created_at": "2026-06-09T10:00:00.000000Z",
+  "updated_at": "2026-06-09T10:00:00.000000Z",
+  "deleted_at": null
+}
+```

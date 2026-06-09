@@ -105,9 +105,9 @@ class Risk extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function measures(): BelongsToMany
+    public function controls(): BelongsToMany
     {
-        return $this->belongsToMany(Measure::class, 'measure_risk');
+        return $this->belongsToMany(Control::class, 'control_risk');
     }
 
     public function actions(): BelongsToMany
@@ -185,7 +185,7 @@ class Risk extends Model
     // Helpers métier
     // -------------------------------------------------------------------------
 
-    public function requiresMeasures(): bool
+    public function requiresControls(): bool
     {
         return $this->status === self::STATUS_MITIGATED;
     }

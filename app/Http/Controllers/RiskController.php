@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\RiskExport;
 use App\Models\Action;
-use App\Models\Measure;
+use App\Models\Control;
 use App\Models\Risk;
 use App\Models\User;
 use App\Services\RiskScoringService;
@@ -97,13 +97,13 @@ class RiskController extends Controller
     public function create(): View
     {
         $users         = User::query()->orderBy('name')->get();
-        $measures      = Measure::query()->orderBy('name')->get();
+        $controls      = Control::query()->orderBy('name')->get();
         $actions       = Action::query()->orderBy('name')->get();
         $statuses      = Risk::STATUS_LABELS;
         $scoringConfig = $this->scoringService->config();
 
         return view('risks.create',
-            compact('users', 'measures', 'actions', 'statuses', 'scoringConfig'));
+            compact('users', 'controls', 'actions', 'statuses', 'scoringConfig'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -133,7 +133,7 @@ class RiskController extends Controller
         $risk = Risk::query()->findOrFail($id);
         $this->authorizeView($risk);
 
-        $risk->load(['owner', 'measures', 'actions']);
+        $risk->load(['owner', 'controls', 'actions']);
 
         $scoringConfig = $this->scoringService->config();
 
@@ -148,15 +148,15 @@ class RiskController extends Controller
     {
         $risk     = Risk::query()->findOrFail($id);
         $users    = User::query()->orderBy('name')->get();
-        $measures = Measure::query()->orderBy('name')->get();
+        $controls = Control::query()->orderBy('name')->get();
         $actions  = Action::query()->orderBy('name')->get();
         $statuses = Risk::STATUS_LABELS;
         $scoringConfig = $this->scoringService->config();
 
-        $risk->load(['measures', 'actions']);
+        $risk->load(['controls', 'actions']);
 
         return view('risks.edit',
-            compact('risk', 'users', 'measures', 'actions', 'statuses', 'scoringConfig'));
+            compact('risk', 'users', 'controls', 'actions', 'statuses', 'scoringConfig'));
     }
 
     public function update(Request $request): RedirectResponse
@@ -276,8 +276,8 @@ class RiskController extends Controller
             'status_comment'      => ['nullable', 'string'],
             'review_frequency'    => ['required', 'integer', 'min:1', 'max:60'],
             'next_review_at'      => ['nullable', 'date'],
-            'measure_ids'         => ['nullable', 'array'],
-            'measure_ids.*'       => ['exists:measures,id'],
+            'control_ids'         => ['nullable', 'array'],
+            'control_ids.*'       => ['exists:controls,id'],
             'action_ids'          => ['nullable', 'array'],
             'action_ids.*'        => ['exists:actions,id'],
         ]);
@@ -300,13 +300,13 @@ class RiskController extends Controller
 
     private function syncRelations(Risk $risk, Request $request): void
     {
-        $risk->measures()->sync($request->input('measure_ids', []));
+        $risk->controls()->sync($request->input('control_ids', []));
         $risk->actions()->sync($request->input('action_ids', []));
     }
 
     private function warnBusinessRules(Risk $risk): void
     {
-        if ($risk->requiresMeasures() && $risk->measures()->count() === 0) {
+        if ($risk->requiresControls() && $risk->controls()->count() === 0) {
             session()->flash('warning', __('Un risque "Mitigé" doit avoir au moins un contrôle lié.'));
         }
         if ($risk->requiresActions() && $risk->actions()->count() === 0) {

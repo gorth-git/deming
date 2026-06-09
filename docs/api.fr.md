@@ -18,15 +18,15 @@ L'environnement Docker prend en charge cette fonctionnalité nativement, via l'[
 
 ## Les APIs
 
-| Endpoint | Rôle |
-|---|---|
-| `/api/attributes` | Taxonomies d'attributs |
-| `/api/domains` | Domaines / référentiels |
+| Endpoint | Rôle                                                                      |
+|---|---------------------------------------------------------------------------|
+| `/api/attributes` | Taxonomies d'attributs                                                    |
+| `/api/domains` | Domaines / référentiels                                                   |
 | `/api/controls` | **Mesures de sécurité** (exigences à mettre en œuvre, liées à un domaine) |
-| `/api/measures` | **Instances d'audit** (vérifications périodiques des mesures de sécurité) |
-| `/api/users` | Utilisateurs |
-| `/api/documents` | Documents attachés aux instances d'audit |
-| `/api/logs` | Journaux d'audit |
+| `/api/measures` | **Contrôles** (vérifications périodiques des mesures de sécurité)         |
+| `/api/users` | Utilisateurs                                                              |
+| `/api/documents` | Documents attachés aux instances d'audit                                  |
+| `/api/logs` | Journaux d'audit                                                          |
 
 > **Rappel des rôles :** `controls` = mesures de sécurité (`domain_id`, `clause`, `objective`…).  
 > `measures` = instances d'audit (`plan_date`, `realisation_date`, `status`, `score`…).

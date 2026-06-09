@@ -23,19 +23,10 @@
 
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.measure.fields.clause') }}</strong>
+        		<strong>{{ trans('cruds.measure.fields.clause') }}</strong> - <strong>{{ trans('cruds.measure.fields.name') }}</strong>
         	</div>
             <div class="cell-lg-7 cell-md-9">
-    			{{ $measure->clause }}
-    		</div>
-        </div>
-
-    	<div class="row">
-    		<div class="cell-lg-1 cell-md-2">
-        		<strong>{{ trans('cruds.measure.fields.name') }}</strong>
-        	</div>
-            <div class="cell-lg-7 cell-md-9">
-    			{{ $measure->name }}
+    			{{ $measure->clause }} - {{ $measure->name }}
     		</div>
         </div>
 

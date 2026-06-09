@@ -18,15 +18,15 @@ The Docker environment supports this functionality natively, via the [entrypoint
 
 ## The APIs
 
-| Endpoint | Role |
-|---|---|
-| `/api/attributes` | Attribute taxonomies |
-| `/api/domains` | Domains / frameworks |
-| `/api/controls` | **Security measures** (requirements to implement, linked to a domain) |
-| `/api/measures` | **Audit instances** (periodic verifications of security measures) |
-| `/api/users` | Users |
-| `/api/documents` | Documents attached to audit instances |
-| `/api/logs` | Audit logs |
+| Endpoint | Role                                                                  |
+|---|-----------------------------------------------------------------------|
+| `/api/attributes` | Attribute taxonomies                                                  |
+| `/api/domains` | Domains / frameworks                                                  |
+| `/api/controls` | **Security controls** (requirements to implement, linked to a domain) |
+| `/api/measures` | **Measures** (periodic verifications of controls)                     |
+| `/api/users` | Users                                                                 |
+| `/api/documents` | Documents attached to audit instances                                 |
+| `/api/logs` | Audit logs                                                            |
 
 > **Role reminder:** `controls` = security measures (`domain_id`, `clause`, `objective`…).  
 > `measures` = audit instances (`plan_date`, `realisation_date`, `status`, `score`…).
