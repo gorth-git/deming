@@ -9,7 +9,7 @@ The key tables are the following:
 - documents  
 - risks  
 
-> **Roles:** `controls` = **security measures** (requirements to implement).  
+> `controls` = **security measures** (requirements to implement).  
 > `measures` = **audit instances** (periodic verifications of those requirements).  
 > `risks` = **information security risks** (ISO 27001 §6.1.2 register).
 
@@ -19,16 +19,14 @@ Overview: who uses what.
 
 ```mermaid
 flowchart LR
-    domains -->|"domain_id (1:N)"| controls
-    controls -->|"measures[ ] (N:N)"| measures
-    measures -->|"controls[ ] (N:N)"| controls
-    attributes -.->|"optional"| controls
-    attributes -.->|"optional"| measures
-    measures -.->|"next_id (self)"| measures
-    documents -.->|"optional"| measures
-    risks -->|"owner_id (1:N)"| users
-    risks -->|"control_risk (N:N)"| controls
-    controls -->|"control_risk (N:N)"| risks
+    controls --> |"domain_id (0:1)"| domains
+    controls <-->|"control_measure (N:N)"| measures
+    attributes -.-o |"optional"| controls
+    attributes -.-o |"optional"| measures
+    measures -->|"measure_id (0:1)"| measures
+    documents -->|"document_id (1:1)"| measures
+    risks -->|"owner_id (0:1)"| users
+    risks <-->|"control_risk (N:N)"| controls
 ```
 
 The detailed schema below describes the fields of each table.
