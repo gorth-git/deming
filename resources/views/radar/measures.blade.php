@@ -34,10 +34,10 @@
         </div>
     </div>
 
-    @foreach($measures as $measure)
-    <div class="mt-2" data-role="panel" data-title-caption="{{ $measure->name }}" data-collapsible="true" data-title-icon="<span class='mif-line-chart'></span>">
+    @foreach($controls as $control)
+    <div class="mt-2" data-role="panel" data-title-caption="{{ $control->name }}" data-collapsible="true" data-title-icon="<span class='mif-line-chart'></span>">
         <div class="p-7" style="height: 300px;">
-            <canvas id="scoreChart-{{ $measure->id }}"></canvas>
+            <canvas id="scoreChart-{{ $control->id }}"></canvas>
         </div>
 
         <div>
@@ -46,18 +46,18 @@
                     <tbody>
                         <tr>
                             <td class="fw-bold">{{ trans("cruds.measure.fields.realisation_date") }}</td>
-                            @foreach($measure->controls as $control)
-                            <td><a href="/bob/show/{{ $control->id }}">{{ $control->realisation_date }}</a></td>
+                            @foreach($control->measures as $measure)
+                            <td><a href="/bob/show/{{ $measure->id }}">{{ $measure->realisation_date }}</a></td>
                             @endforeach
                         </tr>
                         <tr>
                             <td class="fw-bold">{{ trans("cruds.measure.fields.score") }}</td>
-                            @foreach($measure->controls as $control)
+                            @foreach($control->measures as $measure)
                             <td class="text-center"
-                                {!! $control->score == 1 ? 'style="background-color: #ce352c;"' : '' !!}
-                                {!! $control->score == 2 ? 'style="background-color: #fa6800;"' : '' !!}
-                                {!! $control->score == 3 ? 'style="background-color: #60a917;"' : '' !!}>
-                            {{ $control->note }}
+                                {!! $measure->score == 1 ? 'style="background-color: #ce352c;"' : '' !!}
+                                {!! $measure->score == 2 ? 'style="background-color: #fa6800;"' : '' !!}
+                                {!! $measure->score == 3 ? 'style="background-color: #60a917;"' : '' !!}>
+                            {{ $measure->note }}
                             </td>
                             @endforeach
                         </tr>
@@ -90,19 +90,19 @@ window.addEventListener('DOMContentLoaded', function() {
         }, false);
 
 
-@foreach($measures as $measure)
+@foreach($controls as $control)
 
-    const labels{{$measure->id}} = @json($measure->controls->pluck('realisation_date'));
-    const data{{$measure->id}} = @json($measure->controls->pluck('note'));
+    const labels{{$control->id}} = @json($control->measures->pluck('realisation_date'));
+    const data{{$control->id}} = @json($control->measures->pluck('note'));
 
-    const ctx{{$measure->id}} = document.getElementById('scoreChart-{{$measure->id}}').getContext('2d');
+    const ctx{{$control->id}} = document.getElementById('scoreChart-{{$control->id}}').getContext('2d');
 
-    new Chart(ctx{{$measure->id}}, {
+    new Chart(ctx{{$control->id}}, {
         type: 'line',
         data: {
-            labels: labels{{$measure->id}},
+            labels: labels{{$control->id}},
             datasets: [{
-                data: data{{$measure->id}},
+                data: data{{$control->id}},
                 borderColor: 'rgba(0,123,255,1)',
                 backgroundColor: 'rgba(0,123,255,0.1)',
                 fill: true,
