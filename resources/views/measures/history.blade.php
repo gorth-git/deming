@@ -4,7 +4,7 @@
 <div class="row">
     <div class="cell-lg-6 cell-md-12">
 
-        <div data-role="panel" data-title-caption="{{ trans('cruds.control.history') }}" data-collapsible="false" data-title-icon="<span class='mif-stacked-bar-chart'></span>">
+        <div data-role="panel" data-title-caption="{{ trans('cruds.measure.history') }}" data-collapsible="false" data-title-icon="<span class='mif-stacked-bar-chart'></span>">
 
             <canvas id="canvas-status" width="600" height="300px" class="chartjs-render-monitor">
             </canvas>
@@ -37,10 +37,10 @@
                         </td>
                         <td align="center">
                             <?php $count=0; ?>
-                            @foreach ($controls as $control)
+                            @foreach ($measures as $measure)
                                 <?php
-                                if (($control->score!=null) &&
-                                    (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                                if (($measure->score!=null) &&
+                                    (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                                 )
                                 {
                                         $count++;
@@ -50,16 +50,16 @@
                             {{ $count }}
                             /
                             <?php $count=0; ?>
-                            @foreach ($controls as $control)
+                            @foreach ($measures as $measure)
                                 <?php
                                 if (
                                     (
-                                        ($control->score==null)&&
-                                        (\Carbon\Carbon::parse($control->plan_date)->between($first, $second))
+                                        ($measure->score==null)&&
+                                        (\Carbon\Carbon::parse($measure->plan_date)->between($first, $second))
                                     )||
                                     (
-                                        ($control->score!=null)&&
-                                        (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                                        ($measure->score!=null)&&
+                                        (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                                     )
                                 )
                                 {
@@ -71,10 +71,10 @@
                         </td>
                         <td  align="center">
                             <?php $count=0; ?>
-                            @foreach ($controls as $control)
+                            @foreach ($measures as $measure)
                                 <?php
-                                if (($control->score==1) &&
-                                    (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                                if (($measure->score==1) &&
+                                    (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                                 ) {
                                         $count++;
                                 }
@@ -90,10 +90,10 @@
                         </td>
                         <td  align="center">
                             <?php $count=0; ?>
-                            @foreach ($controls as $control)
+                            @foreach ($measures as $measure)
                                 <?php
-                                if (($control->score==2) &&
-                                    (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                                if (($measure->score==2) &&
+                                    (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                                 ) {
                                         $count++;
                                 }
@@ -109,10 +109,10 @@
                         </td>
                         <td align="center">
                             <?php $count=0; ?>
-                            @foreach ($controls as $control)
+                            @foreach ($measures as $measure)
                                 <?php
-                                if (($control->score==3) &&
-                                    (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                                if (($measure->score==3) &&
+                                    (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                                 ) {
                                         $count++;
                                 }
@@ -151,10 +151,10 @@
                 </td>
                 <td align="center">
                 <?php $count=0; ?>
-                    @foreach ($controls as $control)
+                    @foreach ($measures as $measure)
                     <?php
-                    if (($control->score!=null) &&
-                        (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                    if (($measure->score!=null) &&
+                        (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                     ) {
                             $count++;
                     }
@@ -163,16 +163,16 @@
                     {{ $count }}
                     /
                     <?php $count=0; ?>
-                    @foreach ($controls as $control)
+                    @foreach ($measures as $measure)
                         <?php
                         if (
                             (
-                                ($control->score==null) &&
-                                (\Carbon\Carbon::parse($control->plan_date)->between($first, $second))
+                                ($measure->score==null) &&
+                                (\Carbon\Carbon::parse($measure->plan_date)->between($first, $second))
                             )||
                             (
-                                ($control->score!=null) &&
-                                (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                                ($measure->score!=null) &&
+                                (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                             )
                         ) {
                                 $count++;
@@ -183,10 +183,10 @@
                 </td>
                 <td  align="center">
                     <?php $count=0; ?>
-                    @foreach ($controls as $control)
+                    @foreach ($measures as $measure)
                         <?php
-                        if (($control->score==1)
-                            && (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                        if (($measure->score==1)
+                            && (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                         ) {
                                 $count++;
                         }
@@ -201,11 +201,11 @@
                 </td>
                 <td  align="center">
                     <?php $count=0; ?>
-                    @foreach ($controls as $control)
+                    @foreach ($measures as $measure)
                         <?php
                         if (
-                            ($control->score==2) &&
-                            (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                            ($measure->score==2) &&
+                            (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                             )
                         {
                                 $count++;
@@ -221,10 +221,10 @@
                 </td>
                 <td align="center">
                     <?php $count=0; ?>
-                    @foreach ($controls as $control)
+                    @foreach ($measures as $measure)
                         <?php
-                        if (($control->score==3) &&
-                            (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                        if (($measure->score==3) &&
+                            (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                         ) {
                                 $count++;
                         }
@@ -253,7 +253,7 @@
 </div>
 
     <div class="cell-lg-6 cell-md-12">
-        <div data-role="panel" data-title-caption="{{ trans('cruds.control.calendar') }}" data-collapsible="false" data-title-icon="<span class='mif-calendar'></span>">
+        <div data-role="panel" data-title-caption="{{ trans('cruds.measure.calendar') }}" data-collapsible="false" data-title-icon="<span class='mif-calendar'></span>">
 
             <?php
             if (Request::get('date')!==null)
@@ -261,21 +261,21 @@
             else
                 $calendar = new \App\Calendar(\Carbon\Carbon::now()->format('m/Y'));
 
-            foreach ($controls as $control) {
-                if (($control->score===null) && ($control->plan_date!==null)) {
-                    if ($control->observations===null)
-                        $calendar->addEvent($control->measures->implode(', '), $control->plan_date, 1, 'grey', $control->id);
+            foreach ($measures as $measure) {
+                if (($measure->score===null) && ($measure->plan_date!==null)) {
+                    if ($measure->observations===null)
+                        $calendar->addEvent($measure->controls->implode(', '), $measure->plan_date, 1, 'grey', $measure->id);
                     else
-                        $calendar->addEvent($control->measures->implode(', '), $control->plan_date, 1, 'lblue', $control->id);
+                        $calendar->addEvent($measure->controls->implode(', '), $measure->plan_date, 1, 'lblue', $measure->id);
                     }
-                else if (($control->score===1) && ($control->realisation_date!==null)) {
-                        $calendar->addEvent($control->measures->implode(', '), $control->realisation_date, 1, 'red', $control->id);
+                else if (($measure->score===1) && ($measure->realisation_date!==null)) {
+                        $calendar->addEvent($measure->controls->implode(', '), $measure->realisation_date, 1, 'red', $measure->id);
                         }
-                else if (($control->score===2) && ($control->realisation_date!==null)) {
-                        $calendar->addEvent($control->measures->implode(', '), $control->realisation_date, 1, 'orange', $control->id);
+                else if (($measure->score===2) && ($measure->realisation_date!==null)) {
+                        $calendar->addEvent($measure->controls->implode(', '), $measure->realisation_date, 1, 'orange', $measure->id);
                         }
-                else if (($control->score===3) && ($control->realisation_date!==null)) {
-                        $calendar->addEvent($control->measures->implode(', '), $control->realisation_date, 1, 'green', $control->id);
+                else if (($measure->score===3) && ($measure->realisation_date!==null)) {
+                        $calendar->addEvent($measure->controls->implode(', '), $measure->realisation_date, 1, 'green', $measure->id);
                     }
                 }
             echo $calendar;
@@ -316,11 +316,11 @@
                     $first = \Carbon\Carbon::today()->day(1)->addMonth($i+$delta);
                     $second = \Carbon\Carbon::today()->day(1)->addMonth($i+$delta)->endOfMonth();
                     ?>
-                @foreach ($controls as $control)
+                @foreach ($measures as $measure)
                     <?php
-                    if (($control->score==3) &&
-                        ($control->realisation_date!=null) &&
-                        (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                    if (($measure->score==3) &&
+                        ($measure->realisation_date!=null) &&
+                        (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                     ) { $count++;
                     }
                     ?>
@@ -340,11 +340,11 @@
                     $first = \Carbon\Carbon::today()->day(1)->addMonth($i+$delta);
                     $second = \Carbon\Carbon::today()->day(1)->addMonth($i+$delta)->endOfMonth();
                     ?>
-                @foreach ($controls as $control)
+                @foreach ($measures as $measure)
                     <?php
-                    if (($control->score==2) &&
-                        ($control->realisation_date!=null) &&
-                        (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                    if (($measure->score==2) &&
+                        ($measure->realisation_date!=null) &&
+                        (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                     ) { $count++;
                     }
                     ?>
@@ -364,11 +364,11 @@
                     $first = \Carbon\Carbon::today()->day(1)->addMonth($i+$delta);
                     $second = \Carbon\Carbon::today()->day(1)->addMonth($i+$delta)->endOfMonth();
                     ?>
-                @foreach ($controls as $control)
+                @foreach ($measures as $measure)
                     <?php
-                    if (($control->score==1) &&
-                        ($control->realisation_date!=null) &&
-                        (\Carbon\Carbon::parse($control->realisation_date)->between($first, $second))
+                    if (($measure->score==1) &&
+                        ($measure->realisation_date!=null) &&
+                        (\Carbon\Carbon::parse($measure->realisation_date)->between($first, $second))
                     ) {
                         $count++;
                     }
@@ -389,11 +389,11 @@
                     $first = \Carbon\Carbon::today()->day(1)->addMonth($i+$delta);
                     $second = \Carbon\Carbon::today()->day(1)->addMonth($i+$delta)->endOfMonth();
                     ?>
-                @foreach ($controls as $control)
+                @foreach ($measures as $measure)
                     <?php
-                    if (($control->score==null)
-                        && ($control->plan_date!=null)
-                        && (\Carbon\Carbon::parse($control->plan_date)->between($first, $second))
+                    if (($measure->score==null)
+                        && ($measure->plan_date!=null)
+                        && (\Carbon\Carbon::parse($measure->plan_date)->between($first, $second))
                     ) {
                             $count++;
                     }

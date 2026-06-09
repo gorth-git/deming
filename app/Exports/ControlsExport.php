@@ -2,42 +2,38 @@
 
 namespace App\Exports;
 
-use App\Models\Measure;
+use App\Models\Control;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Cell\StringValueBinder;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ControlsExport implements FromQuery, WithMapping, WithHeadings, WithStyles, WithColumnWidths
+class ControlsExport extends StringValueBinder implements FromQuery, WithMapping, WithHeadings, WithStyles, WithColumnWidths
 {
     public function headings(): array
     {
         return [
+            trans('cruds.domain.fields.framework'),
+            trans('cruds.domain.title'),
+            trans('cruds.domain.title') . ' - ' . trans('cruds.domain.fields.description'),
             trans('cruds.control.fields.clause'),
             trans('cruds.control.fields.name'),
-            trans('cruds.control.fields.scope'),
             trans('cruds.control.fields.objective'),
             trans('cruds.control.fields.attributes'),
             trans('cruds.control.fields.input'),
             trans('cruds.control.fields.model'),
             trans('cruds.control.fields.indicator'),
-            trans('cruds.control.fields.plan_date'),
-            trans('cruds.control.fields.realisation_date'),
-            trans('cruds.control.fields.observations'),
-            trans('cruds.control.fields.score'),
-            trans('cruds.control.fields.note'),
-            trans('cruds.control.fields.owners'),
-            trans('cruds.control.fields.status'),
             trans('cruds.control.fields.action_plan'),
         ];
     }
 
-    public function styles(Worksheet $_sheet)
+    public function styles(Worksheet $sheet)
     {
-        // return
         return [
             // Style the first row as bold text.
             1 => ['font' => ['bold' => true],
@@ -49,62 +45,52 @@ class ControlsExport implements FromQuery, WithMapping, WithHeadings, WithStyles
         ];
     }
 
-    public function columnWidths(): array
+    public function columnFormats(): array
     {
         return [
-            'A' => 10,  // Clause
-            'B' => 30,  // Nom
-            'C' => 20,  // Scope
-            'D' => 50,  // Objectif
-            'E' => 50,  // Attibuts
-            'F' => 50,  // Input
-            'G' => 50,  // Modele
-            'H' => 50,  // Indicateur
-            'I' => 15,  // Plan date
-            'J' => 15,  // Realisation date
-            'K' => 50,  // Observation
-            'L' => 15,  // Score
-            'M' => 15,  // Note
-            'N' => 50,  // Responsibles
-            'O' => 15,  // Status
-            'P' => 50,  // Plan d'action
+            'A' => NumberFormat::FORMAT_TEXT,
+            'C' => NumberFormat::FORMAT_TEXT,
         ];
     }
 
-    public function map($control): array
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 10,  // Framework
+            'B' => 10,  // Domain name
+            'C' => 30,  // Domain description
+            'D' => 10,  // Clause
+            'E' => 30,  // Name
+            'F' => 50,  // Objectif
+            'G' => 50,  // Attibuts
+            'H' => 50,  // Input
+            'I' => 50,  // Modele
+            'J' => 50,  // Indicateur
+            'K' => 50,  // Plan d'action
+        ];
+    }
+
+    public function map($measure): array
     {
         return [
             [
-                $control->controls()->implode('clause', ', '),
-                $control->name,
-                $control->scope,
-                $control->objective,
-                $control->attributes,
-                $control->input,
-                $control->model,
-                $control->indicator,
-                $control->plan_date,
-                $control->realisation_date,
-                $control->observations,
-                $control->score,
-                $control->note,
-                implode(
-                    ', ',
-                    array_filter(
-                        [
-                            $control->users()->implode('name', ', '),
-                            $control->groups()->implode('name', ', '),
-                        ]
-                    )
-                ),
-                $control->status,
-                $control->action_plan,
+                $measure->domain->framework,
+                $measure->domain->title,
+                $measure->domain->description,
+                $measure->clause,
+                $measure->name,
+                $measure->objective,
+                $measure->attributes,
+                $measure->input,
+                $measure->model,
+                $measure->indicator,
+                $measure->action_plan,
             ],
         ];
     }
 
     public function query(): Builder
     {
-        return Measure::orderBy('realisation_date');
+        return Control::with('domain')->orderBy('clause');
     }
 }

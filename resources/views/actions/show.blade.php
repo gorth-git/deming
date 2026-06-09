@@ -84,7 +84,7 @@ form, table {
 				</div>
                 @if ($action->scope!==null)
                 <div class="cell-2">
-		    		<strong>{{ trans("cruds.control.fields.scope") }}</strong>
+		    		<strong>{{ trans("cruds.measure.fields.scope") }}</strong>
 		    		&nbsp;
 	    			{{ $action->scope }}
 	    		</div>

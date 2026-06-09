@@ -22,7 +22,7 @@
                     </select>
                 </div>
                 <div class="cell-2">
-                    <strong>{{ trans("cruds.control.fields.scope") }}</strong>
+                    <strong>{{ trans("cruds.measure.fields.scope") }}</strong>
                     <select name="scope" data-role="select" id="scope">
                         <option value='none'></option>
                         @foreach ($scopes as $key => $value)
@@ -38,7 +38,7 @@
                 <div class="cell-6">
                 </div>
                 <div class="cell-2">
-                    <strong>{{ trans("cruds.control.groupBy") }}</strong>
+                    <strong>{{ trans("cruds.measure.groupBy") }}</strong>
                     <select name="group" data-role="select" id="group">
                         <option value="0" {{ Session::get("group")==="0" ? "selected" : "" }}>{{ trans("cruds.welcome.measures") }}</option>
                         <option value="1" {{ Session::get("group")==="1" ? "selected" : "" }}>{{ trans("cruds.welcome.controls") }}</option>
@@ -47,7 +47,7 @@
             </div>
 
             <div class="panel mt-2">
-                <div data-role="panel" data-title-caption="{{ trans("cruds.control.status_date") }} {{date('d/m/Y')}}" data-collapsible="true" data-title-icon="<span class='mif-bar-vertical-chart'></span>">
+                <div data-role="panel" data-title-caption="{{ trans("cruds.measure.status_date") }} {{date('d/m/Y')}}" data-collapsible="true" data-title-icon="<span class='mif-bar-vertical-chart'></span>">
                     <div class="p-8">
                         <canvas id="canvas-status" class="chartjs-render-monitor"></canvas>
                     </div>
@@ -59,11 +59,11 @@
         <table class="table table-border cell-border">
             <thead>
                 <tr>
-                    <th>{{ trans("cruds.control.fields.domain") }}</th>
-                    <th>{{ trans("cruds.control.fields.clause") }}</th>
-                    <th>{{ trans("cruds.control.fields.name") }}</th>
-                    <th>{{ trans("cruds.control.fields.scope") }}</th>
-                    <th>{{ trans("cruds.control.fields.score") }}</th>
+                    <th>{{ trans("cruds.measure.fields.domain") }}</th>
+                    <th>{{ trans("cruds.measure.fields.clause") }}</th>
+                    <th>{{ trans("cruds.measure.fields.name") }}</th>
+                    <th>{{ trans("cruds.measure.fields.scope") }}</th>
+                    <th>{{ trans("cruds.measure.fields.score") }}</th>
                 </tr>
             </thead>
             <tbody>

@@ -7,10 +7,10 @@
 	   	<b>{{ trans("cruds.domain.title")}}</b> -
 	   	<a href="/domains/{{ $result['id'] }}">{{ $result['title'] }}</a> : {{ $result['description'] }}
 	@elseif ($result['model']==='App\\Models\\Control')
-	   	<b>{{ trans("cruds.measure.title")}}</b> -
+	   	<b>{{ trans("cruds.control.title")}}</b> -
 		<a href="/alice/show/{{ $result['id'] }}">{{ $result['clause'] }}</a> : {{ $result["name"] }}
 	@elseif ($result['model']==='App\\Models\\Measure')
-	   	<b>{{ trans("cruds.control.title_singular")}}</b> -
+	   	<b>{{ trans("cruds.measure.title_singular")}}</b> -
         {{ $result["name"] }} -
         <a href="/bob/show/{{ $result['id'] }}">{{ $result["plan_date"] }}</a>
 	@endif

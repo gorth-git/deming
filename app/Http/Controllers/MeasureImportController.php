@@ -35,7 +35,7 @@ class MeasureImportController extends Controller
             fn ($str) => str_ends_with($str, '.xlsx')
         );
 
-        return view('measures/import')
+        return view('controls.import')
             ->with('models', $models);
     }
 

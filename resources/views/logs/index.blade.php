@@ -56,19 +56,19 @@
                         {{ $log->subject_type }}
                     </td>
                     <td>
-                        @if ($log->subject_type=='App\\Models\\Measure')
+                        @if ($log->subject_type=='App\Models\Control')
                             <a href="/alice/show/{{ $log->subject_id }} ">
                                 {{ $log->subject_id }}
                             </a>
-                        @elseif ($log->subject_type=='App\\Models\\Control')
+                        @elseif ($log->subject_type=='App\Models\Measure')
                             <a href="/bob/show/{{ $log->subject_id }} ">
                                 {{ $log->subject_id }}
                             </a>
-                        @elseif ($log->subject_type=='App\\Models\\Action')
+                        @elseif ($log->subject_type=='App\Models\Action')
                             <a href="/action/show/{{ $log->subject_id }} ">
                                 {{ $log->subject_id }}
                             </a>
-                        @elseif ($log->subject_type=='App\\Models\\User')
+                        @elseif ($log->subject_type=='App\Models\User')
                             <a href="/users/{{ $log->subject_id }} ">
                                 {{ $log->subject_id }}
                             </a>

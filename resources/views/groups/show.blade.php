@@ -83,10 +83,10 @@
 			       data-check="false">
 			        <thead>
 			            <tr>
-                            <th class="sortable-column">{{ trans("cruds.control.fields.clauses") }}</th>
-                            <th class="sortable-column">{{ trans("cruds.control.fields.name") }}</th>
-                            <th class="sortable-column">{{ trans("cruds.control.fields.scope") }}</th>
-                            <th class="sortable-column">{{ trans("cruds.control.fields.planned") }}</th>
+                            <th class="sortable-column">{{ trans("cruds.measure.fields.clauses") }}</th>
+                            <th class="sortable-column">{{ trans("cruds.measure.fields.name") }}</th>
+                            <th class="sortable-column">{{ trans("cruds.measure.fields.scope") }}</th>
+                            <th class="sortable-column">{{ trans("cruds.measure.fields.planned") }}</th>
 			            </tr>
 			        </thead>
 			        <tbody>

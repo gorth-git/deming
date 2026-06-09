@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("deleteButton").addEventListener("click", function (event) {
         const select = document.getElementById("durationSelect");
         const selected = select.options[select.selectedIndex].value;
-        if ((selected==0)||(!confirm("{{ trans('cruds.control.confirm_delete') }}")))
+        if ((selected==0)||(!confirm("{{ trans('cruds.measure.confirm_delete') }}")))
             event.preventDefault();
     });
 });

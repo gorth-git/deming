@@ -65,7 +65,7 @@ return [
         'choose' => 'Choisir un attribut',
         'title' => 'Attribut'
     ],
-    'control' => [
+    'measure' => [
         'description' => '',
         'fields' => [
             'action_plan' => 'Plan d\'actions',
@@ -123,7 +123,7 @@ return [
         'calendar' => 'Calendrier',
         'confirm_delete' => 'Etes vous sur de vouloir supprimer des contrôles ?'
     ],
-    'measure' => [
+    'control' => [
         'title' => 'Mesure',
         'fields' => [
             'domain' => 'Domaine',

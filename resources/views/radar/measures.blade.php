@@ -19,7 +19,7 @@
             </div>
             <div class="cell-2">
             @if (($scopes!=null) && ($scopes->count()>0))
-                <strong>{{ trans("cruds.control.fields.scope") }}</strong>
+                <strong>{{ trans("cruds.measure.fields.scope") }}</strong>
                 <select name="scopes" data-role="select" id="scopes" data-filter="true">
                     <option></option>
                     @foreach ($scopes as $scope)
@@ -45,13 +45,13 @@
                 <table class="table table-border cell-border striped" style="width: max-content;">
                     <tbody>
                         <tr>
-                            <td class="fw-bold">{{ trans("cruds.control.fields.realisation_date") }}</td>
+                            <td class="fw-bold">{{ trans("cruds.measure.fields.realisation_date") }}</td>
                             @foreach($measure->controls as $control)
                             <td><a href="/bob/show/{{ $control->id }}">{{ $control->realisation_date }}</a></td>
                             @endforeach
                         </tr>
                         <tr>
-                            <td class="fw-bold">{{ trans("cruds.control.fields.score") }}</td>
+                            <td class="fw-bold">{{ trans("cruds.measure.fields.score") }}</td>
                             @foreach($measure->controls as $control)
                             <td class="text-center"
                                 {!! $control->score == 1 ? 'style="background-color: #ce352c;"' : '' !!}

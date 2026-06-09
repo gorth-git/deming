@@ -91,10 +91,10 @@
 				       data-check="false">
 				        <thead>
 				            <tr>
-				                <th class="sortable-column" width="5%">{{ trans("cruds.control.fields.clauses") }}</th>
-				                <th width="50%">{{ trans("cruds.control.fields.name") }}</th>
-                                <th width="50%">{{ trans("cruds.control.fields.scope") }}</th>
-				                <th class="sortable-column sort-asc"  width="5%">{{ trans("cruds.control.fields.planned") }}</th>
+				                <th class="sortable-column" width="5%">{{ trans("cruds.measure.fields.clauses") }}</th>
+				                <th width="50%">{{ trans("cruds.measure.fields.name") }}</th>
+                                <th width="50%">{{ trans("cruds.measure.fields.scope") }}</th>
+				                <th class="sortable-column sort-asc"  width="5%">{{ trans("cruds.measure.fields.planned") }}</th>
 				            </tr>
 				        </thead>
 				        <tbody>
