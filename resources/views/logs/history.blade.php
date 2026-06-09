@@ -8,19 +8,19 @@
                     {{ trans('cruds.log.subject_id') }}
                 </th>
                 <td>
-                    @if ($auditLogs->first()->subject_type=='App\\Models\\Measure')
+                    @if ($auditLogs->first()->subject_type=='App\Models\Control')
                         <a href="/alice/show/{{ $auditLogs->first()->subject_id }} ">
                             {{ $auditLogs->first()->subject_id }}
                         </a>
-                    @elseif ($auditLogs->first()->subject_type=='App\\Models\\Control')
+                    @elseif ($auditLogs->first()->subject_type=='App\Models\Measure')
                         <a href="/bob/show/{{ $auditLogs->first()->subject_id }} ">
                             {{ $auditLogs->first()->subject_id }}
                         </a>
-                    @elseif ($auditLogs->first()->subject_type=='App\\Models\\Action')
+                    @elseif ($auditLogs->first()->subject_type=='App\Models\Action')
                         <a href="/action/show/{{ $auditLogs->first()->subject_id }} ">
                             {{ $auditLogs->first()->subject_id }}
                         </a>
-                    @elseif ($auditLogs->first()->subject_type=='App\\Models\\User')
+                    @elseif ($auditLogs->first()->subject_type=='App\Models\User')
                         <a href="/user/show/{{ $auditLogs->first()->subject_id }} ">
                             {{ $auditLogs->first()->subject_id }}
                         </a>

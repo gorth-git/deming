@@ -1,65 +1,26 @@
 @extends("layout")
 
 @section("content")
-<div data-role="panel" data-title-caption="{{ trans('cruds.measure.create') }}" data-collapsible="false" data-title-icon="<span class='mif-books'></span>">
+<div data-role="panel" data-title-caption='{{ trans("cruds.control.create")}}' data-collapsible="false" data-title-icon="<span class='mif-paste'></span>">
+
     @include('partials.errors')
 
-	<form method="POST" action="/alice/store">
-	@csrf
+	<form method="POST" action="/bob/store">
+		@csrf
+
 		<div class="grid">
-	    	<div class="row">
-                <div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.measure.fields.domain") }}</strong>
-		    	</div>
-                <div class="cell-lg-6 cell-md-9">
-					<select data-role="select" name="domain_id" value="{{ old('domain_id') }}" size="1" width='10'>
-					    <option value="">-- {{ trans("cruds.domain.choose") }} --</option>
-						@foreach ($domains as $domain)
-					    	<option value="{{ $domain->id }}" {{ old('domain_id', optional($measure)->domain_id)==$domain->id ? "selected" : "" }} >
-					    		{{ $domain->title }} - {{ $domain->description }}
-					    	</option>
-					    @endforeach
-					</select>
-				</div>
-			</div>
-	    	<div class="row">
-                <div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.measure.fields.clause") }}</strong>
-		    	</div>
-                <div class="cell-lg-2 cell-md-4">
-                    <input type="text" class="input" name="clause" value="{{ old('clause', optional($measure)->clause) }}" maxlength='32'/>
-				</div>
-			</div>
 
 	    	<div class="row">
-                <div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans("cruds.measure.fields.name") }}</strong>
-		    	</div>
-                <div class="cell-lg-6 cell-md-9">
-                    <input type="text" class="input" name="name" value="{{ old('name', optional($measure)->name) }}" maxlength='255'/>
-				</div>
-			</div>
-
-	    	<div class="row">
-                <div class="cell-lg-1 cell-md-2">
-					<strong>{{ trans("cruds.measure.fields.objective") }}</strong>
-				</div>
-                <div class="cell-lg-6 cell-md-9">
-                    <textarea name="objective" class="easymde" id="objetive">{{ old('objective', optional($measure)->objective) }}</textarea>
-				</div>
-			</div>
-
-			<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-		    		<strong>{{ trans('cruds.measure.fields.attributes') }}</strong>
-		    	</div>
-                    <div class="cell-lg-6 cell-md-9">
-					<select data-role="select" name="attributes[]" data-filter="true" multiple>
-						@foreach($values as $value)
-					    <option value="{{ $value }}"
-                            @if(in_array($value, old('attributes', $selectedAttributes ?? []))) selected @endif>
-                            {{$value}}
-                        </option>
+		    		<strong>{{ trans("cruds.control.fields.clauses") }}</strong>
+				</div>
+	    		<div class="cell-lg-6 cell-md-8">
+                    <select id="controls" name="controls[]" multiple  data-role="select" data-filter="true" >
+						@foreach($all_controls as $control)
+                            <option value="{{ $control->id }}"
+                                {{ in_array($control->id, old('controls', [])) ? 'selected' : '' }}>
+                                {{ $control->clause }} - {{ $control->name }}
+                            </option>
 					    @endforeach
 					 </select>
 				</div>
@@ -67,55 +28,133 @@
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-					<strong>{{ trans("cruds.measure.fields.input") }}</strong>
+		    		<strong>{{ trans("cruds.control.fields.name") }}</strong>
+	    		</div>
+                <div class="cell-lg-4 cell-md-5">
+					<input type="text" data-role="input" name="name" value="{{ old('name') }}" maxlength="255">
 				</div>
-                <div class="cell-lg-6 cell-md-9">
-                    <textarea name="input" class="easymde" id="input">{{ old('input', optional($measure)->input) }}</textarea>
-				</div>
-			</div>
-
-	    	<div class="row">
-	    		<div class="cell-lg-1 cell-md-2">
-					<strong>{{ trans("cruds.measure.fields.model") }}</strong>
-				</div>
-				<div class="cell-lg-6 cell-md-9">
-					<textarea name="model" rows="3" data-role="textarea" data-clear-button="false">{{ old('model', optional($measure)->model) }}</textarea>
+                <div class="cell-lg-1 cell-md-1" align="right">
+		    		<strong>{{ trans("cruds.control.fields.scope") }}</strong>
+                </div>
+                <div class="cell-lg-1 cell-md-2">
+					<input type="text" name="scope" data-role="input" autocomplete="off" maxlength="32"
+                    value="{{ old('scope') }}" data-autocomplete=" {{ $scopes->implode(",") }} "/>
 				</div>
 			</div>
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-					<strong>{{ trans("cruds.measure.fields.indicator") }}</strong>
+		    		<strong>{{ trans("cruds.control.fields.objective") }}</strong>
+		    	</div>
+				<div class="cell-lg-6 cell-md-8">
+                    <textarea name="objective" class="easymde" id="objective">{{ old('objective') }}</textarea>
 				</div>
-				<div class="cell-lg-6 cell-md-9">
-					<textarea name="indicator" rows="3" data-role="textarea" data-clear-button="false">{{ old('indicator', optional($measure)->indicator) }}</textarea>
+			</div>
+
+			<div class="row">
+	    		<div class="cell-lg-1 cell-md-2">
+		    		<strong>{{ trans('cruds.control.fields.attributes') }}</strong>
+		    	</div>
+				<div class="cell-lg-6 cell-md-8">
+                    <select data-role="select" id="attributes" name="attributes[]" data-filter="true" multiple>
+						@foreach($attributes as $attribute)
+							@if (strlen($attribute)>0)
+							    <option {{ in_array($attribute, old("attributes",[])) ? "selected" : "" }}>
+                                    {{ $attribute }}
+                                </option>
+                            @endif
+					    @endforeach
+					 </select>
 				</div>
 			</div>
 
 	    	<div class="row">
 	    		<div class="cell-lg-1 cell-md-2">
-					<strong>{{ trans("cruds.measure.fields.action_plan") }}</strong>
+		    		<strong>{{ trans("cruds.control.fields.input") }}</strong>
+		    	</div>
+				<div class="cell-lg-6 cell-md-8">
+                    <textarea name="input" class="easymde" id="input">{{ old('input') }}</textarea>
 				</div>
-				<div class="cell-lg-6 cell-md-9">
-                    <textarea name="action_plan" class="easymde" id="action_plan">{{ old('action_plan', optional($measure)->action_plan) }}</textarea>
+			</div>
+			<div class="row">
+                <div class="cell-lg-1 cell-md-2">
+                    <strong>{{ trans('cruds.control.fields.model') }}</strong>
+                </div>
+                <div class="cell-lg-6 cell-md-8">
+                    <textarea class="textarea" name="model" rows="3" data-role="textarea" data-clear-button="false">{{ old('model') }}</textarea>
+                </div>
+            </div>
+
+	    	<div class="row">
+	    		<div class="cell-lg-1 cell-md-2">
+		    		<strong>{{ trans("cruds.control.fields.plan_date") }}</strong>
+		    	</div>
+				<div class="cell-lg-2 cell-md-4">
+					<input
+						data-role="calendarpicker"
+						data-format="YYYY-MM-DD"
+						name="plan_date"
+						value="{{ old('plan_date') }}"/>
 				</div>
+				<div class="cell-lg-1 cell-md-2">
+                </div>
 			</div>
 
 	    	<div class="row">
-	    		<div class="cell-5">
-					<button type="submit" class="button success">
+	    		<div class="cell-lg-1 cell-md-2">
+		    		<strong>{{ trans("cruds.control.fields.action_plan") }}</strong>
+		    	</div>
+				<div class="cell-lg-6 cell-md-8">
+                    <textarea name="action_plan" class="easymde" id="action_plan">{{ old('action_plan') }}</textarea>
+				</div>
+			</div>
+
+
+			<div class="row">
+	    		<div class="cell-lg-1 cell-md-2">
+		    		<strong>{{ trans('cruds.control.fields.periodicity') }}</strong>
+		    	</div>
+				<div class="cell-lg-2 cell-md-4">
+                    <select data-role="select" id='periodicity' name="periodicity">
+					    <option value="0" {{ old("periodicity")=="0" ? "selected" : ""}}>{{ trans('common.once') }}</option>
+					    <option value="-1" {{ old("periodicity")=="-1" ? "selected" : ""}}>{{ trans('common.weekly') }}</option>
+					    <option value="1" {{ old("periodicity")=="1" ? "selected" : ""}}>{{ trans('common.monthly') }}</option>
+					    <option value="3" {{ old("periodicity")=="3" ? "selected" : ""}}>{{ trans('common.quarterly') }}</option>
+					    <option value="6" {{ old("periodicity")=="6" ? "selected" : ""}}>{{ trans('common.biannually') }}</option>
+					    <option value="12" {{ (old("periodicity")==null||old("periodicity")=="12") ? "selected" : ""}}>{{ trans('common.annually') }}</option>
+					 </select>
+				</div>
+			</div>
+
+			<div class="row">
+                <div class="cell-lg-1 cell-md-2">
+                    <strong>{{ trans('cruds.control.fields.owners') }}</strong>
+                </div>
+                <div class="cell-lg-6 cell-md-8">
+                    <select data-role="select" name="owners[]" id="owners" data-filter="true" multiple>
+                        @foreach($owners as $id => $name)
+                            <option value="{{ $id }}" {{ in_array($id, old('owners', [])) ? 'selected' : '' }}>{{ $name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+	    	<div class="row">
+                <div class="cell-lg-12 cell-md-12">
+    				<button type="submit" class="button success">
                         <span class="mif-floppy-disk2"></span>
-						&nbsp;
-						{{ trans("common.save") }}
-					</button>
-                    <a class="button" href="/alice/index">
-						<span class="mif-cancel"></span>
-						&nbsp;
-						{{ trans("common.cancel") }}
+    		            &nbsp;
+    					{{ trans("common.save") }}
+    				</button>
+    				&nbsp;
+                    <a class="button cancel" href="/bob/index" role="button">
+                        <span class="mif-cancel"></span>
+                        &nbsp;
+                        {{ trans("common.cancel") }}
                     </a>
-				</div>
-			</div>
-		</div>
-	</form>
+                </div>
+    		</div>
+    	</div>
+    </form>
 </div>
 @endsection

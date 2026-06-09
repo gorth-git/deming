@@ -1,6 +1,6 @@
 @extends("layout")
 
-@section('title', $control->name)
+@section('title', $measure->name)
 
 @section("styles")
 <style>
@@ -18,7 +18,7 @@
 
 <form method="POST" action="/bob/make" enctype="multipart/form-data">
 	@csrf
-	<input type="hidden" name="id" value="{{ $control->id }}"/>
+	<input type="hidden" name="id" value="{{ $measure->id }}"/>
 
 	<div class="grid">
     	<div class="row">
@@ -26,8 +26,8 @@
 	    		<strong>{{ trans('cruds.control.fields.clauses') }}</strong>
 	    	</div>
     		<div class="cell-lg-4 cell-md-5">
-                @foreach($control->measures as $measure)
-                    <a href="/alice/show/{{ $measure->id }}">{{ $measure->clause }}</a> - {{ $measure->name }}
+                @foreach($measure->controls as $control)
+                    <a href="/alice/show/{{ $control->id }}">{{ $control->clause }}</a> - {{ $control->name }}
                     @if(!$loop->last)
                     <br>
                     @endif
@@ -40,13 +40,13 @@
 	    		<strong>{{ trans('cruds.control.fields.name') }}</strong>
 	    	</div>
     		<div class="cell-lg-5 cell-md-5">
-				{{ $control->name }}
+				{{ $measure->name }}
 			</div>
-            @if ($control->scope!==null)
+            @if ($measure->scope!==null)
             <div class="cell-2">
 	    		<strong>{{ trans("cruds.control.fields.scope") }}</strong>
 	    		&nbsp;
-    			{{ $control->scope }}
+    			{{ $measure->scope }}
     		</div>
             @endif
 		</div>
@@ -56,7 +56,7 @@
 	    		<strong>{{ trans('cruds.control.fields.objective') }}</strong>
 	    	</div>
             <div class="cell-lg-6 cell-md-10">
-                {!! \Parsedown::instance()->text($control->objective) !!}
+                {!! \Parsedown::instance()->text($measure->objective) !!}
 			</div>
 		</div>
 
@@ -65,7 +65,7 @@
 	    		<strong>{{ trans('cruds.control.fields.input') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-10">
-                {!! \Parsedown::instance()->text($control->input) !!}
+                {!! \Parsedown::instance()->text($measure->input) !!}
 			</div>
 		</div>
 
@@ -74,7 +74,7 @@
 	    		<strong>{{ trans('cruds.control.fields.model') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-10">
-				<pre>{{ $control->model }}</pre>
+				<pre>{{ $measure->model }}</pre>
 			</div>
 		</div>
 
@@ -90,10 +90,10 @@
 						name="plan_date"
     					data-format="YYYY-MM-DD"
     					data-inputFormat="YYYY-MM-DD"
-						value="{{ count($errors)>0 ?  old('plan_date') : $control->plan_date }}"
+						value="{{ count($errors)>0 ?  old('plan_date') : $measure->plan_date }}"
 						/>
                 @else
-                    {{ $control->plan_date }}
+                    {{ $measure->plan_date }}
                 @endif
 			</div>
             <div class="cell-lg-2 cell-md-3" align="right">
@@ -117,7 +117,7 @@
 	    		<strong>{{ trans('cruds.control.fields.observations') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-10">
-                <textarea name="observations" rows="5" data-role="textarea" data-clear-button="false">{{ count($errors)>0 ?  old('observations') : $control->observations }}</textarea>
+                <textarea name="observations" rows="5" data-role="textarea" data-clear-button="false">{{ count($errors)>0 ?  old('observations') : $measure->observations }}</textarea>
 			</div>
 	    </div>
 
@@ -125,7 +125,7 @@
     		<div class="cell-lg-1 cell-md-2">
 	    		<strong>{{ trans('cruds.control.fields.evidence') }}</strong>
 	    		<br>
-                <a target="_new" href="/bob/template/{{ $control->id }}" id="checklist-link">{{ trans('cruds.control.checklist') }}</a>
+                <a target="_new" href="/bob/template/{{ $measure->id }}" id="checklist-link">{{ trans('cruds.control.checklist') }}</a>
 	    	</div>
 			<div class="cell-lg-6 cell-md-10">
 				<div class="dropzone dropzone-previews" id="dropzoneFileUpload"></div>
@@ -140,7 +140,7 @@
                 <input
                     id="note"
                     name="note"
-                    value="{{ count($errors)>0 ?  old('note') : $control->note }}"
+                    value="{{ count($errors)>0 ?  old('note') : $measure->note }}"
                     min="0"
                     max="100"
                     step="0.01"
@@ -155,7 +155,7 @@
 	    		<strong>{{ trans('cruds.control.fields.indicator') }}</strong>
 	    	</div>
             <div class="cell-lg-6 cell-md-10">
-				<pre>{{ $control->indicator }}</pre>
+				<pre>{{ $measure->indicator }}</pre>
 			</div>
 		</div>
 
@@ -166,9 +166,9 @@
 	    		</strong>
 	    	</div>
             <div class="cell-lg-6 cell-md-10">
-                <input type="radio" data-role="radio" name="score" value="3" data-role="radio" data-append="<font color='green'>{{ trans('common.green') }}</font>" {{ $control->score===3 ? "checked" : "" }} />
-                <input type="radio" data-role="radio" name="score" value="2" data-role="radio" data-append="<font color='orange'>{{ trans('common.orange') }}</font>" {{ $control->score===2 ? "checked" : "" }} />
-                <input type="radio" data-role="radio" name="score" value="1" data-role="radio" data-append="<font color='red'>{{ trans('common.red') }}</font>" {{ $control->score===1 ? "checked" : "" }} />
+                <input type="radio" data-role="radio" name="score" value="3" data-role="radio" data-append="<font color='green'>{{ trans('common.green') }}</font>" {{ $measure->score===3 ? "checked" : "" }} />
+                <input type="radio" data-role="radio" name="score" value="2" data-role="radio" data-append="<font color='orange'>{{ trans('common.orange') }}</font>" {{ $measure->score===2 ? "checked" : "" }} />
+                <input type="radio" data-role="radio" name="score" value="1" data-role="radio" data-append="<font color='red'>{{ trans('common.red') }}</font>" {{ $measure->score===1 ? "checked" : "" }} />
             </div>
 		</div>
         @if ((Auth::User()->role === 1)||(Auth::User()->role === 2))
@@ -184,11 +184,11 @@
 	    		<strong>{{ trans('cruds.control.fields.action_plan') }}</strong>
 	    	</div>
             <div class="cell-lg-6 cell-md-10">
-                <textarea name="action_plan" class="form-control easymde disabled-editor" id="action_plan">{{ $errors->count()>0 ?  old('action_plan') : $control->action_plan }}</textarea>
+                <textarea name="action_plan" class="form-control easymde disabled-editor" id="action_plan">{{ $errors->count()>0 ?  old('action_plan') : $measure->action_plan }}</textarea>
 			</div>
 		</div>
         @endif
-		@if ($control->periodicity!==0)
+		@if ($measure->periodicity!==0)
     	<div class="row">
     		<div class="cell-lg-1 cell-md-2">
 	    		<strong>{{ trans('cruds.control.fields.next') }}</strong>
@@ -208,18 +208,18 @@
                     {{ $next_date }}
                 @endif
 			(
-			@if ($control->periodicity==-1)
+			@if ($measure->periodicity==-1)
 				{{ trans("common.weekly") }}
-			@elseif ($control->periodicity==1)
+			@elseif ($measure->periodicity==1)
 				{{ trans("common.monthly") }}
-			@elseif ($control->periodicity==3)
+			@elseif ($measure->periodicity==3)
 				{{ trans("common.quarterly") }}
-			@elseif ($control->periodicity==6)
+			@elseif ($measure->periodicity==6)
 				{{ trans("common.biannually") }}
-			@elseif ($control->periodicity==12)
+			@elseif ($measure->periodicity==12)
 				{{ trans("common.annually") }}
 			@else
-				{{ $control->periodicity }}
+				{{ $measure->periodicity }}
 			@endif
 			)
 			</div>
@@ -232,8 +232,8 @@
 
     	<div class="row">
               <div class="cell-12">
-            @if ($control->canMake())
-                @if ($control->status===0)
+            @if ($measure->canMake())
+                @if ($measure->status===0)
 					<button type="submit" class="button success">
 						<span class="mif-done"></span>
 						&nbsp;
@@ -243,7 +243,7 @@
                     @endif
                 @endif
                 @if ((Auth::User()->role === 1)||(Auth::User()->role === 2))
-                    @if ($control->status===1)
+                    @if ($measure->status===1)
 					<button type="submit" class="button success" onclick='this.form.action="/bob/accept"'>
 						<span class="mif-done"></span>
 						&nbsp;
@@ -258,7 +258,7 @@
 					&nbsp;
                     @endif
                 @endif
-                @if ($control->canMake())
+                @if ($measure->canMake())
 					<button type="submit" class="button primary" onclick='this.form.action="/bob/draft"'>
                         <span class="mif-floppy-disk2"></span>
 			            &nbsp;
@@ -266,7 +266,7 @@
 					</button>
 					&nbsp;
                 @endif
-                <a href="/bob/show/{{ $control->id }}" class="button">
+                <a href="/bob/show/{{ $measure->id }}" class="button">
 					<span class="mif-cancel"></span>
 					&nbsp;
 	    			{{ trans('common.cancel') }}
@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const myDropzone = new Dropzone("div#dropzoneFileUpload", {
         url: '/doc/store',
 	    headers: { 'x-csrf-token': '{{csrf_token()}}' },
-        params: function params(files, xhr, chunk) { return { 'control': '{{ $control->id }}' }; },
+        params: function params(files, xhr, chunk) { return { 'control': '{{ $measure->id }}' }; },
         addRemoveLinks: true,
         timeout: 50000,
         removedfile: function(file)
