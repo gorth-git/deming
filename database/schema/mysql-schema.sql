@@ -105,6 +105,18 @@ CREATE TABLE `control_measure` (
   CONSTRAINT `control_measure_measure_id_foreign` FOREIGN KEY (`measure_id`) REFERENCES `measures` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `control_risk`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `control_risk` (
+  `control_id` int(10) unsigned NOT NULL,
+  `risk_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`control_id`,`risk_id`),
+  KEY `control_risk_risk_id_foreign` (`risk_id`),
+  CONSTRAINT `control_risk_control_id_foreign` FOREIGN KEY (`control_id`) REFERENCES `controls` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `control_risk_risk_id_foreign` FOREIGN KEY (`risk_id`) REFERENCES `risks` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `control_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -212,15 +224,6 @@ CREATE TABLE `exceptions` (
   CONSTRAINT `exceptions_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   CONSTRAINT `exceptions_measure_id_foreign` FOREIGN KEY (`control_id`) REFERENCES `controls` (`id`) ON DELETE SET NULL,
   CONSTRAINT `exceptions_submitted_by_foreign` FOREIGN KEY (`submitted_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `measure_risk`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `measure_risk` (
-  `risk_id` int(10) unsigned NOT NULL,
-  `measure_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`risk_id`,`measure_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `measures`;
@@ -524,3 +527,4 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (81,'2026_04_16_081
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (83,'2026_04_23_160957_create_exceptions_table',8);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (84,'2026_05_21_000001_swap_measures_controls_tables',9);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (85,'2026_05_21_000002_fix_control_measure_foreign_keys',10);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (86,'2026_06_09_000001_replace_measure_risk_with_control_risk',11);
