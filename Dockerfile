@@ -31,7 +31,7 @@ RUN mkdir -p /var/www/deming
 
 WORKDIR /var/www/deming
 
-RUN git clone https://www.github.com/dbarzin/deming .
+RUN git clone https://www.github.com/sourcentis/deming .
 RUN cp docker/deming.conf /etc/nginx/conf.d/deming.conf
 RUN cp docker/userdemo.sh /etc/userdemo.sh
 COPY docker/resetdb.sh /etc/resetdb.sh

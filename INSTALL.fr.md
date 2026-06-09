@@ -25,7 +25,7 @@ Créer le répertoire du projet
 
 Cloner le projet depuis Github
 
-    git clone https://www.github.com/dbarzin/deming
+    git clone https://www.github.com/sourcentis/deming
 
 Créer les répertoires temporaires
 
@@ -288,7 +288,7 @@ MAIL_DKIM_SELECTOR = 'default'; // Match your DKIM DNS selector
 MAIL_DKIM_PASSPHRASE = '';      // Only if your key has a passphrase
 ```
 
-N'oubliez pas de [configurer](https://dbarzin.github.io/deming/config.fr/#notifications) le contenu et la fréquence d'envoi des mails.
+N'oubliez pas de [configurer](https://sourcentis.github.io/deming/config.fr/#notifications) le contenu et la fréquence d'envoi des mails.
 
 ## LDAP / LDAPRecord configuration (optional)
 

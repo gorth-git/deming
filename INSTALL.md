@@ -25,7 +25,7 @@ Create the project directory
 
 Clone project from Github
 
-    git clone https://www.github.com/dbarzin/deming
+    git clone https://www.github.com/sourcentis/deming
 
 Install packages with composer :
 
@@ -281,7 +281,7 @@ MAIL_DKIM_SELECTOR = 'default'; // Match your DKIM DNS selector
 MAIL_DKIM_PASSPHRASE = '';      // Only if your key has a passphrase
 ```
 
-Don't forget to [configure](https://dbarzin.github.io/deming/config/#notifications) the content and frequency of your emails.
+Don't forget to [configure](https://sourcentis.github.io/deming/config/#notifications) the content and frequency of your emails.
 
 
 ## LDAP / LDAPRecord configuration (optional)

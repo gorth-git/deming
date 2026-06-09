@@ -33,7 +33,7 @@ Create the project directory
 Clone project from Github to /var/www
 
     cd /var/www
-    git clone https://www.github.com/dbarzin/deming
+    git clone https://www.github.com/sourcentis/deming
 
 Create temporary directories
 
@@ -295,7 +295,7 @@ You may also configure DKIM :
     MAIL_DKIM_SELECTOR = 'default'; // Match your DKIM DNS selector
     MAIL_DKIM_PASSPHRASE = '';      // Only if your key has a passphrase
 
-Don't forget to [configure](https://dbarzin.github.io/deming/config.fr/#notifications) the content and frequency of mail sending.
+Don't forget to [configure](https://sourcentis.github.io/deming/config.fr/#notifications) the content and frequency of mail sending.
 
 ## Sheduler
 
