@@ -380,8 +380,8 @@ return [
             // Behandlung
             'status' => 'Behandlungsstatus',
             'status_comment' => 'Kommentar Status',
-            'measures' => 'Verknüpfte Kontrollen',
-            'measures_hint' => 'Erforderlich bei Status = Gemindert',
+            'controls' => 'Verknüpfte Kontrollen',
+            'controls_hint' => 'Erforderlich bei Status = Gemindert',
             'action_plan' => 'Verknüpfte Aktionspläne',
             'actions_hint' => 'Erforderlich bei Status = Nicht akzeptiert',
 

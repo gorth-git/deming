@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Control;
 use App\Models\Risk;
 use App\Models\User;
 use Database\Seeders\RiskScoringConfigSeeder;
@@ -124,4 +125,36 @@ test('admin can export risks', function () {
 
 test('auditor cannot export risks', function () {
     $this->actingAs($this->auditor)->get('/export/risks')->assertStatus(403);
+});
+
+test('admin can create a mitigated risk with linked controls', function () {
+    $control = Control::factory()->create();
+
+    $this->actingAs($this->admin)
+        ->post('/risk/store', [
+            'name'             => 'Mitigated risk with controls',
+            'probability'      => 2,
+            'impact'           => 3,
+            'status'           => Risk::STATUS_MITIGATED,
+            'review_frequency' => 12,
+            'control_ids'      => [$control->id],
+        ])
+        ->assertRedirect();
+
+    $risk = Risk::where('name', 'Mitigated risk with controls')->firstOrFail();
+    expect($risk->controls)->toHaveCount(1);
+    expect($risk->controls->first()->id)->toBe($control->id);
+});
+
+test('mitigated risk with no controls triggers warning', function () {
+    $this->actingAs($this->admin)
+        ->post('/risk/store', [
+            'name'             => 'Mitigated without controls',
+            'probability'      => 2,
+            'impact'           => 3,
+            'status'           => Risk::STATUS_MITIGATED,
+            'review_frequency' => 12,
+        ])
+        ->assertRedirect()
+        ->assertSessionHas('warning');
 });

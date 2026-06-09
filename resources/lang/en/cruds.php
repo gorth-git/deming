@@ -384,8 +384,8 @@ return [
             // Treatment
             'status'              => 'Treatment status',
             'status_comment'      => 'Status comment',
-            'measures'            => 'Linked controls',
-            'measures_hint'       => 'Required when status = Mitigated',
+            'controls'            => 'Linked controls',
+            'controls_hint'       => 'Required when status = Mitigated',
             'action_plan'         => 'Linked action plans',
             'actions_hint'        => 'Required when status = Not accepted',
 

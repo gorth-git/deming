@@ -181,16 +181,16 @@
         @endif
     </div>
 
-    {{-- Mesures liés --}}
-    @if ($risk->measures->isNotEmpty())
+    {{-- Contrôles liés --}}
+    @if ($risk->controls->isNotEmpty())
     <div class="row">
         <div class="cell-lg-1 cell-md-2">
-            <strong>{{ trans("cruds.risk.fields.measures") }}</strong>
+            <strong>{{ trans("cruds.risk.fields.controls") }}</strong>
         </div>
         <div class="cell-lg-7 cell-md-9">
-            @foreach ($risk->measures as $measure)
-                <a href="/alice/show/{{ $measure->id }}">{{ $measure->name }}</a>
-                @if (!$loop->last) , @endif
+            @foreach ($risk->controls as $control)
+                <a href="/alice/show/{{ $control->id }}">{{ $control->clause }} - {{ $control->name }}</a>
+                @if (!$loop->last) <br> @endif
             @endforeach
         </div>
     </div>

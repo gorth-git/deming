@@ -40,6 +40,11 @@ class Control extends Model
         'action_plan',
     ];
 
+    public function risks(): BelongsToMany
+    {
+        return $this->belongsToMany(Risk::class, 'control_risk');
+    }
+
     // Return the domain associated to this control
     public function domain(): BelongsTo
     {

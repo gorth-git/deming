@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!statusEl) return;
         const status = statusEl.value;
 
-        const measuresSection = document.getElementById('measures-section');
+        const measuresSection = document.getElementById('controls-section');
         const actionsSection  = document.getElementById('actions-section');
 
         if (measuresSection) measuresSection.style.display = (status === 'mitigated')     ? '' : 'none';
