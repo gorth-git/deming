@@ -5,7 +5,7 @@ cd /var/www/deming
 
 DB_HOST="${DB_HOST:-mysql}"
 
-echo "Waiting for MySQL to be ready..."
+echo "Waiting for MySQL (${DB_HOST}) to be ready..."
 until mysqladmin ping -h"${DB_HOST}" --silent 2>/dev/null; do
     echo "  Not ready, retrying in 3s..."
     sleep 3
