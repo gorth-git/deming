@@ -109,7 +109,7 @@ form, table {
 	    	</div>
 			<div class="cell-6">
                 @if ($action->status==0)
-                    <textarea name="remediation" class="easymde" id="remediation">{{ $errors->has('remediation') ?  old('remediation') : $action->remediation }}</textarea>
+                    <textarea name="remediation" class="easymde" id="remediation">{{ old('remediation', $action->remediation) }}</textarea>
                 @else
                     {!! \Parsedown::instance()->text($action->remediation) !!}
                 @endif

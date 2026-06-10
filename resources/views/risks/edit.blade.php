@@ -31,7 +31,7 @@
                 </div>
                 <div class="cell-lg-6 cell-md-8">
                     <textarea name="description" rows="3" data-role="textarea"
-                              data-clear-button="false">{{ $errors->has('description') ? old('description') : $risk->description }}</textarea>
+                              data-clear-button="false">{{ old('description', $risk->description) }}</textarea>
                 </div>
             </div>
 
@@ -96,7 +96,7 @@
                     <div class="cell-lg-6 cell-md-8">
                         <textarea name="probability_comment" rows="2" data-role="textarea"
                                   data-clear-button="false"
-                                  placeholder="{{ trans('cruds.risk.fields.probability_comment') }}">{{ $errors->has('probability_comment') ? old('probability_comment') : $risk->probability_comment }}</textarea>
+                                  placeholder="{{ trans('cruds.risk.fields.probability_comment') }}">{{ old('probability_comment', $risk->probability_comment) }}</textarea>
                     </div>
                 </div>
             </div>
@@ -159,7 +159,7 @@
                 <div class="cell-lg-6 cell-md-8">
                     <textarea name="impact_comment" rows="2" data-role="textarea"
                               data-clear-button="false"
-                              placeholder="{{ trans('cruds.risk.fields.impact_comment') }}">{{ $errors->has('impact_comment') ? old('impact_comment') : $risk->impact_comment }}</textarea>
+                              placeholder="{{ trans('cruds.risk.fields.impact_comment') }}">{{ old('impact_comment', $risk->impact_comment) }}</textarea>
                 </div>
             </div>
 
@@ -216,7 +216,7 @@
                 <div class="cell-lg-6 cell-md-8">
                     <textarea name="status_comment" rows="2" data-role="textarea"
                               data-clear-button="false"
-                              placeholder="{{ trans('cruds.risk.fields.status_comment') }}">{{ $errors->has('status_comment') ? old('status_comment') : $risk->status_comment }}</textarea>
+                              placeholder="{{ trans('cruds.risk.fields.status_comment') }}">{{ old('status_comment', $risk->status_comment) }}</textarea>
                 </div>
             </div>
 

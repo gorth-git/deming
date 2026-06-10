@@ -86,7 +86,7 @@ form, table {
                 <strong>{{ trans('cruds.action.fields.cause') }}</strong>
 	    	</div>
             <div class="cell-6">
-            <textarea name="cause" class="easymde" id="cause">{{ $errors->has('cause') ?  old('cause') : $action->cause }}</textarea>
+            <textarea name="cause" class="easymde" id="cause">{{ old('cause', $action->cause) }}</textarea>
 			</div>
 		</div>
 
@@ -98,7 +98,7 @@ form, table {
             <strong>{{ trans('cruds.action.fields.remediation') }}</strong>
     	</div>
 		<div class="cell-6">
-            <textarea name="remediation" class="easymde" id="remediation">{{ $errors->has('remediation') ?  old('remediation') : $action->remediation }}</textarea>
+            <textarea name="remediation" class="easymde" id="remediation">{{ old('remediation', $action->remediation) }}</textarea>
 		</div>
 	</div>
 
@@ -141,7 +141,7 @@ form, table {
             <strong>{{ trans('cruds.action.fields.justification') }}</strong>
     	</div>
 		<div class="cell-6">
-            <textarea name="justification" class="easymde" id="justification">{{ $errors->has('justification') ?  old('justification') : $action->justification }}</textarea>
+            <textarea name="justification" class="easymde" id="justification">{{ old('justification', $action->justification) }}</textarea>
 		</div>
 	</div>
 

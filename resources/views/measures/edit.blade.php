@@ -51,7 +51,7 @@
 		    		<strong>{{ trans("cruds.measure.fields.objective") }}</strong>
 		    	</div>
 				<div class="cell-lg-6 cell-md-10">
-                    <textarea name="objective" class="easymde" id="objective">{{ $errors->has('objective') ?  old('objective') : $measure->objective }}</textarea>
+                    <textarea name="objective" class="easymde" id="objective">{{ old('objective', $measure->objective) }}</textarea>
 				</div>
 			</div>
 
@@ -75,7 +75,7 @@
 		    		<strong>{{ trans("cruds.measure.fields.input") }}</strong>
 		    	</div>
 				<div class="cell-lg-6 cell-md-10">
-                    <textarea name="input" class="easymde" id="input">{{ $errors->has('input') ?  old('input') : $measure->input }}</textarea>
+                    <textarea name="input" class="easymde" id="input">{{ old('input', $measure->input) }}</textarea>
 				</div>
 			</div>
 			<div class="row">
@@ -83,7 +83,7 @@
                     <strong>{{ trans('cruds.measure.fields.model') }}</strong>
                 </div>
                 <div class="cell-lg-6 cell-md-10">
-                    <textarea class="textarea" name="model" rows="3" data-role="textarea" data-clear-button="false">{{ $errors->has('model') ?  old('model') : $measure->model }}</textarea>
+                    <textarea class="textarea" name="model" rows="3" data-role="textarea" data-clear-button="false">{{ old('model', $measure->model) }}</textarea>
                 </div>
             </div>
 
@@ -120,7 +120,7 @@
 		    		<strong>{{ trans("cruds.measure.fields.observations") }}</strong>
 		    	</div>
 				<div class="cell-lg-6 cell-md-10">
-					<textarea name="observations" rows="5" data-role="textarea" data-clear-button="false">{{ $errors->has('observations') ?  old('observations') : $measure->observations }}</textarea>
+					<textarea name="observations" rows="5" data-role="textarea" data-clear-button="false">{{ old('observations', $measure->observations) }}</textarea>
 				</div>
 		    </div>
 
@@ -141,7 +141,7 @@
                     <input
                         id="note"
                         name="note"
-                        value="{{ count($errors)>0 ?  old('note') : $measure->note }}"
+                        value="{{ old('note', $measure->note) }}"
                         min="0"
                         max="100"
                         step="0.01"
@@ -156,7 +156,7 @@
 		    		<strong>{{ trans("cruds.measure.fields.indicator") }}</strong>
 		    	</div>
                 <div class="cell-lg-6 cell-md-10">
-                    <textarea class="textarea" name="indicator" rows="3" data-role="textarea" data-clear-button="false">{{ $errors->has('indicator') ?  old('indicator') : $measure->indicator }}</textarea>
+                    <textarea class="textarea" name="indicator" rows="3" data-role="textarea" data-clear-button="false">{{ old('indicator', $measure->indicator) }}</textarea>
 				</div>
 			</div>
 
@@ -176,7 +176,7 @@
 		    		<strong>{{ trans("cruds.measure.fields.action_plan") }}</strong>
 		    	</div>
 				<div class="cell-lg-6 cell-md-10">
-                    <textarea name="action_plan" class="easymde" id="action_plan">{{ $errors->has('action_plan') ?  old('action_plan') : $measure->action_plan }}</textarea>
+                    <textarea name="action_plan" class="easymde" id="action_plan">{{ old('action_plan', $measure->action_plan) }}</textarea>
 				</div>
 			</div>
 

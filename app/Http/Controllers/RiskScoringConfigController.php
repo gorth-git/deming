@@ -171,17 +171,17 @@ class RiskScoringConfigController extends Controller
             'probability_levels.*.description'=> ['nullable', 'string', 'max:255'],
 
             'impact_levels'              => ['required', 'array', 'min:2'],
-            'impact_levels.*.value'      => ['required', 'integer', 'min:1'],
+            'impact_levels.*.value'      => ['required', 'integer', 'min:0', 'max:9'],
             'impact_levels.*.label'      => ['required', 'string', 'max:100'],
             'impact_levels.*.description'=> ['nullable', 'string', 'max:255'],
 
             'exposure_levels'              => ['nullable', 'array'],
-            'exposure_levels.*.value'      => ['nullable', 'integer', 'min:0'],
+            'exposure_levels.*.value'      => ['nullable', 'integer', 'min:0', 'max:9'],
             'exposure_levels.*.label'      => ['nullable', 'string', 'max:100'],
             'exposure_levels.*.description'=> ['nullable', 'string', 'max:255'],
 
             'vulnerability_levels'              => ['nullable', 'array'],
-            'vulnerability_levels.*.value'      => ['nullable', 'integer', 'min:1'],
+            'vulnerability_levels.*.value'      => ['nullable', 'integer', 'min:0', 'max:9'],
             'vulnerability_levels.*.label'      => ['nullable', 'string', 'max:100'],
             'vulnerability_levels.*.description'=> ['nullable', 'string', 'max:255'],
 

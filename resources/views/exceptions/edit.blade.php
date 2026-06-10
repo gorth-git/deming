@@ -1,12 +1,13 @@
 @extends("layout")
 
 @section("content")
-<div data-role="panel" data-title-caption="{{ trans('cruds.exception.create') }}" data-collapsible="false" data-title-icon="<span class='mif-shield'></span>">
+<div data-role="panel" data-title-caption="{{ trans('cruds.exception.create') }}" data-collapsible="false" data-title-icon="<span class='mif-cross'></span>">
 
     @include('partials.errors')
 
-    <form method="POST" action="/exception/store">
+    <form method="POST" action="/exception/save">
         @csrf
+        <input type="hidden" name="id" value="{{ $exception->id }}">
 
         <div class="grid">
 
@@ -17,7 +18,8 @@
                 </div>
                 <div class="cell-lg-6 cell-md-8">
                     <input type="text" data-role="input" name="name"
-                        value="{{ old('name') }}" maxlength="255" required>
+        				value="{{ old('name', $exception->name) }}"
+                        maxlength="255" required>
                 </div>
             </div>
 
@@ -31,7 +33,7 @@
                         <option value="">– {{ trans('cruds.exception.fields.no_measure') }} –</option>
                         @foreach($controls as $control)
                             <option value="{{ $control->id }}"
-                                {{ old('measure_id') == $control->id ? 'selected' : '' }}>
+                                {{ (old('measure_id', $exception->control_id)) == $control->id ? 'selected' : '' }}>
                                 {{ $control->clause }} – {{ $control->name }}
                             </option>
                         @endforeach
@@ -46,7 +48,7 @@
                 </div>
                 <div class="cell-lg-6 cell-md-8">
                     <textarea name="description" rows="4"
-                        data-role="textarea" data-clear-button="false">{{ old('description') }}</textarea>
+                        data-role="textarea" data-clear-button="false">{{ old('description', $exception->description) }}</textarea>
                 </div>
             </div>
 
@@ -57,7 +59,7 @@
                 </div>
                 <div class="cell-lg-6 cell-md-8">
                     <textarea name="justification" rows="4"
-                        data-role="textarea" data-clear-button="false">{{ old('justification') }}</textarea>
+                        data-role="textarea" data-clear-button="false">{{ old('justification', $exception->justification) }}</textarea>
                 </div>
             </div>
 
@@ -68,7 +70,7 @@
                 </div>
                 <div class="cell-lg-6 cell-md-8">
                     <textarea name="compensating_controls" rows="3"
-                        data-role="textarea" data-clear-button="false">{{ old('compensating_controls') }}</textarea>
+                        data-role="textarea" data-clear-button="false">{{ old('compensating_controls', $exception->compensating_controls) }}</textarea>
                 </div>
             </div>
 
@@ -79,14 +81,14 @@
                 </div>
                 <div class="cell-lg-2 cell-md-3">
                     <input data-role="calendarpicker" data-format="YYYY-MM-DD"
-                        name="start_date" value="{{ old('start_date') }}"/>
+                        name="start_date" value="{{ old('start_date', $exception->start_date) }}"/>
                 </div>
                 <div class="cell-lg-1 cell-md-2 text-right">
                     <strong>{{ trans('cruds.exception.fields.end_date') }}</strong>
                 </div>
                 <div class="cell-lg-2 cell-md-3">
                     <input data-role="calendarpicker" data-format="YYYY-MM-DD"
-                        name="end_date" value="{{ old('end_date') }}" data-clear-button="true"/>
+                        name="end_date" value="{{ old('end_date', $exception->end_date) }}" data-clear-button="true"/>
                 </div>
             </div>
 

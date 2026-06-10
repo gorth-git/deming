@@ -18,12 +18,7 @@
 <div data-role="panel" data-title-caption="{{ trans('cruds.exception.title_singular') }}"
     data-collapsible="false" data-title-icon="<span class='mif-cross'></span>">
 
-    @if(session('success'))
-        <div class="alert success mb-2">{{ session('success') }}</div>
-    @endif
-    @if(session('warning'))
-        <div class="alert warning mb-2">{{ session('warning') }}</div>
-    @endif
+    @include('partials.errors')
 
     <div class="grid">
 
