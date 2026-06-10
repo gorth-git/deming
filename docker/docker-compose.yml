@@ -10,7 +10,6 @@ services:
       - TZ=Europe/Paris
       # Default db connexion
       - DB_HOST=mysql
-      - APP_ENV=local
       - DB_DATABASE=deming
       - DB_USERNAME=deming_user
       - DB_PASSWORD=demPasssword-123
