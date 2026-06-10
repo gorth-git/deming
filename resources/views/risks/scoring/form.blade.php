@@ -144,7 +144,7 @@
                         <tbody id="impact-body">
                         @foreach (old('impact_levels', $impLevels) as $idx => $level)
                         <tr class="level-row">
-                            <td><input type="number" name="impact_levels[{{ $idx }}][value]" class="input" value="{{ $level['value'] }}" min="1" required style="width:80px; text-align:center;"></td>
+                            <td><input type="number" name="impact_levels[{{ $idx }}][value]" class="input" value="{{ $level['value'] }}" min="0" required style="width:80px; text-align:center;"></td>
                             <td><input type="text"   name="impact_levels[{{ $idx }}][label]" class="input" value="{{ $level['label'] }}" required></td>
                             <td><input type="text"   name="impact_levels[{{ $idx }}][description]" class="input" value="{{ $level['description'] ?? '' }}"></td>
                             <td><button type="button" class="button mini alert js-remove-level"><span class="mif-bin"></span></button></td>
