@@ -32,17 +32,11 @@ return new class extends Migration
         //      measure_id → measures (audit instances)
         // Solution: swap the column VALUES
         // PostgreSQL enforces FK constraints immediately (no session-level disable).
-        // Drop all FKs on control_measure dynamically so naming conventions don't matter.
+        // Drop by explicit name (deterministic from the original migration) to avoid
+        // relying on pg_constraint queries that may silently return 0 rows.
         if ($driver === 'pgsql') {
-            $fks = DB::select("
-                SELECT conname
-                FROM pg_constraint
-                WHERE conrelid = 'control_measure'::regclass
-                AND contype = 'f'
-            ");
-            foreach ($fks as $fk) {
-                DB::statement("ALTER TABLE control_measure DROP CONSTRAINT \"{$fk->conname}\"");
-            }
+            DB::statement('ALTER TABLE control_measure DROP CONSTRAINT IF EXISTS "control_measure_control_id_foreign"');
+            DB::statement('ALTER TABLE control_measure DROP CONSTRAINT IF EXISTS "control_measure_measure_id_foreign"');
         }
 
         DB::statement('ALTER TABLE control_measure ADD COLUMN swap_tmp INTEGER NULL');
@@ -141,17 +135,10 @@ return new class extends Migration
         });
 
         // Reverse step 2: swap back control_measure column values
-        // PostgreSQL: drop all FKs on control_measure dynamically before the reverse UPDATE.
+        // PostgreSQL: drop by explicit name before the reverse UPDATE.
         if ($driver === 'pgsql') {
-            $fks = DB::select("
-                SELECT conname
-                FROM pg_constraint
-                WHERE conrelid = 'control_measure'::regclass
-                AND contype = 'f'
-            ");
-            foreach ($fks as $fk) {
-                DB::statement("ALTER TABLE control_measure DROP CONSTRAINT \"{$fk->conname}\"");
-            }
+            DB::statement('ALTER TABLE control_measure DROP CONSTRAINT IF EXISTS "control_measure_control_id_foreign"');
+            DB::statement('ALTER TABLE control_measure DROP CONSTRAINT IF EXISTS "control_measure_measure_id_foreign"');
         }
 
         DB::statement('ALTER TABLE control_measure ADD COLUMN swap_tmp INTEGER NULL');
