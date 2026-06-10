@@ -31,13 +31,18 @@ return new class extends Migration
         // New: control_id → controls (security measures)
         //      measure_id → measures (audit instances)
         // Solution: swap the column VALUES
-        // PostgreSQL enforces FK constraints immediately (no session-level disable);
-        // drop them here — migration _000002 will recreate with correct targets.
+        // PostgreSQL enforces FK constraints immediately (no session-level disable).
+        // Drop all FKs on control_measure dynamically so naming conventions don't matter.
         if ($driver === 'pgsql') {
-            Schema::table('control_measure', function (Blueprint $table) {
-                $table->dropForeign(['control_id']);
-                $table->dropForeign(['measure_id']);
-            });
+            $fks = DB::select("
+                SELECT conname
+                FROM pg_constraint
+                WHERE conrelid = 'control_measure'::regclass
+                AND contype = 'f'
+            ");
+            foreach ($fks as $fk) {
+                DB::statement("ALTER TABLE control_measure DROP CONSTRAINT \"{$fk->conname}\"");
+            }
         }
 
         DB::statement('ALTER TABLE control_measure ADD COLUMN swap_tmp INTEGER NULL');
@@ -136,13 +141,17 @@ return new class extends Migration
         });
 
         // Reverse step 2: swap back control_measure column values
-        // PostgreSQL: migration _000002 down() restores FKs pointing to the swapped tables;
-        // drop them again before the reverse UPDATE so constraints aren't violated.
+        // PostgreSQL: drop all FKs on control_measure dynamically before the reverse UPDATE.
         if ($driver === 'pgsql') {
-            Schema::table('control_measure', function (Blueprint $table) {
-                $table->dropForeign(['control_id']);
-                $table->dropForeign(['measure_id']);
-            });
+            $fks = DB::select("
+                SELECT conname
+                FROM pg_constraint
+                WHERE conrelid = 'control_measure'::regclass
+                AND contype = 'f'
+            ");
+            foreach ($fks as $fk) {
+                DB::statement("ALTER TABLE control_measure DROP CONSTRAINT \"{$fk->conname}\"");
+            }
         }
 
         DB::statement('ALTER TABLE control_measure ADD COLUMN swap_tmp INTEGER NULL');
