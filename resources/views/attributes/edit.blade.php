@@ -14,7 +14,7 @@
 					<label>{{ trans('cruds.attribute.fields.name') }}</label>
 		    	</div>
 				<div class="cell-3">
-					<input type="text" class="input {{ $errors->has('name') ? 'is-danger' : ''}}" name="name" value="{{ $errors->has('name') ?  old('name') : $attribute->name }}" size='5'>
+					<input type="text" class="input {{ $errors->has('name') ? 'is-danger' : ''}}" name="name" value="{{ old('name', $attribute->name) }}" size='5'>
 				</div>
 			</div>
 	    	<div class="row">
@@ -22,7 +22,7 @@
 					<label class="label" for="description">{{ trans('cruds.attribute.fields.values') }}</label>
 		    	</div>
 				<div class="cell-8">
-					<textarea name="values" rows="5" cols="80">{{ $errors->has('values') ?  old('values') : $attribute->values }}</textarea>
+					<textarea name="values" rows="5" cols="80">{{ old('values', $attribute->values) }}</textarea>
 					<br>
 					format: #tag #tag #tag ...
 					<br><br>

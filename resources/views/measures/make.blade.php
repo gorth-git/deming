@@ -90,7 +90,7 @@
 						name="plan_date"
     					data-format="YYYY-MM-DD"
     					data-inputFormat="YYYY-MM-DD"
-						value="{{ count($errors)>0 ?  old('plan_date') : $measure->plan_date }}"
+						value="{{ old('plan_date', $measure->plan_date) }}"
 						/>
                 @else
                     {{ $measure->plan_date }}
@@ -117,7 +117,7 @@
 	    		<strong>{{ trans('cruds.measure.fields.observations') }}</strong>
 	    	</div>
 			<div class="cell-lg-6 cell-md-10">
-                <textarea name="observations" rows="5" data-role="textarea" data-clear-button="false">{{ count($errors)>0 ?  old('observations') : $measure->observations }}</textarea>
+                <textarea name="observations" rows="5" data-role="textarea" data-clear-button="false">{{ old('observations', $measure->observations) }}</textarea>
 			</div>
 	    </div>
 
@@ -140,7 +140,7 @@
                 <input
                     id="note"
                     name="note"
-                    value="{{ count($errors)>0 ?  old('note') : $measure->note }}"
+                    value="{{ old('note', $measure->note) }}"
                     min="0"
                     max="100"
                     step="0.01"
@@ -184,7 +184,7 @@
 	    		<strong>{{ trans('cruds.measure.fields.action_plan') }}</strong>
 	    	</div>
             <div class="cell-lg-6 cell-md-10">
-                <textarea name="action_plan" class="form-control easymde disabled-editor" id="action_plan">{{ $errors->count()>0 ?  old('action_plan') : $measure->action_plan }}</textarea>
+                <textarea name="action_plan" class="form-control easymde disabled-editor" id="action_plan">{{ old('action_plan', $measure->action_plan) }}</textarea>
 			</div>
 		</div>
         @endif

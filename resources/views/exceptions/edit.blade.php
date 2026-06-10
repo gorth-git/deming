@@ -18,7 +18,7 @@
                 </div>
                 <div class="cell-lg-6 cell-md-8">
                     <input type="text" data-role="input" name="name"
-        				value="{{ $errors->has('name') ?  old('name') : $exception->name }}"
+        				value="{{ old('name', $exception->name) }}"
                         maxlength="255" required>
                 </div>
             </div>

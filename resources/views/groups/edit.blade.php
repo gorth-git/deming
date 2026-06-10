@@ -15,7 +15,7 @@
                 <label>{{ trans('cruds.group.fields.name') }}</label>
 			</div>
             <div class="cell-lg-4 cell-md-6">
-                <input type="text" class="input {{ $errors->has('name') ? 'is-danger' : ''}}" name="name" value="{{ $errors->has('login') ?  old('login') : $group->name }}" maxlength='90' required>
+                <input type="text" class="input {{ $errors->has('name') ? 'is-danger' : ''}}" name="name" value="{{ old('name', $group->name) }}" maxlength='90' required>
 			</div>
 		</div>
 
@@ -24,7 +24,7 @@
                 <label>{{ trans('cruds.group.fields.description') }}</label>
 			</div>
             <div class="cell-lg-8 cell-md-10">
-                <textarea name="description" rows="5" data-role="textarea" data-clear-button="false">{{ $errors->has('description') ?  old('description') : $group->description }}</textarea>
+                <textarea name="description" rows="5" data-role="textarea" data-clear-button="false">{{ old('description', $group->description) }}</textarea>
 			</div>
 		</div>
 

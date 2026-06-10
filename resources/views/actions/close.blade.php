@@ -142,7 +142,7 @@ form, table {
                 <strong>{{ trans('cruds.action.fields.justification') }}</strong>
 	    	</div>
 			<div class="cell-6">
-                <textarea name="justification" class="easymde" id="justification">{{ $errors->has('justification') ?  old('justification') : $action->justification }}</textarea>
+                <textarea name="justification" class="easymde" id="justification">{{ old('justification', $action->justification) }}</textarea>
 			</div>
 		</div>
 
