@@ -266,7 +266,7 @@ class RiskController extends Controller
             'name'                => ['required', 'string', 'max:255'],
             'description'         => ['nullable', 'string'],
             'owner_id'            => ['nullable', 'exists:users,id'],
-            'probability'         => ['required', 'integer', 'min:1'],
+            'probability'         => ['required', 'integer', 'min:0', 'max:9'],
             'probability_comment' => ['nullable', 'string'],
             'impact'              => ['required', 'integer', 'min:0', 'max:9'],
             'impact_comment'      => ['nullable', 'string'],
