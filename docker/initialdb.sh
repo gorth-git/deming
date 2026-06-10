@@ -2,6 +2,9 @@
 
 echo "Initialize database"
 
+# Mandatory to force the database migrations
+APP_ENV="local"
+
 # Migarte the database
 php artisan migrate
 
