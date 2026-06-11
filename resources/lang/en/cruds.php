@@ -374,6 +374,7 @@ return [
 
             // Assessment
             'probability'         => 'Probability',
+            'threat'              => 'Threat (likelihood)',
             'probability_comment' => 'Probability comment',
             'impact'              => 'Impact',
             'impact_comment'      => 'Impact comment',
@@ -463,6 +464,7 @@ return [
             'likelihood_x_impact'  => 'Likelihood × Impact (BSI 200-3)',
             'additive'             => 'Probability + Impact',
             'max_pi'               => 'max(Probability, Impact)',
+            'monarc'               => 'MONARC (Impact × Threat × Vulnerability)',
         ],
 
 
@@ -498,6 +500,28 @@ return [
                 'medium' => 'Medium',
                 'high' => 'High',
                 'critical' => 'Critical',
+            ],
+            'monarc_impact_levels' => [
+                0 => ['label' => 'Negligible',  'description' => 'No significant consequence on reputation, operations, legal, financial aspects or individuals'],
+                1 => ['label' => 'Low',         'description' => 'Limited consequences, absorbed without noticeable disruption to the business'],
+                2 => ['label' => 'Significant', 'description' => 'Noticeable disruption to the business, measurable reputational damage, notable financial or legal consequences'],
+                3 => ['label' => 'Critical',    'description' => 'Serious disruption to the business, severe reputational damage, major legal or financial consequences, or harm to individuals'],
+                4 => ['label' => 'Vital',       'description' => 'Endangers the organisation, irreversible consequences or serious harm to individuals'],
+            ],
+            'monarc_threat_levels' => [
+                0 => ['label' => 'Not applicable', 'description' => 'Threat impossible in this context'],
+                1 => ['label' => 'Unlikely',       'description' => 'Has never occurred, very unlikely'],
+                2 => ['label' => 'Possible',       'description' => 'No clear evidence, could occur'],
+                3 => ['label' => 'Likely',         'description' => 'Has already occurred in the organisation or its environment'],
+                4 => ['label' => 'Very likely',    'description' => 'Has already occurred on several occasions'],
+            ],
+            'monarc_vulnerability_levels' => [
+                0 => ['label' => 'Non-existent', 'description' => 'All security controls are in place, documented and effective'],
+                1 => ['label' => 'Very low',     'description' => 'Controls in place and monitored, minor improvements possible'],
+                2 => ['label' => 'Low',          'description' => 'Controls broadly in place but not systematically monitored'],
+                3 => ['label' => 'Medium',       'description' => 'Controls partially in place, gaps identified'],
+                4 => ['label' => 'High',         'description' => 'Controls embryonic or ineffective'],
+                5 => ['label' => 'Very high',    'description' => 'Complete absence of security controls'],
             ],
         ],
     ],

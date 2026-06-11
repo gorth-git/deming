@@ -69,14 +69,19 @@
     <div class="row">
     </div>
 
-    {{-- Évaluation : probabilité --}}
+    {{-- Évaluation : probabilité / menace --}}
     @if (!$scoringConfig->usesLikelihood())
     <div class="row">
         <div class="cell-lg-1 cell-md-2">
-            <strong>{{ trans("cruds.risk.fields.probability") }}</strong>
+            <strong>
+                @if ($scoringConfig->usesMonarc())
+                    {{ trans("cruds.risk.fields.threat") }}
+                @else
+                    {{ trans("cruds.risk.fields.probability") }}
+                @endif
+            </strong>
         </div>
         <div class="cell-lg-1 cell-md-1">
-            @php $probThreshold = $scoringConfig->thresholdFor($risk->probability * max($scoringConfig->levelValues('impact'))); @endphp
             <span class="badge" style="font-size:1.1rem;background:#7f8c8d;color:#fff">{{ $risk->probability }}</span>
             &nbsp;
             {{ $scoringConfig->levelLabel('probability', $risk->probability) }}
@@ -87,18 +92,23 @@
         </div>
         @endif
     </div>
-@endif
-    {{-- Exposition + Vulnérabilité (formule likelihood_x_impact) --}}
+    @endif
+
+    {{-- Exposition (likelihood_x_impact uniquement) --}}
     @if ($scoringConfig->usesLikelihood())
     <div class="row">
         <div class="cell-lg-1 cell-md-2">
             <strong>{{ trans("cruds.risk.fields.exposure") }}</strong>
         </div>
         <div class="cell-lg-1 cell-md-2">
-            <span class="badge"style="font-size:1.1rem;background:#7f8c8d;color:#fff">{{ $risk->exposure ?? '—' }}</span>
+            <span class="badge" style="font-size:1.1rem;background:#7f8c8d;color:#fff">{{ $risk->exposure ?? '—' }}</span>
             &nbsp;{{ $scoringConfig->levelLabel('exposure', $risk->exposure ?? 0) }}
         </div>
     </div>
+    @endif
+
+    {{-- Vulnérabilité (likelihood_x_impact ou monarc) --}}
+    @if ($scoringConfig->usesLikelihood() || $scoringConfig->usesMonarc())
     <div class="row">
         <div class="cell-lg-1 cell-md-2">
             <strong>{{ trans("cruds.risk.fields.vulnerability") }}</strong>
@@ -108,6 +118,10 @@
             &nbsp;{{ $scoringConfig->levelLabel('vulnerability', $risk->vulnerability ?? 0) }}
         </div>
     </div>
+    @endif
+
+    {{-- Vraisemblance calculée (likelihood_x_impact uniquement) --}}
+    @if ($scoringConfig->usesLikelihood())
     <div class="row">
         <div class="cell-lg-1 cell-md-2">
             <strong>{{ trans("cruds.risk.fields.likelihood") }}</strong>

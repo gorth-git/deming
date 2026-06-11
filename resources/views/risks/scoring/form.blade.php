@@ -40,6 +40,7 @@
                         @foreach ($formulas as $key => $info)
                             <option value="{{ $key }}"
                                     data-requires-exposure="{{ $info['requires_exposure'] ? '1' : '0' }}"
+                                    data-requires-vulnerability="{{ ($info['requires_vulnerability'] ?? false) ? '1' : '0' }}"
                                     data-description="{{ $info['description'] }}"
                                     {{ old('formula', $config->formula ?? 'probability_x_impact') === $key ? 'selected' : '' }}>
                                 {{ $info['label'] }}
@@ -181,7 +182,7 @@
                         <tbody id="vulnerability-body">
                         @foreach (old('vulnerability_levels', $vulnLevels) as $idx => $level)
                         <tr class="level-row">
-                            <td><input type="number" name="vulnerability_levels[{{ $idx }}][value]" class="input" value="{{ $level['value'] }}" min="1" style="width:80px; text-align:center;"></td>
+                            <td><input type="number" name="vulnerability_levels[{{ $idx }}][value]" class="input" value="{{ $level['value'] }}" min="0" style="width:80px; text-align:center;"></td>
                             <td><input type="text"   name="vulnerability_levels[{{ $idx }}][label]" class="input" value="{{ $level['label'] }}"></td>
                             <td><input type="text"   name="vulnerability_levels[{{ $idx }}][description]" class="input" value="{{ $level['description'] ?? '' }}"></td>
                             <td><button type="button" class="button mini alert js-remove-level"><span class="mif-bin"></span></button></td>
@@ -325,6 +326,9 @@
 </style>
 
 <script>
+const isNew = {{ isset($config->id) ? 'false' : 'true' }};
+const formulaDefaults = @json($formulaDefaults);
+
 document.addEventListener("DOMContentLoaded", function () {
 
     // =========================================================================
@@ -332,18 +336,87 @@ document.addEventListener("DOMContentLoaded", function () {
     // =========================================================================
     const formulaSelect = document.getElementById('formula-select');
 
+    function escapeAttr(s) {
+        return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function buildLevelRow(field, idx, level) {
+        return '<tr class="level-row">' +
+            '<td><input type="number" name="' + field + '_levels[' + idx + '][value]" class="input" value="' + escapeAttr(level.value) + '" min="0" style="width:80px; text-align:center;" required></td>' +
+            '<td><input type="text"   name="' + field + '_levels[' + idx + '][label]" class="input" value="' + escapeAttr(level.label) + '" required></td>' +
+            '<td><input type="text"   name="' + field + '_levels[' + idx + '][description]" class="input" value="' + escapeAttr(level.description) + '"></td>' +
+            '<td><button type="button" class="button mini alert js-remove-level"><span class="mif-bin"></span></button></td>' +
+            '</tr>';
+    }
+
+    function buildThresholdRow(idx, t) {
+        const color    = t.color || '#cccccc';
+        const maxVal   = (t.max !== null && t.max !== undefined) ? t.max : '';
+        const contrast = typeof getContrastColor === 'function' ? getContrastColor(color) : '#fff';
+        return '<tr class="threshold-row">' +
+            '<td><input type="text"   name="risk_thresholds[' + idx + '][level]" class="input" value="' + escapeAttr(t.level) + '" required></td>' +
+            '<td><input type="text"   name="risk_thresholds[' + idx + '][label]" class="input js-threshold-label" value="' + escapeAttr(t.label) + '" required></td>' +
+            '<td><input type="number" name="risk_thresholds[' + idx + '][max]"   class="input js-threshold-max" value="' + escapeAttr(maxVal) + '" placeholder="∞" min="1" style="width:80px; text-align:center;"></td>' +
+            '<td><input type="color"  name="risk_thresholds[' + idx + '][color]" class="js-color-input" value="' + escapeAttr(color) + '" style="width:40px;" data-role="color-selector" onchange="updatePreview(this)"></td>' +
+            '<td class="text-center"><span class="badge js-preview" style="background:' + color + ';color:' + contrast + ';padding:2px 8px;font-size:1rem">' + escapeAttr(t.label) + '</span></td>' +
+            '<td><button type="button" class="button mini alert js-remove-threshold"><span class="mif-bin"></span></button></td>' +
+            '</tr>';
+    }
+
+    function fillFormulaDefaults(formula) {
+        if (!isNew) return;
+        const defaults = formulaDefaults[formula];
+        if (!defaults) return;
+
+        ['probability', 'exposure', 'impact', 'vulnerability'].forEach(function (field) {
+            const levels = defaults[field + '_levels'];
+            if (!levels) return;
+            const tbody = document.getElementById(field + '-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            levels.forEach(function (level, idx) {
+                tbody.insertAdjacentHTML('beforeend', buildLevelRow(field, idx, level));
+            });
+            counters[field] = levels.length;
+        });
+
+        if (defaults.risk_thresholds) {
+            const tbody = document.getElementById('thresholds-body');
+            if (tbody) {
+                tbody.innerHTML = '';
+                defaults.risk_thresholds.forEach(function (t, idx) {
+                    const tr = document.createElement('tr');
+                    tr.className = 'threshold-row';
+                    tr.innerHTML = buildThresholdRow(idx, t);
+                    // Assigner .value explicitement : les navigateurs n'appliquent
+                    // pas toujours l'attribut value= sur les input[type=number] injectés.
+                    const maxInput = tr.querySelector('.js-threshold-max');
+                    if (maxInput) {
+                        maxInput.value = (t.max !== null && t.max !== undefined) ? t.max : '';
+                    }
+                    tbody.appendChild(tr);
+                });
+                thrIdx = defaults.risk_thresholds.length;
+            }
+        }
+    }
+
     function updateFormulaUI() {
         const opt      = formulaSelect.options[formulaSelect.selectedIndex];
-        const needsExp = opt ? opt.dataset.requiresExposure === '1' : false;
-        const desc     = opt ? opt.dataset.description : '';
+        const needsExp  = opt ? opt.dataset.requiresExposure === '1' : false;
+        const needsVuln = opt ? opt.dataset.requiresVulnerability === '1' : false;
+        const desc      = opt ? opt.dataset.description : '';
 
         document.getElementById('formula-description').textContent = desc;
         document.getElementById('probability-col').style.display   = needsExp ? 'none' : '';
         document.getElementById('exposure-col').style.display      = needsExp ? ''     : 'none';
-        document.getElementById('vulnerability-row').style.display = needsExp ? ''     : 'none';
+        document.getElementById('vulnerability-row').style.display = (needsExp || needsVuln) ? '' : 'none';
     }
 
-    formulaSelect.addEventListener('change', updateFormulaUI);
+    formulaSelect.addEventListener('change', function () {
+        updateFormulaUI();
+        fillFormulaDefaults(formulaSelect.value);
+    });
     updateFormulaUI();
 
     // =========================================================================

@@ -372,6 +372,7 @@ return [
 
             // Évaluation
             'probability'         => 'Probabilité',
+            'threat'              => 'Menace (vraisemblance)',
             'probability_comment' => 'Commentaire probabilité',
             'impact'              => 'Impact',
             'impact_comment'      => 'Commentaire impact',
@@ -462,6 +463,7 @@ return [
             'likelihood_x_impact'  => 'Vraisemblance × Impact (BSI 200-3)',
             'additive'             => 'Probabilité + Impact',
             'max_pi'               => 'max(Probabilité, Impact)',
+            'monarc'               => 'MONARC (Impact × Menace × Vulnérabilité)',
         ],
 
         // Valeurs par défaut proposées à la création d'une configuration
@@ -496,6 +498,28 @@ return [
                 'medium'   => 'Moyen',
                 'high'     => 'Élevé',
                 'critical' => 'Critique',
+            ],
+            'monarc_impact_levels' => [
+                0 => ['label' => 'Négligeable', 'description' => 'Aucune conséquence significative sur la réputation, les opérations, le plan légal, financier ou les personnes'],
+                1 => ['label' => 'Faible',       'description' => 'Conséquences limitées, absorbables sans perturbation notable de l\'activité'],
+                2 => ['label' => 'Important',    'description' => 'Perturbation sensible de l\'activité, atteinte mesurable à la réputation, conséquences financières ou légales notables'],
+                3 => ['label' => 'Critique',     'description' => 'Perturbation grave de l\'activité, atteinte sérieuse à la réputation, conséquences légales ou financières majeures, ou atteinte aux personnes'],
+                4 => ['label' => 'Vital',        'description' => 'Mise en péril de l\'organisation, conséquences irréversibles ou atteinte grave aux personnes'],
+            ],
+            'monarc_threat_levels' => [
+                0 => ['label' => 'Non applicable', 'description' => 'Menace impossible dans le contexte'],
+                1 => ['label' => 'Improbable',     'description' => 'Ne s\'est jamais produit, très peu vraisemblable'],
+                2 => ['label' => 'Possible',       'description' => 'Pas de position claire, pourrait se produire'],
+                3 => ['label' => 'Probable',       'description' => 'S\'est déjà produit dans l\'organisation ou son environnement'],
+                4 => ['label' => 'Très probable',  'description' => 'S\'est déjà produit à plusieurs reprises'],
+            ],
+            'monarc_vulnerability_levels' => [
+                0 => ['label' => 'Inexistante',  'description' => 'Toutes les mesures de sécurité sont appliquées, documentées et efficaces'],
+                1 => ['label' => 'Très faible',  'description' => 'Mesures appliquées et contrôlées, améliorations mineures possibles'],
+                2 => ['label' => 'Faible',       'description' => 'Mesures globalement appliquées mais non systématiquement contrôlées'],
+                3 => ['label' => 'Moyenne',      'description' => 'Mesures partiellement appliquées, lacunes identifiées'],
+                4 => ['label' => 'Élevée',       'description' => 'Mesures embryonnaires ou inefficaces'],
+                5 => ['label' => 'Très élevée',  'description' => 'Absence totale de mesures de sécurité'],
             ],
         ],
     ],

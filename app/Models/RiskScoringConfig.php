@@ -123,6 +123,14 @@ class RiskScoringConfig extends Model
         return $this->formula === 'likelihood_x_impact';
     }
 
+    /**
+     * Indique si la formule active est MONARC (Impact × Menace × Vulnérabilité).
+     */
+    public function usesMonarc(): bool
+    {
+        return $this->formula === 'monarc';
+    }
+
     // -------------------------------------------------------------------------
     // Helpers sur les seuils
     // -------------------------------------------------------------------------
@@ -151,11 +159,11 @@ class RiskScoringConfig extends Model
     public function maxScore(): int
     {
         return match ($this->formula) {
-            'likelihood_x_impact' => $this->maxLevelValue('exposure')
-                + $this->maxLevelValue('vulnerability')
-                + $this->maxLevelValue('impact'),
+            'likelihood_x_impact' => ($this->maxLevelValue('exposure') + $this->maxLevelValue('vulnerability'))
+                * $this->maxLevelValue('impact'),
             'additive'   => $this->maxLevelValue('probability') + $this->maxLevelValue('impact'),
             'max_pi'     => max($this->maxLevelValue('probability'), $this->maxLevelValue('impact')),
+            'monarc'     => $this->maxLevelValue('impact') * $this->maxLevelValue('probability') * $this->maxLevelValue('vulnerability'),
             default      => $this->maxLevelValue('probability') * $this->maxLevelValue('impact'),
         };
     }
