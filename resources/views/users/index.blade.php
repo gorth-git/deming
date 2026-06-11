@@ -11,7 +11,7 @@
 				<div class="cell-7" align="right">
 					@if (Auth::User()->role==1)
                     <a class="button primary" href="/users/create">
-			            <span class="mif-plus"></span>
+			            <span class="mif-add-lib"></span>
 			            &nbsp;
 						{{ trans('common.new') }}
                     </a>

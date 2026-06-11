@@ -9,7 +9,7 @@
 			@if (Auth::User()->role==1)
 			<div class="cell-7" align="right">
 				<button class="button primary" onclick="location.href = '/attributes/create';">
-		            <span class="mif-plus"></span>
+		            <span class="mif-add-lib"></span>
 		            &nbsp;
 					{{ trans('common.new') }}
 				</button>

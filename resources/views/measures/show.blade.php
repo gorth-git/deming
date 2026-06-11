@@ -284,7 +284,7 @@
 			</a>
 			&nbsp;
 			<a href="/bob/clone/{{ $measure->id }}" class="button warning">
-	            <span class="mif-plus"></span>
+	            <span class="mif-add-lib"></span>
 	            &nbsp;
 		    	{{ trans('common.clone') }}
 			</a>

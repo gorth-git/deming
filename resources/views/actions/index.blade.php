@@ -34,7 +34,7 @@
 		<div class="cell-1" align="right">
 		@if ((Auth::User()->role==1)||(Auth::User()->role==2))
             <a class="button primary" href='/action/create'>
-	            <span class="mif-plus"></span>
+	            <span class="mif-add-lib"></span>
 	            &nbsp;
 				{{ trans('common.new') }}
             </a>

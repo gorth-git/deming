@@ -69,10 +69,10 @@
                  <input type="radio" data-role="radio" data-append="{{ trans("cruds.measure.fields.status_done") }}" value="1" id="status1" {{ (Session::get("status")=="1") ? 'checked' : '' }}>
                  <input type="radio" data-role="radio" data-append="{{ trans("cruds.measure.fields.status_todo") }}" value="2" id="status2" {{ (Session::get("status")=="2") ? 'checked' : '' }}>
             </div>
-            <div class="cell-lg-1 cell-md-2" align="right">
+            <div class="cell-lg-1 cell-md-1 flex-justify-end d-flex">
 			@if ((Auth::User()->role==1)||(Auth::User()->role==2))
 				<button class="button primary" onclick="location.href = '/bob/create';">
-		            <span class="mif-plus"></span>
+		            <span class="mif-add-lib"></span>
 					{{ trans('common.new') }}
                </button>
             @endif

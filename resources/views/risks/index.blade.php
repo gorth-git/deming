@@ -58,7 +58,7 @@
             <div class="cell-lg-1 cell-md-1 flex-justify-end d-flex">
                 @if (Auth::User()->role === 1 || Auth::User()->role === 2)
                     <button class="button primary" onclick="location.href='/risk/create'">
-                        <span class="mif-plus"></span>
+                        <span class="mif-add-lib"></span>
                         {{ trans('common.new') }}
                     </button>
                 @endif

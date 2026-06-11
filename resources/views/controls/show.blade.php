@@ -108,7 +108,7 @@
                 </a>
     	    &nbsp;
                 <a class="button warning" href="/alice/clone/{{ $control->id }}">
-    	            <span class="mif-plus"></span>
+    	            <span class="mif-add-lib"></span>
     	            &nbsp;
     		    	{{ trans('common.clone') }}
                 </a>
