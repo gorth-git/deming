@@ -19,7 +19,7 @@
         <div class="cell-lg-1 cell-md-1 flex-justify-end d-flex">
             @if (Auth::User()->role === 1 || Auth::User()->role === 2)
                 <button class="button primary" onclick="location.href='/risk/create'">
-                    <span class="mif-plus"></span>
+                    <span class="mif-add-lib"></span>
                     {{ trans('common.new') }}
                 </button>
             @endif
@@ -169,13 +169,13 @@
         <div class="cell-lg-1 cell-md-2">
             <strong>{{ trans("cruds.risk.fields.status") }}</strong>
         </div>
-        <div class="cell-lg-2 cell-md-3">
+        <div class="cell-lg-1 cell-md-1">
             <span class="badge {{ \App\Models\Risk::STATUS_COLORS[$risk->status] ?? 'secondary' }}" style="font-size:1rem;">
                 {{ \App\Models\Risk::STATUS_LABELS[$risk->status] ?? $risk->status }}
             </span>
         </div>
         @if ($risk->status_comment)
-        <div class="cell-lg-4 cell-md-5">
+        <div class="cell-lg-5 cell-md-7">
             <small class="text-muted">{{ $risk->status_comment }}</small>
         </div>
         @endif

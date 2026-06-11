@@ -9,7 +9,7 @@
         <div class="row">
             <div class="cell-lg-12" align="right">
                 <button class="button primary" onclick="location.href='/risk/scoring/create'">
-                    <span class="mif-plus"></span>
+                    <span class="mif-add-lib"></span>
                     {{ trans('common.new') }}
                 </button>
             </div>

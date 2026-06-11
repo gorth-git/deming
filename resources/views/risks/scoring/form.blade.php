@@ -88,7 +88,7 @@
                         </tbody>
                     </table>
                     <button type="button" class="button mini success mt-1 js-add-level" data-field="probability">
-                        <span class="mif-plus"></span> {{ trans('cruds.risk_scoring.add_level') }}
+                        <span class="mif-add-lib"></span> {{ trans('cruds.risk_scoring.add_level') }}
                     </button>
                 </div>
 
@@ -122,7 +122,7 @@
                         </tbody>
                     </table>
                     <button type="button" class="button mini success mt-1 js-add-level" data-field="exposure">
-                        <span class="mif-plus"></span> {{ trans('cruds.risk_scoring.add_level') }}
+                        <span class="mif-add-lib"></span> {{ trans('cruds.risk_scoring.add_level') }}
                     </button>
                 </div>
 
@@ -153,7 +153,7 @@
                         </tbody>
                     </table>
                     <button type="button" class="button mini success mt-1 js-add-level" data-field="impact">
-                        <span class="mif-plus"></span> {{ trans('cruds.risk_scoring.add_level') }}
+                        <span class="mif-add-lib"></span> {{ trans('cruds.risk_scoring.add_level') }}
                     </button>
                 </div>
 
@@ -190,7 +190,7 @@
                         </tbody>
                     </table>
                     <button type="button" class="button mini success mt-1 js-add-level" data-field="vulnerability">
-                        <span class="mif-plus"></span> {{ trans('cruds.risk_scoring.add_level') }}
+                        <span class="mif-add-lib"></span> {{ trans('cruds.risk_scoring.add_level') }}
                     </button>
                 </div>
             </div>
@@ -263,7 +263,7 @@
                         </tbody>
                     </table>
                     <button type="button" class="button mini success mt-1" id="js-add-threshold">
-                        <span class="mif-plus"></span> {{ trans('cruds.risk_scoring.add_threshold') }}
+                        <span class="mif-add-lib"></span> {{ trans('cruds.risk_scoring.add_threshold') }}
                     </button>
                 </div>
             </div>

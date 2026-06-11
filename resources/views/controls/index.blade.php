@@ -19,7 +19,7 @@
 				</div>
 				<div class="cell-7" align="right">
                     <a class="button primary" href="/alice/create">
-			            <span class="mif-plus"></span>
+			            <span class="mif-add-lib"></span>
 			            &nbsp;
 						{{ trans('common.new') }}
                     </a>

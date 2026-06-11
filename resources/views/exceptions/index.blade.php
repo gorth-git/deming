@@ -40,7 +40,7 @@
             {{-- Bouton Nouveau --}}
             <div class="cell-lg-5 cell-md-5 text-right">
                 <button class="button primary" onclick="location.href='/exception/create';">
-                    <span class="mif-plus"></span>&nbsp;{{ trans('common.new') }}
+                    <span class="mif-add-lib"></span>&nbsp;{{ trans('common.new') }}
                 </button>
             </div>
         </div>
