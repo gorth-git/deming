@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+exec 1>/proc/1/fd/1 2>/proc/1/fd/2
 
 cd /var/www/deming
 
@@ -30,12 +31,16 @@ php artisan storage:link --quiet
 bash /etc/uploadiso27001db.sh || echo "uploadiso27001db skipped"
 bash /etc/userdemo.sh || echo "userdemo skipped"
 
-# Passport (OAuth)
+# Passport v13 — --force évite une erreur si les clés existent déjà
+echo "🔑 Generating Passport encryption keys..."
+
 php artisan passport:install --force || echo "Passport skipped"
 if ls storage/oauth-*.key 2>/dev/null; then
     chown www-data:www-data storage/oauth-*.key
     chmod 600 storage/oauth-*.key
 fi
+
+echo "🔑 Passport installation complete"
 
 # Services système
 service cron start || true
@@ -48,3 +53,5 @@ php artisan serve --host 0.0.0.0 --port 8000 &
 
 # Nginx en PID 1
 exec nginx -g "daemon off;"
+
+echo "✅ Deming initialization complete — starting services"
