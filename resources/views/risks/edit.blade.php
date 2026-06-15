@@ -75,11 +75,44 @@
             <div class="row">
             </div>
 
-            {{-- Section probabilité --}}
+            {{-- Impact (en premier pour MONARC) --}}
+            @if ($scoringConfig->usesMonarc())
+            <div class="row">
+                <div class="cell-lg-1 cell-md-2">
+                    <strong>{{ trans("cruds.risk.fields.impact") }}</strong>
+                </div>
+                <div class="cell-lg-6 cell-md-8">
+                    @foreach ($scoringConfig->impact_levels ?? [] as $level)
+                    <input type="radio" name="impact" value="{{ $level['value'] }}"
+                           data-role="radio"
+                           data-append="<b>{{ $level['value'] }}</b> — {{ $level['label'] }}{{ isset($level['description']) && $level['description'] ? ' <small class=\'text-muted\'>('.$level['description'].')</small>' : '' }}"
+                           {{ old('impact', $risk->impact) == $level['value'] ? 'checked' : '' }}/>
+                    <br>
+                    @endforeach
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell-lg-1 cell-md-2"></div>
+                <div class="cell-lg-6 cell-md-8">
+                    <textarea name="impact_comment" rows="2" data-role="textarea"
+                              data-clear-button="false"
+                              placeholder="{{ trans('cruds.risk.fields.impact_comment') }}">{{ old('impact_comment', $risk->impact_comment) }}</textarea>
+                </div>
+            </div>
+            <div class="row"></div>
+            @endif
+
+            {{-- Section probabilité / menace --}}
             <div id="probability-section" @if($scoringConfig->usesLikelihood()) style="display:none" @endif>
                 <div class="row">
                     <div class="cell-lg-1 cell-md-2">
-                        <strong>{{ trans("cruds.risk.fields.probability") }}</strong>
+                        <strong>
+                            @if ($scoringConfig->usesMonarc())
+                                {{ trans("cruds.risk.fields.threat") }}
+                            @else
+                                {{ trans("cruds.risk.fields.probability") }}
+                            @endif
+                        </strong>
                     </div>
                     <div class="cell-lg-10 cell-md-10">
                         @foreach ($scoringConfig->probability_levels ?? [] as $level)
@@ -104,42 +137,47 @@
             <div class="row">
             </div>
 
-            {{-- Section exposition + vulnérabilité --}}
-            <div id="likelihood-section" @if(!$scoringConfig->usesLikelihood()) style="display:none" @endif>
-                <div class="row">
-                    <div class="cell-lg-1 cell-md-2">
-                        <strong>{{ trans("cruds.risk.fields.exposure") }}</strong>
-                    </div>
-                    <div class="cell-lg-6 cell-md-8">
-                        @foreach ($scoringConfig->exposure_levels ?? [] as $level)
-                        <input type="radio" name="exposure" value="{{ $level['value'] }}"
-                               data-role="radio"
-                               data-append="<b>{{ $level['value'] }}</b> — {{ $level['label'] }}"
-                               {{ old('exposure', $risk->exposure ?? 0) == $level['value'] ? 'checked' : '' }}/>
-                       <br>
-                        @endforeach
-                    </div>
+            {{-- Section exposition (likelihood_x_impact uniquement) --}}
+            @if ($scoringConfig->usesLikelihood())
+            <div class="row">
+                <div class="cell-lg-1 cell-md-2">
+                    <strong>{{ trans("cruds.risk.fields.exposure") }}</strong>
                 </div>
-                <div class="row">
-                    <div class="cell-lg-1 cell-md-2">
-                        <strong>{{ trans("cruds.risk.fields.vulnerability") }}</strong>
-                    </div>
-                    <div class="cell-lg-6 cell-md-8">
-                        @foreach ($scoringConfig->vulnerability_levels ?? [] as $level)
-                        <input type="radio" name="vulnerability" value="{{ $level['value'] }}"
-                               data-role="radio"
-                               data-append="<b>{{ $level['value'] }}</b> — {{ $level['label'] }}"
-                               {{ old('vulnerability', $risk->vulnerability ?? 1) == $level['value'] ? 'checked' : '' }}/>
-                        <br>
-                        @endforeach
-                    </div>
+                <div class="cell-lg-6 cell-md-8">
+                    @foreach ($scoringConfig->exposure_levels ?? [] as $level)
+                    <input type="radio" name="exposure" value="{{ $level['value'] }}"
+                           data-role="radio"
+                           data-append="<b>{{ $level['value'] }}</b> — {{ $level['label'] }}"
+                           {{ old('exposure', $risk->exposure ?? 0) == $level['value'] ? 'checked' : '' }}/>
+                    <br>
+                    @endforeach
                 </div>
             </div>
+            @endif
+
+            {{-- Section vulnérabilité (likelihood_x_impact ou monarc) --}}
+            @if ($scoringConfig->usesLikelihood() || $scoringConfig->usesMonarc())
+            <div class="row">
+                <div class="cell-lg-1 cell-md-2">
+                    <strong>{{ trans("cruds.risk.fields.vulnerability") }}</strong>
+                </div>
+                <div class="cell-lg-6 cell-md-8">
+                    @foreach ($scoringConfig->vulnerability_levels ?? [] as $level)
+                    <input type="radio" name="vulnerability" value="{{ $level['value'] }}"
+                           data-role="radio"
+                           data-append="<b>{{ $level['value'] }}</b> — {{ $level['label'] }}"
+                           {{ old('vulnerability', $risk->vulnerability ?? 0) == $level['value'] ? 'checked' : '' }}/>
+                    <br>
+                    @endforeach
+                </div>
+            </div>
+            @endif
 
             <div class="row">
             </div>
 
-            {{-- Impact --}}
+            {{-- Impact (pour les formules non-MONARC) --}}
+            @if (!$scoringConfig->usesMonarc())
             <div class="row">
                 <div class="cell-lg-1 cell-md-2">
                     <strong>{{ trans("cruds.risk.fields.impact") }}</strong>
@@ -162,6 +200,7 @@
                               placeholder="{{ trans('cruds.risk.fields.impact_comment') }}">{{ old('impact_comment', $risk->impact_comment) }}</textarea>
                 </div>
             </div>
+            @endif
 
             {{-- Score calculé --}}
             <div class="row">

@@ -2,8 +2,9 @@
 {{-- Calcul dynamique du score + affichage conditionnel des sections --}}
 document.addEventListener("DOMContentLoaded", function () {
 
-    const config   = @json($scoringConfig);
+    const config         = @json($scoringConfig);
     const usesLikelihood = config.formula === 'likelihood_x_impact';
+    const usesMonarc     = config.formula === 'monarc';
 
     // ---- Helpers ----
     function getRadioVal(name) {
@@ -28,6 +29,9 @@ document.addEventListener("DOMContentLoaded", function () {
             case 'likelihood_x_impact':
                 likelihood = getRadioVal('exposure') + getRadioVal('vulnerability');
                 score = likelihood * impact;
+                break;
+            case 'monarc':
+                score = impact * getRadioVal('probability') * getRadioVal('vulnerability');
                 break;
             case 'additive':
                 score = getRadioVal('probability') + impact;
@@ -68,6 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
             likeEl.textContent = (usesLikelihood && likelihood !== null && likelihood > 0)
                 ? '{{ trans("cruds.risk.fields.likelihood") }} : ' + likelihood
                 : '';
+            if (usesMonarc) likeEl.textContent = '';
         }
     }
     // ---- Affichage conditionnel des sections contrôles / actions ----
@@ -84,8 +89,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ---- Bindings ----
-    document.querySelectorAll('input[name="probability"], input[name="impact"], input[name="exposure"], input[name="vulnerability"]')
-        .forEach(el => el.addEventListener('change', updateScore));
+    // Délégation sur document : robuste face à la transformation MetroUI des radios
+    const scoringFields = new Set(['probability', 'impact', 'exposure', 'vulnerability']);
+
+    document.addEventListener('change', function (e) {
+        if (scoringFields.has(e.target.name)) updateScore();
+    });
+
+    // Fallback click : Metro peut checker l'input sans déclencher de change natif ;
+    // le setTimeout laisse Metro mettre à jour checked avant la lecture.
+    document.addEventListener('click', function (e) {
+        const input = e.target.closest('input[type="radio"]');
+        if (input && scoringFields.has(input.name)) setTimeout(updateScore, 0);
+    });
 
     const statusEl = document.getElementById('risk-status');
     if (statusEl) statusEl.addEventListener('change', updateSections);

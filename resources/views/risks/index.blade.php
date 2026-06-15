@@ -84,15 +84,18 @@
                 <th class="sortable-column">{{ trans("cruds.risk.fields.status") }}</th>
                 <th class="sortable-column">{{ trans("cruds.risk.fields.owner") }}</th>
 
-                {{-- Colonnes intermédiaires selon la config --}}
-                @if ($scoringConfig->usesLikelihood())
+                @if ($scoringConfig->usesMonarc())
+                    <th class="sortable-column">{{ trans("cruds.risk.fields.impact") }}</th>
+                    <th class="sortable-column">{{ trans("cruds.risk.fields.threat") }}</th>
+                    <th class="sortable-column">{{ trans("cruds.risk.fields.vulnerability") }}</th>
+                @elseif ($scoringConfig->usesLikelihood())
                     <th class="sortable-column">{{ trans("cruds.risk.fields.likelihood") }}</th>
                     <th class="sortable-column">{{ trans("cruds.risk.fields.vulnerability") }}</th>
+                    <th class="sortable-column">{{ trans("cruds.risk.fields.impact") }}</th>
                 @else
                     <th class="sortable-column">{{ trans("cruds.risk.fields.probability") }}</th>
+                    <th class="sortable-column">{{ trans("cruds.risk.fields.impact") }}</th>
                 @endif
-
-                <th class="sortable-column">{{ trans("cruds.risk.fields.impact") }}</th>
                 <th class="sortable-column">{{ trans("cruds.risk.fields.next_review") }}</th>
             </tr>
         </thead>
@@ -131,15 +134,18 @@
             {{-- Owner --}}
             <td>{{ $risk->owner?->name ?? '—' }}</td>
 
-            {{-- Colonnes intermédiaires selon la config --}}
-            @if ($scoringConfig->usesLikelihood())
+            @if ($scoringConfig->usesMonarc())
+                <td>{{ $risk->impact }}</td>
+                <td>{{ $risk->probability }}</td>
+                <td>{{ $risk->vulnerability }}</td>
+            @elseif ($scoringConfig->usesLikelihood())
                 <td>{{ $risk->risk_likelihood }}</td>
                 <td>{{ $risk->vulnerability }}</td>
+                <td>{{ $risk->impact }}</td>
             @else
                 <td>{{ $risk->probability }}</td>
+                <td>{{ $risk->impact }}</td>
             @endif
-
-            <td>{{ $risk->impact }}</td>
 
             <td style="white-space:nowrap">
                 @if ($risk->next_review_at)

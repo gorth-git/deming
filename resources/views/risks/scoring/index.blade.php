@@ -85,14 +85,14 @@
                                   ? 'Score ≤ ' . $t['max']
                                   : 'Score > ' . ($prevMax ?? 0) }}"
                               style="
-                                background:{{ $t['color'] }};
-                                color:{{ contrast_color($t['color']) }};
+                                background:{{ $t['color'] ?? '#cccccc' }};
+                                color:{{ contrast_color($t['color'] ?? '#cccccc') }};
 padding:2px 8px;
                             font-size:1rem;
 
                                 "
                               >
-                            {{ $t['label'] }}
+                            {{ $t['label'] ?? $t['level'] ?? '?' }}
                         </span>
                 @endforeach
             </td>

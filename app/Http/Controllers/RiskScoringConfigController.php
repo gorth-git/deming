@@ -41,50 +41,20 @@ class RiskScoringConfigController extends Controller
     {
         $this->checkAdmin();
 
-        $formulas = $this->scoringService->availableFormulas();
-        $config   = new RiskScoringConfig([
-            'formula'            => 'probability_x_impact',
-            'probability_levels' => [
-                ['value' => 1, 'label' => __('cruds.risk_scoring.defaults.probability_levels.rare'),        'description' => ''],
-                ['value' => 2, 'label' => __('cruds.risk_scoring.defaults.probability_levels.unlikely'),    'description' => ''],
-                ['value' => 3, 'label' => __('cruds.risk_scoring.defaults.probability_levels.possible'),    'description' => ''],
-                ['value' => 4, 'label' => __('cruds.risk_scoring.defaults.probability_levels.likely'),      'description' => ''],
-                ['value' => 5, 'label' => __('cruds.risk_scoring.defaults.probability_levels.very_likely'), 'description' => ''],
-            ],
-            'exposure_levels' => [
-                ['value' => 0, 'label' => __('cruds.risk_scoring.defaults.exposure_levels.offline'),  'description' => ''],
-                ['value' => 1, 'label' => __('cruds.risk_scoring.defaults.exposure_levels.internal'), 'description' => ''],
-                ['value' => 2, 'label' => __('cruds.risk_scoring.defaults.exposure_levels.internet'), 'description' => ''],
-            ],
-            'vulnerability_levels' => [
-                ['value' => 1, 'label' => __('cruds.risk_scoring.defaults.vulnerability_levels.none'),            'description' => ''],
-                ['value' => 2, 'label' => __('cruds.risk_scoring.defaults.vulnerability_levels.known'),           'description' => ''],
-                ['value' => 3, 'label' => __('cruds.risk_scoring.defaults.vulnerability_levels.exploitable_int'), 'description' => ''],
-                ['value' => 4, 'label' => __('cruds.risk_scoring.defaults.vulnerability_levels.exploitable_ext'), 'description' => ''],
-            ],
-            'impact_levels' => [
-                ['value' => 1, 'label' => __('cruds.risk_scoring.defaults.impact_levels.negligible'), 'description' => ''],
-                ['value' => 2, 'label' => __('cruds.risk_scoring.defaults.impact_levels.low'),        'description' => ''],
-                ['value' => 3, 'label' => __('cruds.risk_scoring.defaults.impact_levels.moderate'),   'description' => ''],
-                ['value' => 4, 'label' => __('cruds.risk_scoring.defaults.impact_levels.high'),       'description' => ''],
-                ['value' => 5, 'label' => __('cruds.risk_scoring.defaults.impact_levels.critical'),   'description' => ''],
-            ],
-            'risk_thresholds' => [
-                ['level' => 'low',      'label' => __('cruds.risk_scoring.defaults.risk_thresholds.low'),      'max' => 4,    'color' => '#27ae60'],
-                ['level' => 'medium',   'label' => __('cruds.risk_scoring.defaults.risk_thresholds.medium'),   'max' => 9,    'color' => '#f39c12'],
-                ['level' => 'high',     'label' => __('cruds.risk_scoring.defaults.risk_thresholds.high'),     'max' => 16,   'color' => '#e74c3c'],
-                ['level' => 'critical', 'label' => __('cruds.risk_scoring.defaults.risk_thresholds.critical'), 'max' => null, 'color' => '#c0392b'],
-            ],
-        ]);
+        $formulas       = $this->scoringService->availableFormulas();
+        $defaultFormula = 'probability_x_impact';
+        $defaults       = RiskScoringService::defaultsForFormula($defaultFormula);
 
-        // Variables PHP nécessaires dans la vue form
-        $probLevels  = $config->probability_levels ?? [];
-        $impLevels   = $config->impact_levels      ?? [];
-        $expLevels   = $config->exposure_levels    ?? [];
-        $vulnLevels  = $config->vulnerability_levels ?? [];
-        $thresholds  = $config->risk_thresholds ?? [];
+        $config = new RiskScoringConfig(array_merge(['formula' => $defaultFormula], $defaults));
 
-        return view('risks.scoring.form', compact('config', 'formulas', 'probLevels', 'impLevels', 'expLevels', 'vulnLevels', 'thresholds'));
+        $probLevels      = $config->probability_levels   ?? [];
+        $impLevels       = $config->impact_levels        ?? [];
+        $expLevels       = $config->exposure_levels      ?? [];
+        $vulnLevels      = $config->vulnerability_levels ?? [];
+        $thresholds      = $config->risk_thresholds      ?? [];
+        $formulaDefaults = RiskScoringService::allFormulaDefaults();
+
+        return view('risks.scoring.form', compact('config', 'formulas', 'probLevels', 'impLevels', 'expLevels', 'vulnLevels', 'thresholds', 'formulaDefaults'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -107,13 +77,14 @@ class RiskScoringConfigController extends Controller
         $config   = RiskScoringConfig::findOrFail($id);
         $formulas = $this->scoringService->availableFormulas();
 
-        $probLevels  = $config->probability_levels   ?? [];
-        $impLevels   = $config->impact_levels        ?? [];
-        $expLevels   = $config->exposure_levels      ?? [];
-        $vulnLevels  = $config->vulnerability_levels ?? [];
-        $thresholds  = $config->risk_thresholds      ?? [];
+        $probLevels      = $config->probability_levels   ?? [];
+        $impLevels       = $config->impact_levels        ?? [];
+        $expLevels       = $config->exposure_levels      ?? [];
+        $vulnLevels      = $config->vulnerability_levels ?? [];
+        $thresholds      = $config->risk_thresholds      ?? [];
+        $formulaDefaults = RiskScoringService::allFormulaDefaults();
 
-        return view('risks.scoring.form', compact('config', 'formulas', 'probLevels', 'impLevels', 'expLevels', 'vulnLevels', 'thresholds'));
+        return view('risks.scoring.form', compact('config', 'formulas', 'probLevels', 'impLevels', 'expLevels', 'vulnLevels', 'thresholds', 'formulaDefaults'));
     }
 
     public function update(Request $request, int $id): RedirectResponse
@@ -192,16 +163,21 @@ class RiskScoringConfigController extends Controller
             'risk_thresholds.*.color'=> ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
         ]);
 
-        $needsExposure = RiskScoringService::FORMULAS[$data['formula']]['requires_exposure'] ?? false;
+        $formula            = RiskScoringService::FORMULAS[$data['formula']];
+        $needsExposure      = $formula['requires_exposure'];
+        $needsVulnerability = $formula['requires_vulnerability'];
+
         if (! $needsExposure) {
-            $data['probability_levels']   = $data['probability_levels'] ?? [];
-            $data['exposure_levels']      = null;
-            $data['vulnerability_levels'] = null;
+            $data['probability_levels'] = $data['probability_levels'] ?? [];
+            $data['exposure_levels']    = null;
+            if (! $needsVulnerability) {
+                $data['vulnerability_levels'] = null;
+            }
         }
 
-        // Le dernier seuil n'a pas de borne supérieure
-        $last = count($data['risk_thresholds']) - 1;
-        $data['risk_thresholds'][$last]['max'] = null;
+        // Le dernier seuil n'a pas de borne supérieure — réindexer pour éviter les trous d'indices
+        $data['risk_thresholds'] = array_values($data['risk_thresholds']);
+        $data['risk_thresholds'][count($data['risk_thresholds']) - 1]['max'] = null;
 
         return $data;
     }

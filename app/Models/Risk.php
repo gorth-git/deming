@@ -223,12 +223,15 @@ class Risk extends Model
      */
     public function computedScore(RiskScoringConfig $config): int
     {
-        if ($config->usesLikelihood()) {
-                // Modèle 3 facteurs : Likelihood × Vulnerability × Impact
-                return $this->risk_likelihood * $this->vulnerability * $this->impact;
+        if ($config->usesMonarc()) {
+            return $this->impact * ($this->probability ?? 0) * ($this->vulnerability ?? 0);
         }
 
-        // Modèle classique probabilité × impact
+        if ($config->usesLikelihood()) {
+            $likelihood = ($this->exposure ?? 0) + ($this->vulnerability ?? 0);
+            return $likelihood * $this->impact;
+        }
+
         return $this->probability * $this->impact;
     }
 

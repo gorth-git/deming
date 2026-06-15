@@ -238,8 +238,8 @@ class RiskController extends Controller
             'by_level' => collect($thresholds)
                 ->mapWithKeys(fn($t, $i) => [
                     $i => $risks->filter(function ($r) use ($thresholds, $i) {
-                        $score = $r->probability * $r->impact;
-                        $min   = $i > 0 ? ($thresholds[$i - 1]['max'] + 1) : 1;
+                        $score = $r->risk_score;
+                        $min   = $i > 0 ? (($thresholds[$i - 1]['max'] ?? 0) + 1) : 0;
                         $max   = $thresholds[$i]['max'];
                         return $max ? ($score >= $min && $score <= $max) : $score >= $min;
                     })->count(),

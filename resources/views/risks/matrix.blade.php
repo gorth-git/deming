@@ -96,19 +96,29 @@
     </script>
     {{-- Fin filtres ------------------------------------------------------------}}
 
+    @php
+        $colCount      = count($xAxis);
+        $matrixCompact = $colCount > 8;
+        $cellFs        = $matrixCompact ? '0.68rem' : '0.85rem';
+    @endphp
+
     <div class="grid">
     {{-- Matrice --}}
     <div class="row">
         <div class="cell-lg-10 cell-md-12">
             <div class="overflow-auto">
-            <table class="table border text-center" style="table-layout:fixed; min-width:400px">
+            <table class="table border text-center" style="table-layout:fixed; min-width:400px; font-size:{{ $cellFs }}">
                 <thead>
                     <tr>
-                        <th style="width:140px"></th>
+                        <th style="width:{{ $matrixCompact ? '90px' : '140px' }}"></th>
                         @foreach ($xAxis as $impact)
-                        <th>
-                            {{ trans('cruds.risk.fields.impact') }} {{ $impact['value'] }}
-                            <br><small class="text-muted">{{ $impact['label'] }}</small>
+                        <th style="font-size:{{ $cellFs }};text-align:center">
+                            @if ($scoringConfig->usesMonarc())
+                                {{ $impact['value'] }}
+                            @else
+                                {{ trans('cruds.risk.fields.impact') }} {{ $impact['value'] }}
+                                <br><small class="text-muted" style="font-size:{{ $cellFs }}">{{ $impact['label'] }}</small>
+                            @endif
                         </th>
                         @endforeach
                     </tr>
@@ -116,12 +126,15 @@
                 <tbody>
                 @foreach (array_reverse($yAxis) as $yLevel)
                 <tr>
-                    <th class="text-right" style="font-size:.85rem">
-                        @if ($scoringConfig->usesLikelihood())
+                    <th class="text-right" style="font-size:{{ $cellFs }}">
+                        @if ($scoringConfig->usesMonarc())
+                            {{ trans('cruds.risk.fields.impact') }} {{ $yLevel['value'] }}
+                            <br><small class="text-muted" style="font-size:{{ $cellFs }}">{{ $yLevel['label'] }}</small>
+                        @elseif ($scoringConfig->usesLikelihood())
                             {{ trans('cruds.risk.fields.likelihood') }} {{ $yLevel['value'] }}
                         @else
                             {{ trans('cruds.risk.fields.probability') }} {{ $yLevel['value'] }}
-                            <br><small class="text-muted">{{ $yLevel['label'] }}</small>
+                            <br><small class="text-muted" style="font-size:{{ $cellFs }}">{{ $yLevel['label'] }}</small>
                         @endif
                     </th>
                     @foreach ($xAxis as $impact)
@@ -153,24 +166,6 @@
                 </tbody>
             </table>
             </div>
-
-            {{-- Légende
-            <div class="mt-2 d-flex gap-2">
-                @foreach ($scoringConfig->risk_thresholds as $i => $t)
-                    @php
-                        $prevMax = $i > 0 ? $scoringConfig->risk_thresholds[$i-1]['max'] + 1 : 1;
-                    @endphp
-                    <a href="/risk/index?threshold={{ $i }}" class="no-underline">
-                        <span class="badge"
-                              style="background:{{ $t['color'] }};color:#fff;padding:4px 10px;pointer-events:none">
-                        {{ $t['label'] }}
-                        @if ($t['max']) {{ $prevMax }}–{{ $t['max'] }}
-                        @else &gt; {{ $scoringConfig->risk_thresholds[$i-1]['max'] ?? 0 }} @endif
-                    </span>
-                    </a>
-                @endforeach
-            </div>
-            --}}
         </div>
 
         {{-- Répartition par statut --}}
@@ -200,8 +195,8 @@
                     <a href="/risk/index?threshold={{ $i }}" class="no-underline">
                         <span class="badge"
                               style="
-                                background:{{ $t['color'] }};
-                                color: {{ contrast_color($t['color']) }};
+                                background:{{ $t['color'] ?? '#cccccc' }};
+                                color: {{ contrast_color($t['color'] ?? '#cccccc') }};
                                 padding:4px 10px;
                                 pointer-events:none"
                                 >

@@ -65,11 +65,17 @@
 
             <div class="row"></div>
 
-            {{-- Section probabilité (masquée si formule likelihood) --}}
+            {{-- Section probabilité / menace (masquée si formule likelihood) --}}
             <div id="probability-section" @if($scoringConfig->usesLikelihood()) style="display:none" @endif>
                 <div class="row">
                     <div class="cell-lg-1 cell-md-2">
-                        <strong>{{ trans("cruds.risk.fields.probability") }}</strong>
+                        <strong>
+                            @if ($scoringConfig->usesMonarc())
+                                {{ trans("cruds.risk.fields.threat") }}
+                            @else
+                                {{ trans("cruds.risk.fields.probability") }}
+                            @endif
+                        </strong>
                     </div>
                     <div class="cell-lg-6 cell-md-8">
                         @foreach ($scoringConfig->probability_levels ?? [] as $level)
@@ -91,38 +97,41 @@
                 </div>
             </div>
 
-            {{-- Section exposition + vulnérabilité (formule likelihood_x_impact) --}}
-            <div id="likelihood-section" @if(!$scoringConfig->usesLikelihood()) style="display:none" @endif>
-                <div class="row">
-                    <div class="cell-lg-1 cell-md-2">
-                        <strong>{{ trans("cruds.risk.fields.exposure") }}</strong>
-                    </div>
-                    <div class="cell-lg-6 cell-md-8">
-                        @foreach ($scoringConfig->exposure_levels ?? [] as $level)
-                        <input type="radio" name="exposure" value="{{ $level['value'] }}"
-                               data-role="radio"
-                               data-append="<b>{{ $level['value'] }}</b> — {{ $level['label'] }}"
-                               {{ old('exposure', 0) == $level['value'] ? 'checked' : '' }}/>
-                        <br>
-                        @endforeach
-                    </div>
+            {{-- Section exposition (likelihood_x_impact uniquement) --}}
+            @if ($scoringConfig->usesLikelihood())
+            <div class="row">
+                <div class="cell-lg-1 cell-md-2">
+                    <strong>{{ trans("cruds.risk.fields.exposure") }}</strong>
                 </div>
-
-                <div class="row">
-                    <div class="cell-lg-1 cell-md-2">
-                        <strong>{{ trans("cruds.risk.fields.vulnerability") }}</strong>
-                    </div>
-                    <div class="cell-lg-6 cell-md-8">
-                        @foreach ($scoringConfig->vulnerability_levels ?? [] as $level)
-                        <input type="radio" name="vulnerability" value="{{ $level['value'] }}"
-                               data-role="radio"
-                               data-append="<b>{{ $level['value'] }}</b> — {{ $level['label'] }}"
-                               {{ old('vulnerability', 1) == $level['value'] ? 'checked' : '' }}/>
-                        <br>
-                        @endforeach
-                    </div>
+                <div class="cell-lg-6 cell-md-8">
+                    @foreach ($scoringConfig->exposure_levels ?? [] as $level)
+                    <input type="radio" name="exposure" value="{{ $level['value'] }}"
+                           data-role="radio"
+                           data-append="<b>{{ $level['value'] }}</b> — {{ $level['label'] }}"
+                           {{ old('exposure', 0) == $level['value'] ? 'checked' : '' }}/>
+                    <br>
+                    @endforeach
                 </div>
             </div>
+            @endif
+
+            {{-- Section vulnérabilité (likelihood_x_impact ou monarc) --}}
+            @if ($scoringConfig->usesLikelihood() || $scoringConfig->usesMonarc())
+            <div class="row">
+                <div class="cell-lg-1 cell-md-2">
+                    <strong>{{ trans("cruds.risk.fields.vulnerability") }}</strong>
+                </div>
+                <div class="cell-lg-6 cell-md-8">
+                    @foreach ($scoringConfig->vulnerability_levels ?? [] as $level)
+                    <input type="radio" name="vulnerability" value="{{ $level['value'] }}"
+                           data-role="radio"
+                           data-append="<b>{{ $level['value'] }}</b> — {{ $level['label'] }}"
+                           {{ old('vulnerability', 0) == $level['value'] ? 'checked' : '' }}/>
+                    <br>
+                    @endforeach
+                </div>
+            </div>
+            @endif
 
             <div class="row"></div>
 
