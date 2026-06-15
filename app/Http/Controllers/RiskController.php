@@ -56,11 +56,12 @@ class RiskController extends Controller
             $thresholds = $this->scoringService->config()->risk_thresholds;
             $idx = (int) $request->threshold;
             if (isset($thresholds[$idx])) {
-                $min = $idx > 0 ? ($thresholds[$idx - 1]['max'] + 1) : 1;
-                $max = $thresholds[$idx]['max'];
-                $query->whereRaw('probability * impact >= ?', [$min]);
-                if ($max) {
-                    $query->whereRaw('probability * impact <= ?', [$max]);
+                $min = $idx > 0 ? ((int) $thresholds[$idx - 1]['max'] + 1) : 0;
+                $max = $thresholds[$idx]['max'] !== null ? (int) $thresholds[$idx]['max'] : null;
+                $scoreExpr = $this->scoreExpression();
+                $query->whereRaw("($scoreExpr) >= ?", [$min]);
+                if ($max !== null) {
+                    $query->whereRaw("($scoreExpr) <= ?", [$max]);
                 }
             }
         }
@@ -259,6 +260,17 @@ class RiskController extends Controller
     // =========================================================================
     // Privé
     // =========================================================================
+
+    private function scoreExpression(): string
+    {
+        return match ($this->scoringService->config()->formula) {
+            'monarc'              => 'impact * probability * vulnerability',
+            'likelihood_x_impact' => '(exposure + vulnerability) * impact',
+            'additive'            => 'probability + impact',
+            'max_pi'              => 'GREATEST(probability, impact)',
+            default               => 'probability * impact',
+        };
+    }
 
     private function validateRisk(Request $request): array
     {
