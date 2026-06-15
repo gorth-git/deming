@@ -209,9 +209,9 @@ class RiskScoringService
     }
 
     /**
-     * Retourne les produits distincts Menace × Vulnérabilité, triés en ordre croissant.
+     * Retourne toutes les valeurs entières de min à max du produit Menace × Vulnérabilité.
      * Avec les échelles par défaut MONARC (menace 0-4, vuln 0-5) :
-     * [0,1,2,3,4,5,6,8,9,10,12,15,16,20] — 14 colonnes.
+     * [0,1,2,...,20] — 21 colonnes.
      */
     private function monarcThreatVulnProducts(): array
     {
@@ -221,14 +221,16 @@ class RiskScoringService
 
         foreach ($threats as $t) {
             foreach ($vulns as $v) {
-                $products[$t * $v] = $t * $v;
+                $products[] = $t * $v;
             }
         }
-        ksort($products);
+
+        $min = count($products) ? min($products) : 0;
+        $max = count($products) ? max($products) : 0;
 
         return array_map(
             fn($p) => ['value' => $p, 'label' => "M×V=$p"],
-            array_values($products)
+            range($min, $max)
         );
     }
 

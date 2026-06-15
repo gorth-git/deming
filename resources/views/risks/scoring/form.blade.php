@@ -128,7 +128,7 @@
                 </div>
 
                 {{-- COL DROITE : Impact (toujours visible) --}}
-                <div class="cell-lg-6 cell-md-12 mb-4">
+                <div class="cell-lg-6 cell-md-12 mb-4" id="impact-col">
                     <div class="level-section-header" style="background:#c0392b">
                         <span class="mif-warning"></span>
                         &nbsp;{{ trans("cruds.risk.fields.impact") }}
@@ -227,8 +227,8 @@
                         <tbody id="thresholds-body">
                             @foreach (old('risk_thresholds', $thresholds) as $idx => $t)
                             <tr class="threshold-row">
-                                <td><input type="text"   name="risk_thresholds[{{ $idx }}][level]" class="input" value="{{ $t['level'] }}" required></td>
-                                <td><input type="text"   name="risk_thresholds[{{ $idx }}][label]" class="input js-threshold-label" value="{{ $t['label'] }}" required></td>
+                                <td><input type="text"   name="risk_thresholds[{{ $idx }}][level]" class="input" value="{{ $t['level'] ?? '' }}" required></td>
+                                <td><input type="text"   name="risk_thresholds[{{ $idx }}][label]" class="input js-threshold-label" value="{{ $t['label'] ?? $t['level'] ?? '' }}" required></td>
                                 <td>
                                     <input type="number"
                                            name="risk_thresholds[{{ $idx }}][max]"
@@ -251,11 +251,11 @@
                                     <span class="badge js-preview"
                                           style="
                                             background:{{ $t['color'] ?? '#cccccc' }};
-                                            color:{{ contrast_color($t['color']) }};
+                                            color:{{ contrast_color($t['color'] ?? '#cccccc') }};
                                             padding:2px 8px;
                                             font-size:1rem"
                                     >
-                                        {{ $t['label'] }}
+                                        {{ $t['label'] ?? $t['level'] ?? '?' }}
                                     </span>
                                 </td>
                                 <td><button type="button" class="button mini alert js-remove-threshold"><span class="mif-bin"></span></button></td>
@@ -401,16 +401,32 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    const labelThreat      = @json(trans('cruds.risk.fields.threat'));
+    const labelProbability = @json(trans('cruds.risk.fields.probability'));
+
     function updateFormulaUI() {
         const opt      = formulaSelect.options[formulaSelect.selectedIndex];
         const needsExp  = opt ? opt.dataset.requiresExposure === '1' : false;
         const needsVuln = opt ? opt.dataset.requiresVulnerability === '1' : false;
+        const isMonarc  = formulaSelect.value === 'monarc';
         const desc      = opt ? opt.dataset.description : '';
 
         document.getElementById('formula-description').textContent = desc;
         document.getElementById('probability-col').style.display   = needsExp ? 'none' : '';
         document.getElementById('exposure-col').style.display      = needsExp ? ''     : 'none';
         document.getElementById('vulnerability-row').style.display = (needsExp || needsVuln) ? '' : 'none';
+
+        // Pour MONARC : Impact en premier, Menace en second
+        document.getElementById('impact-col').style.order      = isMonarc ? '1' : '';
+        document.getElementById('probability-col').style.order = isMonarc ? '2' : '';
+
+        // Renommer le header de la colonne probabilité
+        const probHeader = document.querySelector('#probability-col .level-section-header');
+        if (probHeader) {
+            const icon = probHeader.querySelector('span.mif-chart-line');
+            probHeader.textContent = ' ' + (isMonarc ? labelThreat : labelProbability);
+            if (icon) probHeader.prepend(icon);
+        }
     }
 
     formulaSelect.addEventListener('change', function () {

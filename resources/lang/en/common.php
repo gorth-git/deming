@@ -50,5 +50,6 @@ return [
     'never' => 'Never',
     'day' => 'Daily',
     'week' => 'Weekly',
-    'month' => 'Monthly'
+    'month' => 'Monthly',
+    'months' => 'Months'
 ];

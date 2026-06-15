@@ -372,7 +372,7 @@ return [
 
             // Évaluation
             'probability'         => 'Probabilité',
-            'threat'              => 'Menace (vraisemblance)',
+            'threat'              => 'Menace',
             'probability_comment' => 'Commentaire probabilité',
             'impact'              => 'Impact',
             'impact_comment'      => 'Commentaire impact',

@@ -69,6 +69,25 @@
     <div class="row">
     </div>
 
+    {{-- Impact (en premier pour MONARC) --}}
+    @if ($scoringConfig->usesMonarc())
+    <div class="row">
+        <div class="cell-lg-1 cell-md-2">
+            <strong>{{ trans("cruds.risk.fields.impact") }}</strong>
+        </div>
+        <div class="cell-lg-1 cell-md-1">
+            <span class="badge" style="font-size:1.1rem;background:#7f8c8d;color:#fff">{{ $risk->impact }}</span>
+            &nbsp;
+            {{ $scoringConfig->levelLabel('impact', $risk->impact) }}
+        </div>
+        @if ($risk->impact_comment)
+        <div class="cell-lg-5 cell-md-7">
+            <small class="text-muted">{{ $risk->impact_comment }}</small>
+        </div>
+        @endif
+    </div>
+    @endif
+
     {{-- Évaluation : probabilité / menace --}}
     @if (!$scoringConfig->usesLikelihood())
     <div class="row">
@@ -132,7 +151,8 @@
     </div>
     @endif
 
-    {{-- Impact --}}
+    {{-- Impact (pour les formules non-MONARC) --}}
+    @if (!$scoringConfig->usesMonarc())
     <div class="row">
         <div class="cell-lg-1 cell-md-2">
             <strong>{{ trans("cruds.risk.fields.impact") }}</strong>
@@ -148,6 +168,7 @@
         </div>
         @endif
     </div>
+    @endif
 
     <div class="row">
     </div>

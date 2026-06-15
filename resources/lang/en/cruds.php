@@ -374,7 +374,7 @@ return [
 
             // Assessment
             'probability'         => 'Probability',
-            'threat'              => 'Threat (likelihood)',
+            'threat'              => 'Threat',
             'probability_comment' => 'Probability comment',
             'impact'              => 'Impact',
             'impact_comment'      => 'Impact comment',
@@ -400,6 +400,7 @@ return [
 
             // Dashboard / matrix
             'total'               => 'Total',
+            'by_risks'            => 'Distribution by risk level',
             'by_status'           => 'Distribution by status',
         ],
 

@@ -112,9 +112,9 @@
                     <tr>
                         <th style="width:{{ $matrixCompact ? '90px' : '140px' }}"></th>
                         @foreach ($xAxis as $impact)
-                        <th style="font-size:{{ $cellFs }}">
+                        <th style="font-size:{{ $cellFs }};text-align:center">
                             @if ($scoringConfig->usesMonarc())
-                                M×V={{ $impact['value'] }}
+                                {{ $impact['value'] }}
                             @else
                                 {{ trans('cruds.risk.fields.impact') }} {{ $impact['value'] }}
                                 <br><small class="text-muted" style="font-size:{{ $cellFs }}">{{ $impact['label'] }}</small>
@@ -166,24 +166,6 @@
                 </tbody>
             </table>
             </div>
-
-            {{-- Légende
-            <div class="mt-2 d-flex gap-2">
-                @foreach ($scoringConfig->risk_thresholds as $i => $t)
-                    @php
-                        $prevMax = $i > 0 ? $scoringConfig->risk_thresholds[$i-1]['max'] + 1 : 1;
-                    @endphp
-                    <a href="/risk/index?threshold={{ $i }}" class="no-underline">
-                        <span class="badge"
-                              style="background:{{ $t['color'] }};color:#fff;padding:4px 10px;pointer-events:none">
-                        {{ $t['label'] }}
-                        @if ($t['max']) {{ $prevMax }}–{{ $t['max'] }}
-                        @else &gt; {{ $scoringConfig->risk_thresholds[$i-1]['max'] ?? 0 }} @endif
-                    </span>
-                    </a>
-                @endforeach
-            </div>
-            --}}
         </div>
 
         {{-- Répartition par statut --}}
@@ -213,8 +195,8 @@
                     <a href="/risk/index?threshold={{ $i }}" class="no-underline">
                         <span class="badge"
                               style="
-                                background:{{ $t['color'] }};
-                                color: {{ contrast_color($t['color']) }};
+                                background:{{ $t['color'] ?? '#cccccc' }};
+                                color: {{ contrast_color($t['color'] ?? '#cccccc') }};
                                 padding:4px 10px;
                                 pointer-events:none"
                                 >

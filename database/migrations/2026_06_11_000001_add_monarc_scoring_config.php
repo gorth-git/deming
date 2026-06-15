@@ -56,9 +56,8 @@ return new class extends Migration
 
             // Seuils : 0–80, palette Deming
             'risk_thresholds' => json_encode([
-                ['level' => 'low',      'label' => __('cruds.risk_scoring.defaults.risk_thresholds.low'),      'max' => 16,   'color' => '#3AB87A'],
-                ['level' => 'medium',   'label' => __('cruds.risk_scoring.defaults.risk_thresholds.medium'),   'max' => 36,   'color' => '#E09B1A'],
-                ['level' => 'high',     'label' => __('cruds.risk_scoring.defaults.risk_thresholds.high'),     'max' => 56,   'color' => '#E8731A'],
+                ['level' => 'low',      'label' => __('cruds.risk_scoring.defaults.risk_thresholds.low'),      'max' => 9,   'color' => '#3AB87A'],
+                ['level' => 'medium',   'label' => __('cruds.risk_scoring.defaults.risk_thresholds.medium'),   'max' => 30,   'color' => '#E09B1A'],
                 ['level' => 'critical', 'label' => __('cruds.risk_scoring.defaults.risk_thresholds.critical'), 'max' => null, 'color' => '#D94F45'],
             ]),
 

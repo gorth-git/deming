@@ -175,9 +175,9 @@ class RiskScoringConfigController extends Controller
             }
         }
 
-        // Le dernier seuil n'a pas de borne supérieure
-        $last = count($data['risk_thresholds']) - 1;
-        $data['risk_thresholds'][$last]['max'] = null;
+        // Le dernier seuil n'a pas de borne supérieure — réindexer pour éviter les trous d'indices
+        $data['risk_thresholds'] = array_values($data['risk_thresholds']);
+        $data['risk_thresholds'][count($data['risk_thresholds']) - 1]['max'] = null;
 
         return $data;
     }

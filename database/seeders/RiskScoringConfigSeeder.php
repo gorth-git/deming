@@ -9,7 +9,9 @@ class RiskScoringConfigSeeder extends Seeder
 {
     public function run(): void
     {
-        if (DB::table('risk_scoring_configs')->count() > 0) {
+        // Ne pas réinsérer ISO 27005 s'il existe déjà (la migration MONARC peut
+        // avoir inséré une ligne sans qu'ISO 27005 soit présent).
+        if (DB::table('risk_scoring_configs')->where('formula', 'probability_x_impact')->exists()) {
             return;
         }
 
@@ -52,12 +54,15 @@ class RiskScoringConfigSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        DB::table('risk_scoring_configs')->insert([
-            'name'    => 'MONARC',
-            'formula' => 'monarc',
-            'is_active' => false,
+        // MONARC — guard indépendant : la migration de rattrapage peut l'avoir déjà inséré
+        if (DB::table('risk_scoring_configs')->where('formula', 'monarc')->exists()) {
+            return;
+        }
 
-            // Menace (vraisemblance) 0–4 — stockée dans probability_levels
+        DB::table('risk_scoring_configs')->insert([
+            'name'       => 'MONARC',
+            'formula'    => 'monarc',
+            'is_active'  => false,
             'probability_levels' => json_encode([
                 ['value' => 0, 'label' => __('cruds.risk_scoring.defaults.monarc_threat_levels.0.label'), 'description' => __('cruds.risk_scoring.defaults.monarc_threat_levels.0.description')],
                 ['value' => 1, 'label' => __('cruds.risk_scoring.defaults.monarc_threat_levels.1.label'), 'description' => __('cruds.risk_scoring.defaults.monarc_threat_levels.1.description')],
@@ -65,11 +70,7 @@ class RiskScoringConfigSeeder extends Seeder
                 ['value' => 3, 'label' => __('cruds.risk_scoring.defaults.monarc_threat_levels.3.label'), 'description' => __('cruds.risk_scoring.defaults.monarc_threat_levels.3.description')],
                 ['value' => 4, 'label' => __('cruds.risk_scoring.defaults.monarc_threat_levels.4.label'), 'description' => __('cruds.risk_scoring.defaults.monarc_threat_levels.4.description')],
             ]),
-
-            // Exposition : non utilisée pour MONARC
-            'exposure_levels' => null,
-
-            // Vulnérabilité 0–5
+            'exposure_levels'      => null,
             'vulnerability_levels' => json_encode([
                 ['value' => 0, 'label' => __('cruds.risk_scoring.defaults.monarc_vulnerability_levels.0.label'), 'description' => __('cruds.risk_scoring.defaults.monarc_vulnerability_levels.0.description')],
                 ['value' => 1, 'label' => __('cruds.risk_scoring.defaults.monarc_vulnerability_levels.1.label'), 'description' => __('cruds.risk_scoring.defaults.monarc_vulnerability_levels.1.description')],
@@ -78,8 +79,6 @@ class RiskScoringConfigSeeder extends Seeder
                 ['value' => 4, 'label' => __('cruds.risk_scoring.defaults.monarc_vulnerability_levels.4.label'), 'description' => __('cruds.risk_scoring.defaults.monarc_vulnerability_levels.4.description')],
                 ['value' => 5, 'label' => __('cruds.risk_scoring.defaults.monarc_vulnerability_levels.5.label'), 'description' => __('cruds.risk_scoring.defaults.monarc_vulnerability_levels.5.description')],
             ]),
-
-            // Impact 0–4
             'impact_levels' => json_encode([
                 ['value' => 0, 'label' => __('cruds.risk_scoring.defaults.monarc_impact_levels.0.label'), 'description' => __('cruds.risk_scoring.defaults.monarc_impact_levels.0.description')],
                 ['value' => 1, 'label' => __('cruds.risk_scoring.defaults.monarc_impact_levels.1.label'), 'description' => __('cruds.risk_scoring.defaults.monarc_impact_levels.1.description')],
@@ -87,19 +86,13 @@ class RiskScoringConfigSeeder extends Seeder
                 ['value' => 3, 'label' => __('cruds.risk_scoring.defaults.monarc_impact_levels.3.label'), 'description' => __('cruds.risk_scoring.defaults.monarc_impact_levels.3.description')],
                 ['value' => 4, 'label' => __('cruds.risk_scoring.defaults.monarc_impact_levels.4.label'), 'description' => __('cruds.risk_scoring.defaults.monarc_impact_levels.4.description')],
             ]),
-
-            // Seuils : 0–80, palette Deming
             'risk_thresholds' => json_encode([
-                ['level' => 'low',      'label' => __('cruds.risk_scoring.defaults.risk_thresholds.low'),      'max' => 16,   'color' => '#3AB87A'],
-                ['level' => 'medium',   'label' => __('cruds.risk_scoring.defaults.risk_thresholds.medium'),   'max' => 36,   'color' => '#E09B1A'],
-                ['level' => 'high',     'label' => __('cruds.risk_scoring.defaults.risk_thresholds.high'),     'max' => 56,   'color' => '#E8731A'],
+                ['level' => 'low',      'label' => __('cruds.risk_scoring.defaults.risk_thresholds.low'),      'max' => 9,    'color' => '#3AB87A'],
+                ['level' => 'medium',   'label' => __('cruds.risk_scoring.defaults.risk_thresholds.medium'),   'max' => 30,   'color' => '#E09B1A'],
                 ['level' => 'critical', 'label' => __('cruds.risk_scoring.defaults.risk_thresholds.critical'), 'max' => null, 'color' => '#D94F45'],
             ]),
-
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-
-
     }
 }

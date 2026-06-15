@@ -75,6 +75,33 @@
             <div class="row">
             </div>
 
+            {{-- Impact (en premier pour MONARC) --}}
+            @if ($scoringConfig->usesMonarc())
+            <div class="row">
+                <div class="cell-lg-1 cell-md-2">
+                    <strong>{{ trans("cruds.risk.fields.impact") }}</strong>
+                </div>
+                <div class="cell-lg-6 cell-md-8">
+                    @foreach ($scoringConfig->impact_levels ?? [] as $level)
+                    <input type="radio" name="impact" value="{{ $level['value'] }}"
+                           data-role="radio"
+                           data-append="<b>{{ $level['value'] }}</b> — {{ $level['label'] }}{{ isset($level['description']) && $level['description'] ? ' <small class=\'text-muted\'>('.$level['description'].')</small>' : '' }}"
+                           {{ old('impact', $risk->impact) == $level['value'] ? 'checked' : '' }}/>
+                    <br>
+                    @endforeach
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell-lg-1 cell-md-2"></div>
+                <div class="cell-lg-6 cell-md-8">
+                    <textarea name="impact_comment" rows="2" data-role="textarea"
+                              data-clear-button="false"
+                              placeholder="{{ trans('cruds.risk.fields.impact_comment') }}">{{ old('impact_comment', $risk->impact_comment) }}</textarea>
+                </div>
+            </div>
+            <div class="row"></div>
+            @endif
+
             {{-- Section probabilité / menace --}}
             <div id="probability-section" @if($scoringConfig->usesLikelihood()) style="display:none" @endif>
                 <div class="row">
@@ -149,7 +176,8 @@
             <div class="row">
             </div>
 
-            {{-- Impact --}}
+            {{-- Impact (pour les formules non-MONARC) --}}
+            @if (!$scoringConfig->usesMonarc())
             <div class="row">
                 <div class="cell-lg-1 cell-md-2">
                     <strong>{{ trans("cruds.risk.fields.impact") }}</strong>
@@ -172,6 +200,7 @@
                               placeholder="{{ trans('cruds.risk.fields.impact_comment') }}">{{ old('impact_comment', $risk->impact_comment) }}</textarea>
                 </div>
             </div>
+            @endif
 
             {{-- Score calculé --}}
             <div class="row">
