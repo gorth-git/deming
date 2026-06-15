@@ -173,7 +173,6 @@
             <table class="table compact border mt-2">
             <tr>
                 <td colspan=3>
-            <strong>{{ trans('cruds.risk.fields.by_risks') }}</strong>
             </td>
             </tr>
             @foreach ($scoringConfig->risk_thresholds as $i => $t)
