@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Initialize database"
+echo "🗄️  Running database migrations..."
 
 # Mandatory to force the database migrations
 APP_ENV="local"
