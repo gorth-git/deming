@@ -31,10 +31,20 @@ php artisan storage:link --quiet
 bash /etc/uploadiso27001db.sh || echo "uploadiso27001db skipped"
 bash /etc/userdemo.sh || echo "userdemo skipped"
 
-# Passport v13 — --force évite une erreur si les clés existent déjà
+# Passport v13 — régénérer uniquement les clés (passport:install --force recrée
+# les oauth_clients à chaque démarrage, causant une erreur de clé dupliquée car
+# l'id UUID est tronqué en entier 19 par MySQL sur le schéma bigIncrements)
 echo "🔑 Generating Passport encryption keys..."
+php artisan passport:keys --force || echo "Passport keys generation skipped"
 
-php artisan passport:install --force || echo "Passport skipped"
+# Créer les clients OAuth seulement s'ils n'existent pas encore
+CLIENT_COUNT=$(mysql -h"${DB_HOST}" -u"${DB_USERNAME}" --password="${DB_PASSWORD}" "${DB_DATABASE}" \
+    -se "SELECT COUNT(*) FROM oauth_clients;" 2>/dev/null || echo "1")
+if [ "${CLIENT_COUNT}" = "0" ]; then
+    php artisan passport:client --personal --no-interaction --name="${APP_NAME:-Laravel}" \
+        || echo "Passport personal client creation skipped"
+fi
+
 if ls storage/oauth-*.key 2>/dev/null; then
     chown www-data:www-data storage/oauth-*.key
     chmod 600 storage/oauth-*.key
