@@ -1,9 +1,13 @@
 # Deming
 
 [![Latest Release](https://img.shields.io/github/release/sourcentis/deming.svg?style=flat-square)](https://github.com/sourcentis/deming/releases/latest)
-![License](https://img.shields.io/github/license/sourcentis/deming.svg?style=flat-square)
-![Contributors](https://img.shields.io/github/contributors/sourcentis/deming.svg?style=flat-square)
-![Stars](https://img.shields.io/github/stars/sourcentis/deming?style=flat-square)
+[![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg?style=flat-square)](https://github.com/sourcentis/deming/blob/main/LICENSE)
+[![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4.svg?style=flat-square&logo=php)](https://www.php.net)
+[![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20.svg?style=flat-square&logo=laravel)](https://laravel.com)
+[![CI](https://img.shields.io/github/actions/workflow/status/sourcentis/deming/ci.yaml?style=flat-square&label=CI)](https://github.com/sourcentis/deming/actions/workflows/ci.yaml)
+[![Docker](https://img.shields.io/github/actions/workflow/status/sourcentis/deming/docker.yaml?style=flat-square&label=Docker)](https://github.com/sourcentis/deming/actions/workflows/docker.yaml)
+
+- Lire dans d'autres langues : 🇬🇧 [English](README.md)
 
 ## :rocket: Introduction
 
