@@ -196,17 +196,17 @@ class DomainController extends Controller
         abort_if(!Auth::user()->isAdmin(), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         // Has measures ?
-        if (DB::table('measures')
-            ->where('domain_id', $domain->id)
-            ->join('control_measure', 'measures.id', 'control_measure.measure_id')
+        $controlIds = DB::table('controls')->where('domain_id', $domain->id)->pluck('id');
+        if (DB::table('control_measure')
+            ->whereIn('control_id', $controlIds)
             ->exists()) {
             return back()
                 ->withErrors(['msg' => 'There are measures associated with this framework !'])
                 ->withInput();
         }
 
-        // Delete measures
-        DB::table('measures')->where('domain_id', $domain->id)->delete();
+        // Delete controls of this domain
+        DB::table('controls')->where('domain_id', $domain->id)->delete();
 
         // Delete domain
         $domain->delete();
