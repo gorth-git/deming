@@ -116,7 +116,10 @@ class SocialiteController extends Controller
 
             return redirect('/');
         } catch (Exception $exception) {
-            return redirect('login');
+            Log::error("Socialite callback exception for provider '{$provider}': " . $exception->getMessage(), [
+                'exception' => $exception,
+            ]);
+            return redirect('login')->withErrors(['socialite' => $exception->getMessage()]);
         }
     }
 
