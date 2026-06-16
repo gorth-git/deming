@@ -135,7 +135,7 @@ class LoginController extends Controller
                 if (!$local && $autoProvision) {
                     $local = User::create([
                         'name'     => $ldapUser->getFirstAttribute('cn')   ?: $identifier,
-                        'email'    => $ldapUser->getFirstAttribute('mail') ?: 'user@localhost.local',
+                        'email'    => $ldapUser->getFirstAttribute('mail') ?: $identifier.'@localhost.local',
                         'login'    => $identifier,
                         'role'     => 5,
                         'password' => Hash::make(Str::random(32)), // inutilisable en local par défaut
