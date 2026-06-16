@@ -101,9 +101,9 @@
 </form>
 
 <script>
-    $(document).ready(function() {
+    document.addEventListener('DOMContentLoaded', function() {
         setTimeout(function() {
-            $("#login").focus();
+            document.getElementById('login').focus();
         }, 1500);
     });
 </script>
