@@ -64,15 +64,11 @@ class LoginController extends Controller
             }
 
             // Filtre OR sur les attributs configurés
-            $first = true;
-            foreach ($attrs as $attr) {
-                if ($first) {
-                    $query->whereEquals($attr, $appUsername);
-                    $first = false;
-                } else {
-                    $query->orWhereEquals($attr, $appUsername);
+            $query->where(function ($q) use ($attrs, $appUsername) {
+                foreach ($attrs as $attr) {
+                    $q->orWhereEquals($attr, $appUsername);
                 }
-            }
+            });
 
             // Collision guard
             $results = $query->limit(2)->get();
@@ -135,7 +131,7 @@ class LoginController extends Controller
                 if (!$local && $autoProvision) {
                     $local = User::create([
                         'name'     => $ldapUser->getFirstAttribute('cn')   ?: $identifier,
-                        'email'    => $ldapUser->getFirstAttribute('mail') ?: 'user@localhost.local',
+                        'email'    => $ldapUser->getFirstAttribute('mail') ?: $identifier.'@localhost.local',
                         'login'    => $identifier,
                         'role'     => 5,
                         'password' => Hash::make(Str::random(32)), // inutilisable en local par défaut
