@@ -64,15 +64,11 @@ class LoginController extends Controller
             }
 
             // Filtre OR sur les attributs configurés
-            $first = true;
-            foreach ($attrs as $attr) {
-                if ($first) {
-                    $query->whereEquals($attr, $appUsername);
-                    $first = false;
-                } else {
-                    $query->orWhereEquals($attr, $appUsername);
+            $query->where(function ($q) use ($attrs, $appUsername) {
+                foreach ($attrs as $attr) {
+                    $q->orWhereEquals($attr, $appUsername);
                 }
-            }
+            });
 
             // Collision guard
             $results = $query->limit(2)->get();
