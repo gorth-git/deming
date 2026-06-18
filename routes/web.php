@@ -17,16 +17,18 @@ use App\Http\Controllers\RiskScoringConfigController;
 
 Auth::routes();
 
+/* Socialite (must be reachable while the user is NOT yet authenticated) */
+Route::namespace('App\\Http\\Controllers')->group(function () {
+    Route::get('auth/redirect/{driver}', 'SocialiteController@redirect')->name('socialite.redirect');
+    Route::get('auth/callback/{driver}', 'SocialiteController@callback')->name('socialite.callback');
+});
+
 Route::namespace('App\\Http\\Controllers')->middleware('auth')->group(function () {
     /* Index */
     Route::get('/', 'HomeController@index');
     Route::get('/home', 'HomeController@index');
     Route::get('/index', 'HomeController@index');
     Route::redirect('/admin', '/');
-
-    /* Socialite (auth) */
-    Route::get('auth/redirect/{driver}', 'SocialiteController@redirect')->name('socialite.redirect');
-    Route::get('auth/callback/{driver}', 'SocialiteController@callback')->name('socialite.callback');
 
     /* Global-search engine */
     Route::get('global-search', 'GlobalSearchController@search');
