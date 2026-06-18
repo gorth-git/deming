@@ -39,10 +39,11 @@ class SocialiteController extends Controller
         $providers = config('services.socialite_controller.providers', []);
 
         if (in_array($provider, $providers)) {
-            Log::debug("Redirect with '{$provider}' provider");
             $config_name = 'services.socialite_controller.'.$provider;
             $additional_scopes = config($config_name.'.additional_scopes');
-            return Socialite::with($provider)->scopes($additional_scopes)->redirect();
+            $response = Socialite::with($provider)->scopes($additional_scopes)->redirect();
+            Log::debug("Redirect with '{$provider}' provider to ".$response->getTargetUrl());
+            return $response;
         }
 
         Log::warning("Redirect: Provider '{$provider}' not found.");
@@ -61,7 +62,7 @@ class SocialiteController extends Controller
             abort(404);
         }
 
-        Log::debug("Callback provider : '{$provider}'");
+        Log::debug("Callback provider : '{$provider}' with query params: ".json_encode($_request->query()));
 
         // Get additionnal config for current provider
         $config_name = 'services.socialite_controller.'.$provider;
