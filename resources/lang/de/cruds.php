@@ -432,8 +432,7 @@ return [
 
         // Contextual hints
         'levels_hint'     => 'Mindestens 2 Stufen. Der Wert muss eine eindeutige ganze Zahl sein.',
-        'thresholds_hint' => 'Der letzte Schwellenwert hat keine Obergrenze (Catch-All). Sortiere die Ergebnisse vom niedrigsten zum höchsten Wert.
-',
+        'thresholds_hint' => 'Der letzte Schwellenwert hat keine Obergrenze (Catch-All). Sortiere die Ergebnisse vom niedrigsten zum höchsten Wert.',
 
         // Form fields
         'fields' => [
@@ -576,8 +575,3 @@ return [
     ],
 
 ];
-
-    
-
-        // Behandlungsstatus
-        'status' =>
