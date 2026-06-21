@@ -18,7 +18,7 @@ return [
         'title' => 'Aktionen',
         'close' => 'Aktionsplan schließen',
         'fields' => [
-            'clause' => 'Klausel', // Hinweis: In en-Datei steht fälschlicherweise doppelt 'clauses'
+            'clause' => 'Klausel', 
             'name' => 'Name',
             'scope' => 'Geltungsbereich',
             'action' => 'Aktionsplan',
@@ -66,7 +66,7 @@ return [
         'choose' => 'Wähle ein Attribut',
         'title' => 'Attribute'
     ],
-     'measure' => [ // Korrigiert: In Ihrer alten DE-Datei hieß das fälschlicherweise 'control'
+     'measure' => [
          'description' => '',
          'fields' => [
             'action_plan' => 'Aktionsplan',
@@ -127,7 +127,7 @@ return [
      'notification' => [
          'subject' => 'Liste der durchzuführenden Maßnahmen',
      ],
-     'control' => [ // Korrigiert: In Ihrer alten DE-Datei hieß das fälschlicherweise 'measure'
+     'control' => [ 
          'title' => 'Kontrolle',
          'fields' => [
              'domain' => 'Domäne',
@@ -402,6 +402,182 @@ return [
             'by_risks' => 'Verteilung nach Risiken',
             'by_status' => 'Verteilung nach Status',
         ],
+
+        // Treatment statuses
+        'status' => [
+            'not_evaluated'        => 'Not evaluated',
+            'not_accepted'         => 'Not accepted',
+            'temporarily_accepted' => 'Temporarily accepted',
+            'accepted'             => 'Accepted',
+            'mitigated'            => 'Mitigated',
+            'transferred'          => 'Transferred',
+            'avoided'              => 'Avoided',
+        ],
+    ],
+
+    // -------------------------------------------------------------------------
+    // Konfiguration der Scoring-Enginge
+    // -------------------------------------------------------------------------
+    'risk_scoring' => [
+
+        // Page titles
+        'list'            => 'Methode zur Risikobewertung',
+        'create'          => 'Neue Bewertungskonfiguration',
+        'edit'            => 'Bearbeite Bewertungskonfiguration',
+        'activate'        => 'Aktiviere diese Konfiguration',
+
+        // Level / threshold actions
+        'add_level'       => 'Level hinzufügen',
+        'add_threshold'   => 'Schwellwert hinzufügen',
+
+        // Contextual hints
+        'levels_hint'     => 'Mindestens 2 Stufen. Der Wert muss eine eindeutige ganze Zahl sein.',
+        'thresholds_hint' => 'Der letzte Schwellenwert hat keine Obergrenze (Catch-All). Sortiere die Ergebnisse vom niedrigsten zum höchsten Wert.
+',
+
+        // Form fields
+        'fields' => [
+            'name'        => 'Konfigurationsname',
+            'formula'     => 'Berechnungsformel',
+            'levels'      => 'Stufe',
+            'thresholds'  => 'Klassifizierungsschwellenwerte',
+            'value'       => 'Wert',
+            'label'       => 'Label',
+            'description' => 'Beschreibung',
+            'level_key'   => 'Interner Schlüssel',
+            'score_max'   => 'Max Wert (∞ = größter Wert)',
+            'color'       => 'Farbe des Abzeichens',
+        ],
+
+        // Available badge colors
+        'colors' => [
+            'success'   => 'Grün',
+            'warning'   => 'Orange',
+            'danger'    => 'Rot',
+            'alert'     => 'Dunkelrot',
+            'info'      => 'Blau',
+            'secondary' => 'Grau',
+        ],
+
+        // Available formulas (labels)
+        'formulas' => [
+            'probability_x_impact' => 'Wahrscheinlichkeit × Auswirkung',
+            'likelihood_x_impact'  => 'Wahrscheinlichkeit × Auswirkung (BSI 200-3)',
+            'additive'             => 'Wahrscheinlichkeit + Auswirkung',
+            'max_pi'               => 'max(Wahrscheinlichkeit, Auswirkung)',
+            'monarc'               => 'MONARC (Auswirkung × Bedrohung × Verwundbarkeit)',
+        ],
+
+
+        // Default values suggested when creating a configuration
+        'defaults' => [
+            'probability_levels' => [
+                'rare' => 'Rare',
+                'unlikely' => 'Unlikely',
+                'possible' => 'Possible',
+                'likely' => 'Probable',
+                'very_likely' => 'Very Likely',
+            ],
+            'exposure_levels' => [
+                'offline' => 'Offline',
+                'internal' => 'Internal',
+                'internet' => 'Internet',
+            ],
+            'vulnerability_levels' => [
+                'none' => 'None',
+                'known' => 'Known',
+                'exploitable_int' => 'Internally exploitable',
+                'exploitable_ext' => 'Externally exploitable',
+            ],
+            'impact_levels' => [
+                'negligible' => 'Negligible',
+                'low' => 'Low',
+                'moderate' => 'Moderate',
+                'high' => 'High',
+                'critical' => 'Critical',
+            ],
+            'risk_thresholds' => [
+                'low' => 'Low',
+                'medium' => 'Medium',
+                'high' => 'High',
+                'critical' => 'Critical',
+            ],
+            'monarc_impact_levels' => [
+                0 => ['label' => 'Negligible',  'description' => 'No significant consequence on reputation, operations, legal, financial aspects or individuals'],
+                1 => ['label' => 'Low',         'description' => 'Limited consequences, absorbed without noticeable disruption to the business'],
+                2 => ['label' => 'Significant', 'description' => 'Noticeable disruption to the business, measurable reputational damage, notable financial or legal consequences'],
+                3 => ['label' => 'Critical',    'description' => 'Serious disruption to the business, severe reputational damage, major legal or financial consequences, or harm to individuals'],
+                4 => ['label' => 'Vital',       'description' => 'Endangers the organisation, irreversible consequences or serious harm to individuals'],
+            ],
+            'monarc_threat_levels' => [
+                0 => ['label' => 'Not applicable', 'description' => 'Threat impossible in this context'],
+                1 => ['label' => 'Unlikely',       'description' => 'Has never occurred, very unlikely'],
+                2 => ['label' => 'Possible',       'description' => 'No clear evidence, could occur'],
+                3 => ['label' => 'Likely',         'description' => 'Has already occurred in the organisation or its environment'],
+                4 => ['label' => 'Very likely',    'description' => 'Has already occurred on several occasions'],
+            ],
+            'monarc_vulnerability_levels' => [
+                0 => ['label' => 'Non-existent', 'description' => 'All security controls are in place, documented and effective'],
+                1 => ['label' => 'Very low',     'description' => 'Controls in place and monitored, minor improvements possible'],
+                2 => ['label' => 'Low',          'description' => 'Controls broadly in place but not systematically monitored'],
+                3 => ['label' => 'Medium',       'description' => 'Controls partially in place, gaps identified'],
+                4 => ['label' => 'High',         'description' => 'Controls embryonic or ineffective'],
+                5 => ['label' => 'Very high',    'description' => 'Complete absence of security controls'],
+            ],
+        ],
+    ],
+
+    'exception' => [
+        'list' => 'Exception Handling',
+        'create' => 'New Exception',
+        'edit' => 'Edit Exception',
+        'title_singular' => 'Exception',
+        'title_plural' => 'Exceptions',
+        'review_section' => 'Validate Decision',
+        'expired_hint' => 'Expired date has passed.',
+        'confirm_submit' => 'Submit this exception for validation?',
+        'confirm_approve' => 'Approve this exception?',
+        'confirm_reject' => 'Reject this exception?',
+        'actions' => [
+            'submit' => 'Submit',
+            'approve' => 'Approve',
+            'reject' => 'Reject',
+        ],
+
+        'status' => [
+            'draft' => 'Draft',
+            'submitted' => 'Submitted',
+            'approved' => 'Approved',
+            'rejected' => 'Rejected',
+            'expired' => 'Expired',
+        ],
+
+        'fields' => [
+            'name' => 'Name',
+            'measure' => 'Linked control',
+            'no_measure' => 'No control',
+            'description' => 'Description',
+            'justification' => 'Justification',
+            'compensating_controls' => 'Compensating measures',
+            'start_date' => 'Start',
+            'end_date' => 'End',
+            'status' => 'Status',
+            'created_by' => 'Created by',
+            'submitted_by' => 'Submitted by',
+            'approved_by' => 'Approved by',
+            'rejected_by' => 'Rejected by',
+            'approval_comment' => 'Decision comment',
+            'approval_comment_optional' => 'Optional comment',
+            'approval_comment_required' => 'Reason for refusal (required)',
+            'choose_status' => 'Filter by status',
+            'choose_measure' => 'Filter by control',
+            'expired_only' => 'Expired only',
+        ],
+    ],
+
+];
+
+    
 
         // Behandlungsstatus
         'status' =>
