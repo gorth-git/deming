@@ -16,7 +16,7 @@ return [
          'create' => 'Create an action plan',
          'edit' => 'Edit action plan',
          'title' => 'Actions',
-        'close' => 'Close an action',
+         'close' => 'Close an action',
          'fields' => [
             'clauses' => 'Clauses',
             'name' => 'Name',
@@ -37,7 +37,6 @@ return [
             'remediation' => 'Remediation',
             'criticity' => 'Criticity',
             'cause' => 'Reason',
-            'clauses' => 'Clauses',
             'owners' => 'Owners',
             'status' => 'Status',
             'status_open' => 'Open',
