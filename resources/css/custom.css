@@ -130,8 +130,8 @@ pre {
 
 
 pre {
-    font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",sans-serif;
-    font-size: 15px;
+    font-family: inherit;
+    font-size: inherit;
     line-height: 1.5;
     font-style: normal;
     font-weight: 400;
