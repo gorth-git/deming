@@ -25,7 +25,7 @@
     		<div class="cell-lg-1 cell-md-2">
 	    		<strong>{{ trans('cruds.measure.fields.clauses') }}</strong>
 	    	</div>
-    		<div class="cell-lg-4 cell-md-5">
+    		<div class="cell-lg-7 cell-md-9">
                 @foreach($measure->controls as $control)
                     <a href="/alice/show/{{ $control->id }}">{{ $control->clause }}</a> - {{ $control->name }}
                     @if(!$loop->last)
@@ -39,10 +39,14 @@
     		<div class="cell-lg-1 cell-md-2">
 	    		<strong>{{ trans('cruds.measure.fields.name') }}</strong>
 	    	</div>
+            @if ($measure->scope==null)
+    		<div class="cell-lg-6 cell-md-10">
+				{{ $measure->name }}
+			</div>
+			@else
     		<div class="cell-lg-5 cell-md-5">
 				{{ $measure->name }}
 			</div>
-            @if ($measure->scope!==null)
             <div class="cell-2">
 	    		<strong>{{ trans("cruds.measure.fields.scope") }}</strong>
 	    		&nbsp;

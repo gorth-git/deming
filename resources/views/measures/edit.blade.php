@@ -17,7 +17,7 @@
 	    		<div class="cell-lg-1 cell-md-2">
 		    		<strong>{{ trans("cruds.measure.fields.clauses") }}</strong>
 				</div>
-	    		<div class="cell-lg-6 cell-md-10">
+        		<div class="cell-lg-7 cell-md-9">
                     <select id="controls" name="controls[]" data-role="select" data-filter="true" multiple>
 						@foreach($all_controls as $control)
 						    <option value="{{ $control->id }}"
