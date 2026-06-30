@@ -120,11 +120,11 @@ class MeasureController extends Controller
             ->where('scope', '<>', '');
         if (Auth::user()->role === 5) {
             $scopes = $scopes
-                ->leftJoin('control_user', 'measures.id', '=', 'control_user.measure_id')
-                ->leftJoin('control_user_group', 'measures.id', '=', 'control_user_group.measure_id')
-                ->leftJoin('user_user_group', 'control_user_group.user_group_id', '=', 'user_user_group.user_group_id')
+                ->leftJoin('measure_user', 'measures.id', '=', 'measure_user.measure_id')
+                ->leftJoin('measure_user_group', 'measures.id', '=', 'measure_user_group.measure_id')
+                ->leftJoin('user_user_group', 'measure_user_group.user_group_id', '=', 'user_user_group.user_group_id')
                 ->where(function ($query) {
-                    $query->where('control_user.user_id', '=', Auth::user()->id)
+                    $query->where('measure_user.user_id', '=', Auth::user()->id)
                         ->orWhere('user_user_group.user_id', '=', Auth::user()->id);
                 });
         }
@@ -149,11 +149,11 @@ class MeasureController extends Controller
         // Filter for auditee
         if (Auth::user()->role === 5) {
             $measures = $measures
-                ->leftJoin('control_user', 'm1.id', '=', 'control_user.measure_id')
-                ->leftJoin('control_user_group', 'm1.id', '=', 'control_user_group.measure_id')
-                ->leftJoin('user_user_group', 'control_user_group.user_group_id', '=', 'user_user_group.user_group_id')
+                ->leftJoin('measure_user', 'm1.id', '=', 'measure_user.measure_id')
+                ->leftJoin('measure_user_group', 'm1.id', '=', 'measure_user_group.measure_id')
+                ->leftJoin('user_user_group', 'measure_user_group.user_group_id', '=', 'user_user_group.user_group_id')
                 ->where(function ($query) {
-                    $query->where('control_user.user_id', '=', Auth::user()->id)
+                    $query->where('measure_user.user_id', '=', Auth::user()->id)
                         ->orWhere('user_user_group.user_id', '=', Auth::user()->id);
                 });
         }
@@ -398,14 +398,14 @@ class MeasureController extends Controller
 
         abort_if(
             Auth::user()->isAuditee() &&
-            ! (DB::table('control_user')
+            ! (DB::table('measure_user')
                     ->where('measure_id', $id)
                     ->where('user_id', Auth::user()->id)
                     ->exists()
                 ||
-                DB::table('control_user_group')
-                    ->join('user_user_group', 'control_user_group.user_group_id', '=', 'user_user_group.user_group_id')
-                    ->where('control_user_group.measure_id', $id)
+                DB::table('measure_user_group')
+                    ->join('user_user_group', 'measure_user_group.user_group_id', '=', 'user_user_group.user_group_id')
+                    ->where('measure_user_group.measure_id', $id)
                     ->where('user_user_group.user_id', Auth::user()->id)
                     ->exists()),
             Response::HTTP_FORBIDDEN,
@@ -659,7 +659,7 @@ class MeasureController extends Controller
             ->where('measure_id', '=', $measure->id)
             ->delete();
 
-        DB::Table('control_user_group')
+        DB::Table('measure_user_group')
             ->where('measure_id', '=', $measure->id)
             ->delete();
 
@@ -1257,7 +1257,7 @@ class MeasureController extends Controller
                     ->pluck('control_id');
                 $action->controls()->sync($controls);
 
-                $owners = DB::table('control_user')
+                $owners = DB::table('measure_user')
                     ->select('user_id')
                     ->where('measure_id', $measure->id)
                     ->pluck('user_id');

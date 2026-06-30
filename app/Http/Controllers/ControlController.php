@@ -62,15 +62,15 @@ class ControlController extends Controller
                     ->where(function ($subQuery) use ($userId) {
                         $subQuery->whereExists(function ($q) use ($userId) {
                             $q->select(DB::raw(1))
-                                ->from('control_user')
-                                ->whereColumn('control_user.measure_id', 'control_measure.measure_id')
-                                ->where('control_user.user_id', $userId);
+                                ->from('measure_user')
+                                ->whereColumn('measure_user.measure_id', 'control_measure.measure_id')
+                                ->where('measure_user.user_id', $userId);
                         })
                             ->orWhereExists(function ($q) use ($userId) {
                                 $q->select(DB::raw(1))
-                                    ->from('control_user_group')
-                                    ->join('user_user_group', 'user_user_group.user_group_id', '=', 'control_user_group.user_group_id')
-                                    ->whereColumn('control_user_group.measure_id', 'control_measure.measure_id')
+                                    ->from('measure_user_group')
+                                    ->join('user_user_group', 'user_user_group.user_group_id', '=', 'measure_user_group.user_group_id')
+                                    ->whereColumn('measure_user_group.measure_id', 'control_measure.measure_id')
                                     ->where('user_user_group.user_id', $userId);
                             });
                     });
@@ -85,15 +85,15 @@ class ControlController extends Controller
                     ->where(function ($q) use ($userId) {
                         $q->whereExists(function ($subQ) use ($userId) {
                             $subQ->select(DB::raw(1))
-                                ->from('control_user')
-                                ->whereColumn('control_user.measure_id', 'measures.id')
-                                ->where('control_user.user_id', $userId);
+                                ->from('measure_user')
+                                ->whereColumn('measure_user.measure_id', 'measures.id')
+                                ->where('measure_user.user_id', $userId);
                         })
                             ->orWhereExists(function ($subQ) use ($userId) {
                                 $subQ->select(DB::raw(1))
-                                    ->from('control_user_group')
-                                    ->join('user_user_group', 'user_user_group.user_group_id', '=', 'control_user_group.user_group_id')
-                                    ->whereColumn('control_user_group.measure_id', 'measures.id')
+                                    ->from('measure_user_group')
+                                    ->join('user_user_group', 'user_user_group.user_group_id', '=', 'measure_user_group.user_group_id')
+                                    ->whereColumn('measure_user_group.measure_id', 'measures.id')
                                     ->where('user_user_group.user_id', $userId);
                             });
                     }),
@@ -206,9 +206,9 @@ class ControlController extends Controller
             (Auth::user()->isAuditee()) &&
             ! DB::table('measures')
                 ->join('control_measure', 'control_measure.measure_id', '=', 'measures.id')
-                ->join('control_user', 'control_user.measure_id', '=', 'measures.id')
+                ->join('measure_user', 'measure_user.measure_id', '=', 'measures.id')
                 ->where('control_measure.control_id', $id)
-                ->where('control_user.user_id', Auth::user()->id)
+                ->where('measure_user.user_id', Auth::user()->id)
                 ->exists(),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden'

@@ -61,11 +61,11 @@ class SendNotifications extends Command
             foreach ($users as $user) {
                 // get controls
                 $controls = Measure::where('status', 0)
-                    ->leftJoin('control_user', 'measures.id', '=', 'control_user.measure_id')
-                    ->leftJoin('control_user_group', 'measures.id', '=', 'control_user_group.measure_id')
-                    ->leftJoin('user_user_group', 'control_user_group.user_group_id', '=', 'user_user_group.user_group_id')
+                    ->leftJoin('measure_user', 'measures.id', '=', 'measure_user.measure_id')
+                    ->leftJoin('measure_user_group', 'measures.id', '=', 'measure_user_group.measure_id')
+                    ->leftJoin('user_user_group', 'measure_user_group.user_group_id', '=', 'user_user_group.user_group_id')
                     ->where(function ($query) use ($user) {
-                        $query->where('control_user.user_id', '=', $user->id)
+                        $query->where('measure_user.user_id', '=', $user->id)
                             ->orWhere('user_user_group.user_id', '=', $user->id);
                     })
                     ->where('plan_date', '<=', Carbon::today()

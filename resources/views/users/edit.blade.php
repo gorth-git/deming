@@ -98,7 +98,7 @@
     		<div class="cell-8">
 	            <select data-role="select" name="controls[]" id="controls" data-filter="true" multiple>
 	                @foreach($measures as $measure)
-                       <option value="{{ $measure->id }}" {{ (in_array($measure->id, old('controls', [])) || ($user->controls->contains($measure->id))) ? 'selected' : '' }}>
+                       <option value="{{ $measure->id }}" {{ (in_array($measure->id, old('controls', [])) || ($user->measures->contains($measure->id))) ? 'selected' : '' }}>
                        {{ $measure->name }}
                        </option>
 	                @endforeach

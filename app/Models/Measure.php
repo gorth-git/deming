@@ -77,7 +77,7 @@ class Measure extends Model
     public function users(): BelongsToMany
     {
         if ($this->users === null) {
-            $this->users = $this->belongsToMany(User::class, 'control_user', 'measure_id')->orderBy('name');
+            $this->users = $this->belongsToMany(User::class, 'measure_user', 'measure_id')->orderBy('name');
         }
         return $this->users;
     }
@@ -86,7 +86,7 @@ class Measure extends Model
     public function groups()
     {
         if ($this->groups === null) {
-            $this->groups = $this->belongsToMany(UserGroup::class, 'control_user_group', 'measure_id')->orderBy('name');
+            $this->groups = $this->belongsToMany(UserGroup::class, 'measure_user_group', 'measure_id')->orderBy('name');
         }
         return $this->groups;
     }
@@ -196,7 +196,7 @@ class Measure extends Model
 
     private function isDirectlyAssignedToUser($user): bool
     {
-        return DB::table('control_user')
+        return DB::table('measure_user')
             ->where('measure_id', $this->id)
             ->where('user_id', $user->id)
             ->exists();
@@ -204,9 +204,9 @@ class Measure extends Model
 
     private function isAssignedViaGroup($user): bool
     {
-        return DB::table('control_user_group')
-            ->join('user_user_group', 'control_user_group.user_group_id', '=', 'user_user_group.user_group_id')
-            ->where('control_user_group.measure_id', $this->id)
+        return DB::table('measure_user_group')
+            ->join('user_user_group', 'measure_user_group.user_group_id', '=', 'user_user_group.user_group_id')
+            ->where('measure_user_group.measure_id', $this->id)
             ->where('user_user_group.user_id', $user->id)
             ->exists();
     }
