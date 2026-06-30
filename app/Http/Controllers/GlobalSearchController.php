@@ -42,15 +42,15 @@ class GlobalSearchController extends Controller
                 $query = $query->where(function($q) use ($userId) {
                     $q->whereExists(function($subQ) use ($userId) {
                         $subQ->selectRaw(1)
-                            ->from('control_user')
-                            ->whereColumn('control_user.measure_id', 'measures.id')
-                            ->where('control_user.user_id', $userId);
+                            ->from('measure_user')
+                            ->whereColumn('measure_user.measure_id', 'measures.id')
+                            ->where('measure_user.user_id', $userId);
                     })
                         ->orWhereExists(function($subQ) use ($userId) {
                             $subQ->selectRaw(1)
-                                ->from('control_user_group')
-                                ->join('user_user_group', 'user_user_group.user_group_id', '=', 'control_user_group.user_group_id')
-                                ->whereColumn('control_user_group.measure_id', 'measures.id')
+                                ->from('measure_user_group')
+                                ->join('user_user_group', 'user_user_group.user_group_id', '=', 'measure_user_group.user_group_id')
+                                ->whereColumn('measure_user_group.measure_id', 'measures.id')
                                 ->where('user_user_group.user_id', $userId);
                         });
                 });

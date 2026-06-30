@@ -95,7 +95,7 @@ class DocumentController extends Controller
         // Auditee may get documents from assigned measures only
         abort_if(
             (Auth::user()->role === 5) &&
-            ! DB::table('control_user')
+            ! DB::table('measure_user')
                 ->where('user_id', Auth::user()->id)
                 ->where('measure_id', $document->measure_id)
                 ->exists(),
@@ -135,14 +135,14 @@ class DocumentController extends Controller
         // Auditee may save document to assigned measure only
         abort_if(
             Auth::user()->role === 5 &&
-            ! (DB::table('control_user')
+            ! (DB::table('measure_user')
                     ->where('measure_id', $measure_id)
                     ->where('user_id', Auth::user()->id)
                     ->exists()
                 ||
-                DB::table('control_user_group')
-                    ->join('user_user_group', 'control_user_group.user_group_id', '=', 'user_user_group.user_group_id')
-                    ->where('control_user_group.measure_id', $measure_id)
+                DB::table('measure_user_group')
+                    ->join('user_user_group', 'measure_user_group.user_group_id', '=', 'user_user_group.user_group_id')
+                    ->where('measure_user_group.measure_id', $measure_id)
                     ->where('user_user_group.user_id', Auth::user()->id)
                     ->exists()),
             Response::HTTP_FORBIDDEN,
@@ -221,10 +221,10 @@ class DocumentController extends Controller
         // when measure has not been made
         abort_if(
             (Auth::user()->role === 5) &&
-            ! DB::table('control_user')
+            ! DB::table('measure_user')
                 ->where('user_id', Auth::user()->id)
                 ->where('measure_id', $document->measure_id)
-                ->leftjoin('measures', 'measures.id', '=', 'control_user.measure_id')
+                ->leftjoin('measures', 'measures.id', '=', 'measure_user.measure_id')
                 ->whereNull('measures.realisation_date')
                 ->exists(),
             Response::HTTP_FORBIDDEN,

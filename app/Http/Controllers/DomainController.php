@@ -42,13 +42,13 @@ class DomainController extends Controller
                         AND (
                             EXISTS (
                                 SELECT 1
-                                FROM control_user cu
+                                FROM measure_user cu
                                 WHERE cu.measure_id = cm.measure_id
                                 AND cu.user_id = ?
                             )
                             OR EXISTS (
                                 SELECT 1
-                                FROM control_user_group cug
+                                FROM measure_user_group cug
                                 INNER JOIN user_user_group uug
                                     ON uug.user_group_id = cug.user_group_id
                                 WHERE cug.measure_id = cm.measure_id

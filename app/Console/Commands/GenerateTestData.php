@@ -40,7 +40,7 @@ class GenerateTestData extends Command
         DB::table('action_user')->delete();
         DB::table('actions')->delete();
         DB::table('measures')->update(['next_id' => null]);
-        DB::table('control_user_group')->delete();
+        DB::table('measure_user_group')->delete();
         DB::table('control_measure')->delete();
         DB::table('measures')->delete();
 

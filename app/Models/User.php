@@ -71,14 +71,14 @@ class User extends Authenticatable implements OAuthenticatable
         return $this->belongsToMany(UserGroup::class)->orderBy('name');
     }
 
-    public function controls(): BelongsToMany
+    public function measures(): BelongsToMany
     {
-        return $this->belongsToMany(Measure::class, 'control_user', 'user_id', 'measure_id')->orderBy('name');
+        return $this->belongsToMany(Measure::class, 'measure_user', 'user_id', 'measure_id')->orderBy('name');
     }
 
-    public function lastControls(): BelongsToMany
+    public function lastMeasures(): BelongsToMany
     {
-        return $this->belongsToMany(Measure::class, 'control_user', 'user_id', 'measure_id')->whereNull('realisation_date')->orderBy('name');
+        return $this->belongsToMany(Measure::class, 'measure_user', 'user_id', 'measure_id')->whereNull('realisation_date')->orderBy('name');
     }
 
     /**

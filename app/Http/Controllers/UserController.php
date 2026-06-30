@@ -166,7 +166,7 @@ class UserController extends Controller
 
         // Update controls assigned to the user
         if ($this->isAdmin() || Auth::user()->role === 2) {
-            $user->lastControls()->sync($request->input('controls', []));
+            $user->lastMeasures()->sync($request->input('controls', []));
         }
 
         $user->update();
