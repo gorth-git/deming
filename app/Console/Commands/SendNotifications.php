@@ -60,7 +60,8 @@ class SendNotifications extends Command
 
             foreach ($users as $user) {
                 // get controls
-                $controls = Measure::where('status', 0)
+                $controls = Measure::select('measures.*')
+                    ->where('status', 0)
                     ->leftJoin('measure_user', 'measures.id', '=', 'measure_user.measure_id')
                     ->leftJoin('measure_user_group', 'measures.id', '=', 'measure_user_group.measure_id')
                     ->leftJoin('user_user_group', 'measure_user_group.user_group_id', '=', 'user_user_group.user_group_id')
@@ -71,6 +72,7 @@ class SendNotifications extends Command
                     ->where('plan_date', '<=', Carbon::today()
                         ->addDays(intval(config('deming.notification.expire-delay')))->toDateString())
                     ->orderBy('plan_date')
+                    ->distinct()
                     ->with('controls')
                     ->get();
 

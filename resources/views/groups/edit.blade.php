@@ -46,9 +46,9 @@
             <strong>{{ trans('cruds.group.fields.controls') }}</strong>
     	</div>
         <div class="cell-lg-8 cell-md-10">
-            <select data-role="select" data-filter="true" name="controls[]" id="controls" multiple>
-                @foreach($all_controls as $control)
-                    <option value="{{ $control->id }}" {{ (in_array($control->id, old('controls', [])) || $group->controls->contains($control->id)) ? 'selected' : '' }}>{{ $control->name }}</option>
+            <select data-role="select" data-filter="true" name="measures[]" id="measures" multiple>
+                @foreach($all_measures as $measure)
+                    <option value="{{ $measure->id }}" {{ (in_array($measure->id, old('measures', [])) || $group->measures->contains($measure->id)) ? 'selected' : '' }}>{{ $measure->name }}</option>
                 @endforeach
             </select>
         </div>

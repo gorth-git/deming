@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Control;
+use App\Models\Measure;
 use App\Models\User;
 use App\Models\UserGroup;
 use Illuminate\Http\Request;
@@ -38,10 +39,10 @@ class UserGroupController extends Controller
 
         $all_users = User::select('id', 'name')->orderBy('name')->get();
 
-        // Get Controls
-        $all_controls = Control::select('id', 'name')->whereNull('realisation_date')->orderBy('name')->get();
+        // Get Measures
+        $all_measures = Measure::select('id', 'name')->whereNull('realisation_date')->orderBy('name')->get();
 
-        return view('groups.create', compact('all_users', 'all_controls'));
+        return view('groups.create', compact('all_users', 'all_measures'));
     }
 
     /**
@@ -70,8 +71,8 @@ class UserGroupController extends Controller
         // Sync users
         $group->users()->sync($request->input('users', []));
 
-        // Sync controls
-        $group->controls()->sync($request->input('controls', []));
+        // Sync measures
+        $group->measures()->sync($request->input('measures', []));
 
         return redirect('/groups');
     }
@@ -114,10 +115,10 @@ class UserGroupController extends Controller
         // Get Users
         $all_users = User::select('id', 'name')->orderBy('name')->get();
 
-        // Get Controls
-        $all_controls = Control::select('id', 'name')->whereNull('realisation_date')->orderBy('name')->get();
+        // Get Measures
+        $all_measures = Measure::select('id', 'name')->whereNull('realisation_date')->orderBy('name')->get();
 
-        return view('groups.edit', compact('group', 'all_users', 'all_controls'));
+        return view('groups.edit', compact('group', 'all_users', 'all_measures'));
     }
 
     /**
@@ -146,8 +147,8 @@ class UserGroupController extends Controller
         // Sync users
         $group->users()->sync($request->input('users', []));
 
-        // Sync controls
-        $group->controls()->sync($request->input('controls', []));
+        // Sync measures
+        $group->measures()->sync($request->input('measures', []));
 
         return redirect('/groups');
     }
@@ -165,7 +166,7 @@ class UserGroupController extends Controller
         abort_if(Auth::user()->role !== 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         // Remove users from controls
-        $group->controls()->detach();
+        $group->measures()->detach();
 
         // Remove users from group
         $group->users()->detach();
