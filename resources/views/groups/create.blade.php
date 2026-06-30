@@ -45,8 +45,8 @@
 		    	</div>
 		        <div class="cell-lg-8 cell-md-10">
 		            <select data-role="select" data-filter="true" name="controls[]" id="controls" multiple>
-		                @foreach($all_controls as $control)
-							<option value="{{ $control->id }}" {{ (in_array($control->id, old('controls', []))) ? 'selected' : '' }}>{{ $control->name }}</option>
+		                @foreach($all_measures as $measure)
+							<option value="{{ $measure->id }}" {{ (in_array($measure->id, old('controls', []))) ? 'selected' : '' }}>{{ $measure->name }}</option>
 		                @endforeach
 		            </select>
 		        </div>

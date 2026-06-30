@@ -25,7 +25,7 @@ class UserGroup extends Model
         return $this->belongsToMany(User::class)->orderBy('name');
     }
 
-    public function controls()
+    public function measures()
     {
         return $this->belongsToMany(Measure::class, 'measure_user_group', 'user_group_id', 'measure_id')->whereNull('realisation_date')->orderBy('plan_date');
     }

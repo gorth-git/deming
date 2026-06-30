@@ -90,12 +90,12 @@
 			            </tr>
 			        </thead>
 			        <tbody>
-                @foreach($group->controls as $control)
+                @foreach($group->measures as $measure)
     				<tr>
 			            <td>
-                            @foreach($control->measures as $measure)
-                            <a id="{{ $measure['clause'] }}" href="/alice/show/{{ $measure['id'] }}">
-                                {{ $measure['clause'] }}
+                            @foreach($measure->controls as $control)
+                            <a id="{{ $control['clause'] }}" href="/alice/show/{{ $control['id'] }}">
+                                {{ $control['clause'] }}
                             </a>
                             @if (!$loop->last)
                             ,
@@ -103,18 +103,18 @@
                             @endforeach
                         </td>
 			            <td>
-                            {{ $control->name }}
+                            {{ $measure->name }}
                         </td>
 			            <td>
-                            {{ $control->scope }}
+                            {{ $measure->scope }}
 			            </td>
                         <td>
-                            <a id="{{ $control->plan_date }}" href="/bob/show/{{$control->id}}">
+                            <a id="{{ $measure->plan_date }}" href="/bob/show/{{$measure->id}}">
 			                <b>
-			                    @if( strtotime($control->plan_date) >= strtotime('now') )
-			                        <font color="green">{{ $control->plan_date }}</font>
+			                    @if( strtotime($measure->plan_date) >= strtotime('now') )
+			                        <font color="green">{{ $measure->plan_date }}</font>
 			                    @else
-			                        <font color="red">{{ $control->plan_date }}</font>
+			                        <font color="red">{{ $measure->plan_date }}</font>
 			                    @endif
 			                </b>
                             </a>

@@ -71,7 +71,7 @@
                 <td><a id="{{$group->name}}" href="/groups/{{ $group->id}}">{{ $group->name }}</a></td>
                 <td>{{ $group->description }}</td>
                 <td>{{ $group->users()->count()}} </td>
-                <td>{{ $group->controls()->count()}} </td>
+                <td>{{ $group->measures()->count()}} </td>
                 <td>
                     <a class="button primary small" href='/groups/{{ $group->id }}/edit'>
                         <span class="mif-wrench"></span>
