@@ -96,6 +96,12 @@ return [
             'handler' => NullHandler::class,
         ],
 
+        'ldap' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/ldap.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+        ],
+
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
