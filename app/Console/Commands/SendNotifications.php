@@ -50,7 +50,7 @@ class SendNotifications extends Command
             Log::info(
                 'SendNotifications - ' .
                 $measures .
-                ' measures(s) will expire within '.
+                ' measure(s) will expire within '.
                 config('deming.notification.expire-delay') .
                 ' days.'
             );
@@ -93,7 +93,7 @@ class SendNotifications extends Command
                         $txt .= '</a>';
                         // Space
                         $txt .= ' &nbsp; - &nbsp; ';
-                        // Clauses (security measures = measures)
+                        // Clauses (security measures = controls)
                         foreach ($measure->controls as $control) {
                             $txt .= '<a href="' . url('/alice/show/' . $control->id) . '">'. htmlentities($control->clause) . '</a>';
                             // Space
