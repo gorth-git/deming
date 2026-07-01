@@ -317,7 +317,9 @@ http://localhost:8000
 
 | Role | Email | Password |
 |---|---|---|
-| Administrator | `admin@admin.com` | `password` |
+| Administrator | `admin@admin.localhost` | `admin` |
+
+See [INSTALL.md](INSTALL.md) for details on how these default credentials are seeded.
 
 > **Important:** Change the default password immediately after first login via
 > **Settings → My profile → Change password**.
