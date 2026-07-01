@@ -30,9 +30,9 @@ class SendNotifications extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         Log::info('SendNotifications - Start.');
 
@@ -40,17 +40,17 @@ class SendNotifications extends Command
         if ($this->needCheck()) {
             Log::info('SendNotifications - notifications today');
 
-            $controls = Measure
-                ::where('status', 0)
-                    ->where('plan_date', '<=', Carbon::today()
-                        ->addDays(intval(config('deming.notification.expire-delay')))->toDateString())
-                    ->orderBy('plan_date')
-                    ->count();
+            $measures = Measure::query()
+                ->where('status', 0)
+                ->where('plan_date', '<=', Carbon::today()
+                    ->addDays(intval(config('deming.notification.expire-delay')))->toDateString())
+                ->orderBy('plan_date')
+                ->count();
 
             Log::info(
                 'SendNotifications - ' .
-                $controls .
-                ' control(s) will expire within '.
+                $measures .
+                ' measures(s) will expire within '.
                 config('deming.notification.expire-delay') .
                 ' days.'
             );
@@ -59,8 +59,9 @@ class SendNotifications extends Command
             $users = User::all();
 
             foreach ($users as $user) {
-                // get controls
-                $controls = Measure::select('measures.*')
+                // get measures
+                $measures = Measure::query()
+                    ->select('measures.*')
                     ->where('status', 0)
                     ->leftJoin('measure_user', 'measures.id', '=', 'measure_user.measure_id')
                     ->leftJoin('measure_user_group', 'measures.id', '=', 'measure_user_group.measure_id')
@@ -76,31 +77,31 @@ class SendNotifications extends Command
                     ->with('controls')
                     ->get();
 
-                if ($controls->count() > 0) {
+                if ($measures->count() > 0) {
                     App::setlocale($user->language);
                     $txt = '';
-                    foreach ($controls as $control) {
+                    foreach ($measures as $measure) {
                         // Date
-                        $txt .= '<a href="' . url('/bob/show/'. $control->id) . '">';
+                        $txt .= '<a href="' . url('/bob/show/'. $measure->id) . '">';
                         $txt .= '<b>';
-                        if (strtotime($control->plan_date) >= strtotime('today')) {
-                            $txt .= "<font color='green'>" . $control->plan_date .' </font>';
+                        if (strtotime($measure->plan_date) >= strtotime('today')) {
+                            $txt .= "<font color='green'>" . $measure->plan_date .' </font>';
                         } else {
-                            $txt .= "<font color='red'>" . $control->plan_date . '</font>';
+                            $txt .= "<font color='red'>" . $measure->plan_date . '</font>';
                         }
                         $txt .= '</b>';
                         $txt .= '</a>';
                         // Space
                         $txt .= ' &nbsp; - &nbsp; ';
-                        // Clauses (security measures = controls)
-                        foreach ($control->controls as $measure) {
-                            $txt .= '<a href="' . url('/alice/show/' . $measure->id) . '">'. htmlentities($measure->clause) . '</a>';
+                        // Clauses (security measures = measures)
+                        foreach ($measure->controls as $control) {
+                            $txt .= '<a href="' . url('/alice/show/' . $control->id) . '">'. htmlentities($control->clause) . '</a>';
                             // Space
                             $txt .= ' &nbsp; ';
                         }
                         $txt .= ' - &nbsp; ';
                         // Name
-                        $txt .= htmlentities($control->name);
+                        $txt .= htmlentities($measure->name);
                         $txt .= "<br>\n";
                     }
 
@@ -173,7 +174,7 @@ class SendNotifications extends Command
      *
      * @return bool
      */
-    private function needCheck()
+    private function needCheck(): bool
     {
         $check_frequency = config('deming.notification.frequency');
 
