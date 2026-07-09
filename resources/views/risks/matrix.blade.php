@@ -17,7 +17,7 @@
                     @foreach (\App\Models\Risk::STATUS_LABELS as $value => $label)
                         <option value="{{ $value }}"
                                 @if(($filters['status'] ?? '') === $value) selected @endif>
-                            {{ $label }}
+                            {{ trans($label) }}
                         </option>
                     @endforeach
                 </select>
@@ -249,7 +249,7 @@
                         <a href="/risk/index?status={{$status}}" class="no-underline">
                             <span class="badge  {{ \App\Models\Risk::STATUS_COLORS[$status] }}"
                                   style="padding:4px 10px;pointer-events:none">
-                                {{ $label }}
+                                {{ trans($label) }}
                             </span>
                         </a>
                     </td>
