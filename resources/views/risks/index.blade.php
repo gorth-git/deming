@@ -28,7 +28,7 @@
                     <option value="none">-- {{ trans("cruds.risk.fields.choose_status") }} --</option>
                     @foreach (\App\Models\Risk::STATUS_LABELS as $value => $label)
                         <option value="{{ $value }}" @if(Session::get('risk_status') === $value) selected @endif>
-                            {{ $label }}
+                            {{ trans($label) }}
                         </option>
                     @endforeach
                 </select>
@@ -128,7 +128,7 @@
             {{-- Status --}}
             <td>
                 <span class="badge {{ \App\Models\Risk::STATUS_COLORS[$risk->status] ?? 'secondary' }}">
-                    {{ \App\Models\Risk::STATUS_LABELS[$risk->status] ?? $risk->status }}
+                    {{ trans(\App\Models\Risk::STATUS_LABELS[$risk->status] ?? $risk->status) }}
                 </span>
             </td>
             {{-- Owner --}}
