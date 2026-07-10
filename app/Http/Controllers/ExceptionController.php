@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 /**
@@ -150,9 +151,10 @@ class ExceptionController extends Controller
 
         $exception = Exception::query()->findOrFail($id);
 
-        // Seul un brouillon ou un refus peut être modifié
+        // Seul un brouillon ou un refus peut être modifié par son créateur ;
+        // l'Administrateur peut modifier une exception quel que soit son statut.
         abort_if(
-            !in_array($exception->status, [Exception::STATUS_DRAFT, Exception::STATUS_REJECTED]),
+            !$exception->canEdit() && !Auth::user()->isAdmin(),
             Response::HTTP_FORBIDDEN,
             'Une exception soumise ou approuvée ne peut pas être modifiée.'
         );
@@ -174,15 +176,18 @@ class ExceptionController extends Controller
         $exception = Exception::query()->findOrFail($request->input('id'));
 
         abort_if(
-            !in_array($exception->status, [Exception::STATUS_DRAFT, Exception::STATUS_REJECTED]),
+            !$exception->canEdit() && !Auth::user()->isAdmin(),
             Response::HTTP_FORBIDDEN,
             'Une exception soumise ou approuvée ne peut pas être modifiée.'
         );
 
         $validated = $this->validateException($request);
 
-        // Une exception refusée et ré-éditée repasse en brouillon
-        if ($exception->status === Exception::STATUS_REJECTED) {
+        if (Auth::user()->isAdmin() && $request->filled('status')) {
+            // Changement de statut libre, réservé à l'Administrateur
+            $exception->overrideStatusAsAdmin($this->validateStatus($request));
+        } elseif ($exception->status === Exception::STATUS_REJECTED) {
+            // Une exception refusée et ré-éditée repasse en brouillon
             $validated['status']       = Exception::STATUS_DRAFT;
             $validated['approved_by']  = null;
             $validated['approved_at']  = null;
@@ -336,5 +341,15 @@ class ExceptionController extends Controller
             unset($validated['measure_id']);
         }
         return $validated;
+    }
+
+    /** Valide le statut soumis par un Administrateur (un des 5 états du workflow) */
+    private function validateStatus(Request $request): int
+    {
+        $validated = $request->validate([
+            'status' => ['required', 'integer', Rule::in(array_keys(Exception::STATUS_LABELS))],
+        ]);
+
+        return (int) $validated['status'];
     }
 }

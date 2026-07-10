@@ -127,4 +127,21 @@ class Exception extends Model
     {
         return in_array($this->status, [self::STATUS_DRAFT, self::STATUS_REJECTED]);
     }
+
+    /** Un entier correspond-il à un des cinq statuts du workflow ? */
+    public static function isValidStatus(int $status): bool
+    {
+        return array_key_exists($status, self::STATUS_LABELS);
+    }
+
+    /**
+     * Force le statut en dehors du workflow habituel (édition administrateur).
+     *
+     * Contourne volontairement la transition automatique « refusée → brouillon »
+     * appliquée lors d'une édition standard : un choix explicite de l'admin prévaut.
+     */
+    public function overrideStatusAsAdmin(int $status): void
+    {
+        $this->status = $status;
+    }
 }
