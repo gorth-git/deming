@@ -56,13 +56,13 @@ class Risk extends Model
     const STATUS_AVOIDED = 'avoided';
 
     const STATUS_LABELS = [
-        self::STATUS_NOT_EVALUATED => 'Non évalué',
-        self::STATUS_NOT_ACCEPTED => 'Non accepté',
-        self::STATUS_TEMPORARILY_ACCEPTED => 'Accepté temporairement',
-        self::STATUS_ACCEPTED => 'Accepté',
-        self::STATUS_MITIGATED => 'Mitigé',
-        self::STATUS_TRANSFERRED => 'Transféré',
-        self::STATUS_AVOIDED => 'Évité',
+        self::STATUS_NOT_EVALUATED => 'cruds.risk.status.not_evaluated',
+        self::STATUS_NOT_ACCEPTED => 'cruds.risk.status.not_accepted',
+        self::STATUS_TEMPORARILY_ACCEPTED => 'cruds.risk.status.temporarily_accepted',
+        self::STATUS_ACCEPTED => 'cruds.risk.status.accepted',
+        self::STATUS_MITIGATED => 'cruds.risk.status.mitigated',
+        self::STATUS_TRANSFERRED => 'cruds.risk.status.transferred',
+        self::STATUS_AVOIDED => 'cruds.risk.status.avoided',
     ];
 
     const STATUS_COLORS = [
@@ -179,6 +179,12 @@ class Risk extends Model
     {
         return $this->next_review_at !== null
             && $this->next_review_at->isPast();
+    }
+
+    /** Libellé traduit du statut courant (cf. Exception::getStatusLabelAttribute) */
+    public function getStatusLabelAttribute(): string
+    {
+        return trans(self::STATUS_LABELS[$this->status]);
     }
 
     // -------------------------------------------------------------------------
