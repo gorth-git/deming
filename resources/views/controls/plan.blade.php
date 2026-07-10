@@ -17,9 +17,9 @@
         	</div>
     		<div class="cell-lg-6 cell-md-8">
     			<select data-role="select" name="controls[]" multiple>
-    				@foreach($all_controls as $m)
-    				    <option value="{{ $m->id }}" {{ in_array($m->id, old("controls", $controls)) ? "selected" : "" }}>
-                            {{ $m->clause }} - {{$m->name}}
+    				@foreach($all_controls as $control)
+    				    <option value="{{ $control->id }}" {{ in_array($control->id, old("controls", $controls)) ? "selected" : "" }}>
+                            {{ $control->clause }} - {{$control->name}}
                         </option>
     			    @endforeach
     			 </select>

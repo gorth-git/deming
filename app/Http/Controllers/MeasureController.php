@@ -549,7 +549,7 @@ class MeasureController extends Controller
         );
 
         $all_controls = DB::table('controls')
-            ->select('id', 'clause')
+            ->select('id', 'clause', 'name')
             ->orderBy('id')
             ->get();
 
@@ -1047,7 +1047,7 @@ class MeasureController extends Controller
         }
 
         $all_controls = DB::table('controls')
-            ->select('id', 'clause')
+            ->select('id', 'clause', 'name')
             ->orderBy('id')
             ->get();
 
