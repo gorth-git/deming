@@ -74,6 +74,24 @@
                 </div>
             </div>
 
+            @if (Auth::user()->isAdmin())
+            {{-- Statut (Administrateur uniquement) --}}
+            <div class="row">
+                <div class="cell-lg-1 cell-md-2">
+                    <strong>{{ trans('cruds.exception.fields.status') }}</strong>
+                </div>
+                <div class="cell-lg-6 cell-md-8">
+                    <select name="status" style="width: 100%; height: 36px; padding: 4px 8px; border: 1px solid #ababab; border-radius: 2px; background-color: #fff;">
+                        @foreach($statuses as $value => $label)
+                            <option value="{{ $value }}" {{ ((int) old('status', $exception->status)) === $value ? 'selected' : '' }}>
+                                {{ trans($label) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            @endif
+
             {{-- Période de validité --}}
             <div class="row">
                 <div class="cell-lg-1 cell-md-2">

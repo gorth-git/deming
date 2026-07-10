@@ -69,9 +69,44 @@ test('admin can edit a draft exception', function () {
     $this->actingAs($this->admin)->get("/exception/edit/{$exception->id}")->assertStatus(200);
 });
 
-test('cannot edit a submitted exception', function () {
+test('non-admin cannot edit a submitted exception', function () {
     $exception = Exception::factory()->submitted()->create();
-    $this->actingAs($this->admin)->get("/exception/edit/{$exception->id}")->assertStatus(403);
+    $this->actingAs($this->user)->get("/exception/edit/{$exception->id}")->assertStatus(403);
+});
+
+test('admin can edit a submitted exception', function () {
+    $exception = Exception::factory()->submitted()->create();
+    $this->actingAs($this->admin)->get("/exception/edit/{$exception->id}")->assertStatus(200);
+});
+
+test('admin can edit an approved exception', function () {
+    $exception = Exception::factory()->create(['status' => Exception::STATUS_APPROVED]);
+    $this->actingAs($this->admin)->get("/exception/edit/{$exception->id}")->assertStatus(200);
+});
+
+test('admin can update a submitted exception', function () {
+    $exception = Exception::factory()->submitted()->create();
+
+    $this->actingAs($this->admin)
+        ->post('/exception/save', [
+            'id' => $exception->id,
+            'name' => 'Updated while submitted',
+            'status' => Exception::STATUS_SUBMITTED,
+        ])
+        ->assertRedirect();
+
+    $this->assertDatabaseHas('exceptions', ['id' => $exception->id, 'name' => 'Updated while submitted']);
+});
+
+test('non-admin cannot update a submitted exception', function () {
+    $exception = Exception::factory()->submitted()->create();
+
+    $this->actingAs($this->user)
+        ->post('/exception/save', [
+            'id' => $exception->id,
+            'name' => 'Should not be saved',
+        ])
+        ->assertStatus(403);
 });
 
 test('admin can update a draft exception', function () {
@@ -142,4 +177,38 @@ test('non-admin cannot delete an exception', function () {
     $this->actingAs($this->user)
         ->get("/exception/delete/{$exception->id}")
         ->assertStatus(403);
+});
+
+test('admin can change the status directly via the edit form', function () {
+    $exception = Exception::factory()->create(['status' => Exception::STATUS_DRAFT]);
+
+    $this->actingAs($this->admin)
+        ->post('/exception/save', [
+            'id' => $exception->id,
+            'name' => $exception->name,
+            'status' => Exception::STATUS_APPROVED,
+        ])
+        ->assertRedirect();
+
+    $this->assertDatabaseHas('exceptions', [
+        'id' => $exception->id,
+        'status' => Exception::STATUS_APPROVED,
+    ]);
+});
+
+test('non-admin cannot change the status even by forging the field', function () {
+    $exception = Exception::factory()->create(['status' => Exception::STATUS_DRAFT]);
+
+    $this->actingAs($this->user)
+        ->post('/exception/save', [
+            'id' => $exception->id,
+            'name' => $exception->name,
+            'status' => Exception::STATUS_APPROVED,
+        ])
+        ->assertRedirect();
+
+    $this->assertDatabaseHas('exceptions', [
+        'id' => $exception->id,
+        'status' => Exception::STATUS_DRAFT,
+    ]);
 });
