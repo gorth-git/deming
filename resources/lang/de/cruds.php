@@ -15,7 +15,8 @@ return [
         'show' => 'Aktionsplan',
         'create' => 'Aktionsplan erzeugen',
         'edit' => 'Aktionsplan ändern',
-        'close' => 'Aktionsplan zäune',
+        'title' => 'Aktionen',
+        'close' => 'Aktionsplan schließen',
         'fields' => [
             'clause' => 'Klausel',
             'name' => 'Name',
@@ -36,7 +37,7 @@ return [
             'remediation' => 'Abhilfemaßnahme',
             'criticity' => 'Kritikalität',
             'cause' => 'Ursache',
-            'clauses' => 'Klausel',
+            'clauses' => 'Klauseln',
             'owners' => 'Besitzer',
             'status' => 'Status',
             'status_open' => 'Offen',
@@ -65,8 +66,8 @@ return [
         'choose' => 'Wähle ein Attribut',
         'title' => 'Attribute'
     ],
-     'control' => [
-         'description' => 'Kontrollen',
+     'measure' => [
+         'description' => '',
          'fields' => [
             'action_plan' => 'Aktionsplan',
             'attributes' => 'Attribute',
@@ -78,11 +79,11 @@ return [
             'domain' => 'Domäne',
             'indicator' => 'Funktion',
             'measure' => 'Maßnahme',
-            'model' => 'Model',
+            'model' => 'Modell',
             'name' => 'Name',
             'next' => 'Nächstes',
             'note' => 'Notiz',
-            'objective' => 'Zilelsetzung',
+            'objective' => 'Zielsetzung',
             'observations' => 'Beobachtungen',
             'plan_date' => 'Planungsdatum',
             'period' => 'Periode',
@@ -101,32 +102,33 @@ return [
             'clauses' => 'Klauseln',
             'input' => 'Eingabe-Elemente',
             'owners' => 'Verantwortlich',
+            'groups' => 'Gruppen'
          ],
         'error' => [
             'made' => 'Diese Maßnahme wurde bereits umgesetzt.',
             'duplicate' => 'Diese Maßnahme existiert bereits.',
         ],
-         'checklist' => 'Maßnahmentabelle',
-         'create' => 'Erstelle eine Maßnahme',
-         'list' => 'Liste der Maßnahmen',
-         'edit' => 'Maßnahme ändern',
-         'history' => 'Zeitplan',
-         'make' => 'Maßnahme durchführen',
-         'plan' => 'Planung einer Maßnahme',
-         'radar' => 'Status der Sicherheitsmaßnahmen',
-	 'status_date' => 'Stand der Kontrolle am',
-         'title' => 'Maßnahmen',
-         'title_singular' => 'Maßnahme',
-         'groupBy' => 'Gruppiert nach',
-         'calendar' => 'Kalender',
-       	 'create_action' => 'Aktionsplan erstellen',
-         'confirm_delete' => 'Möchten Sie die Kontrollen löschen?'
-     ],
+        'checklist' => 'Maßnahmentabelle',
+        'create' => 'Erstelle eine Maßnahme',
+        'list' => 'Liste der Maßnahmen',
+        'edit' => 'Maßnahme ändern',
+        'history' => 'Zeitplan',
+        'make' => 'Maßnahme durchführen',
+        'plan' => 'Planung einer Maßnahme',
+        'radar' => 'Status der Sicherheitsmaßnahmen',
+        'status_date' => 'Stand der Kontrolle am',
+        'title' => 'Maßnahmen',
+        'title_singular' => 'Maßnahme',
+        'groupBy' => 'Gruppiert nach',
+        'create_action' => 'Aktionsplan erstellen',
+        'calendar' => 'Kalender',
+        'confirm_delete' => 'Möchten Sie die Kontrollen löschen?'
+    ],
      'notification' => [
          'subject' => 'Liste der durchzuführenden Maßnahmen',
      ],
-     'measure' => [
-         'title' => 'Maßnahmen',
+     'control' => [
+         'title' => 'Kontrolle',
          'fields' => [
              'domain' => 'Domäne',
              'clause' => 'Klausel',
@@ -139,10 +141,10 @@ return [
              'periodicity' => 'Wiederholung',
              'input' => 'Eingabe-Elemente',
          ],
-         'show' => 'Maßnahmen',
-         'index' => 'Liste der Maßnahmen',
-         'create' => 'Erstelle eine Maßnahme',
-         'edit' => 'Ändere eine Maßnahme',
+         'show' => 'Kontrolle',
+         'index' => 'Liste der Kontrollen',
+         'create' => 'Eine Kontrolle hinzufügen',
+         'edit' => 'Eine Kontrolle bearbeiten',
          'plan' => 'Maßnahmenplanung'
      ],
      'domain' => [
@@ -159,7 +161,7 @@ return [
          'choose' => 'Wähle eine Domäne',
          'title' => 'Domänen',
          'radar' => 'Ergebnis der Kontrollen nach Domänen',
-	 'measure_date' => 'Stand der Maßnahmen zum',
+         'measure_date' => 'Stand der Maßnahmen zum',
      ],
      'document' => [
         'title' => [
@@ -184,7 +186,7 @@ return [
         'model' => [
             'control' => 'Vorlage Kontrollblatt',
             'report' => 'Vorlage Lenkungsbericht',
-            'custom' => 'Benutzerdefiniertes Model',
+            'custom' => 'Benutzerdefiniertes Modell',
         ],
         'count' => 'Anzahl an Dokumenten',
         'total_size' => 'Gesamtgröße',
@@ -196,13 +198,14 @@ return [
          'report_title' => 'Report',
          'steering' => 'ISMS Lenkungsbericht',
          'data_export_title' => 'Datenexport',
-         'users_export' => 'Exportiere Benutzern',
-         'attributes_export' => 'Exportiere Attributen',
+         'users_export' => 'Exportiere Benutzer',
          'domains_export'=> 'Exportiere Domänen',
+         'attributes_export' => 'Exportiere Attribute',
          'measures_export' => 'Exportiere Sicherheitsmaßnahmen',
          'controls_export' => 'Exportiere Kontrollen',
-	 'import' => 'Import',
-	 'actions_export' => 'Exportiere Aktionsplan',
+         'import' => 'Import',
+         'actions_export' => 'Exportiere Aktionsplan',
+         'risks_export' => 'Risikoregister exportieren',
      ],
     'group' => [
          'index' => 'Liste der Gruppen',
@@ -212,16 +215,16 @@ return [
          'fields' => [
              'name' => 'Name',
              'description' => 'Beschreibung',
-             'users' => 'Users',
-             'controls' => 'Controls',
+             'users' => 'Benutzer',
+             'controls' => 'Kontrollen',
              ],
          ],
     'imports' => [
          'index' => 'Import',
-	 'title' => 'Importiere Sicherheitsmaßnahmen',
-	 'current' => 'Aktuelle Sicherheitsmaßnahme',
-	 'or' => 'oder',
-	 'remove_all' => 'Lösche alle anderen Maßnahmen und Kontrollen',
+         'title' => 'Importiere Sicherheitsmaßnahmen',
+         'current' => 'Aktuelle Sicherheitsmaßnahme',
+         'or' => 'oder',
+         'remove_all' => 'Lösche alle anderen Maßnahmen und Kontrollen',
          'fake' => 'Erzeuge Beispielmaßnahmen',
          'format' => 'Das Importformat ist ein XLSX-Dokument mit diesen Spalten',
          'framework' => 'Rahmen',
@@ -237,7 +240,7 @@ return [
          'description' => 'Beschreibung',
          'description_helper' => 'Die Beschreibung der Sicherheits-Maßnahme',
          'attributes' => 'Attribute',
-         'attributes_helper' => 'List der Tags (#... #... #...)',
+         'attributes_helper' => 'Liste der Tags (#... #... #...)',
          'input' => 'Eingabe-Elemente',
          'input_helper' => 'Die Eingabe-Elemente',
          'model' => 'Modell',
@@ -293,7 +296,8 @@ return [
              'password' => 'Passwort',
              'email' => 'E-Mail',
              'language' => 'Sprache',
-             'controls' => 'Kontrollen'
+             'controls' => 'Kontrollen',
+             'groups' => 'Gruppen'
          ],
          'roles' => [
              'admin' => 'Administrator',
@@ -308,9 +312,9 @@ return [
                  'title' => 'Konfiguration der Benachrichtigungen',
                  'title_short' => 'Benachrichtigungen',
                  'help' => 'Hier können Sie die Benachrichtigungen konfigurieren, die die Benutzer per E-Mail erhalten.',
-		 'message_subject' => 'Betreff',
-		 'message_content' => 'Nachrichteninhalt',
-		 'message_default_content' => '<!DOCTYPE html>
+                 'message_subject' => 'Betreff',
+                 'message_content' => 'Nachrichteninhalt',
+                 'message_default_content' => '<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="ISO-8859-1">
@@ -342,12 +346,12 @@ return [
 
         // Seitentitel
         'list' => 'Risikoliste',
+        'title_singular' => 'Risk',
         'create' => 'Neues Risiko',
         'edit' => 'Risiko bearbeiten',
         'matrix' => 'Risikomatrix',
         'singular' => 'Risiko',
         'plural' => 'Risiken',
-        'export' => 'Risiken',
 
         // Risikostufen (in Badges und Zählern angezeigt)
         'levels' => [
@@ -369,6 +373,7 @@ return [
 
             // Bewertung
             'probability' => 'Wskt.',
+            'threat' => 'Bedrohung',
             'probability_comment' => 'Kommentar Wahrscheinlichkeit',
             'impact' => 'Auswirkung',
             'impact_comment' => 'Kommentar Auswirkung',
@@ -386,7 +391,7 @@ return [
             'actions_hint' => 'Erforderlich bei Status = Nicht akzeptiert',
 
             // Planung
-            'review_frequency' => 'Üprf.-Häufgkt.',// 'Überprüfungshäufigkeit',
+            'review_frequency' => 'Üprf.-Häufgkt.',
             'next_review' => 'Nächste Überprüfung',
             'overdue' => 'Überprüfung überfällig',
             'overdue_all' => 'Alle',
@@ -394,8 +399,8 @@ return [
 
             // Dashboard / Matrix
             'total' => 'Gesamt',
-            'by_status' => 'Verteilung nach Status',
             'by_risks' => 'Verteilung nach Risiken',
+            'by_status' => 'Verteilung nach Status',
         ],
 
         // Behandlungsstatus
@@ -407,95 +412,120 @@ return [
             'mitigated' => 'Gemindert',
             'transferred' => 'Übertragen',
             'avoided' => 'Vermieden',
-            ],
+        ],
+    ],
+
+    // -------------------------------------------------------------------------
+    // Konfiguration der Risikobewertung
+    // -------------------------------------------------------------------------
+    'risk_scoring' => [
+
+        // Seitentitel
+        'list' => 'Methoden zur Risikobewertung',
+        'create' => 'Neue Bewertungskonfiguration',
+        'edit' => 'Bearbeite Bewertungskonfiguration',
+        'activate' => 'Diese Konfiguration aktivieren',
+
+        // Aktionen auf Stufen / Schwellenwerte
+        'add_level' => 'Level hinzufügen',
+        'add_threshold' => 'Schwellenwert hinzufügen',
+
+        // Kontexthilfen
+        'levels_hint' => 'Mindestens 2 Stufen. Der Wert muss eine eindeutige ganze Zahl sein.',
+        'thresholds_hint' => 'Der letzte Schwellenwert hat keine Obergrenze (Catch-All). Sortiere die Ergebnisse vom niedrigsten zum höchsten Wert.',
+
+        // Formularfelder
+        'fields' => [
+            'name' => 'Konfigurationsname',
+            'formula' => 'Berechnungsformel',
+            'levels' => 'Stufe',
+            'thresholds' => 'Klassifizierungsschwellenwerte',
+            'value' => 'Wert',
+            'label' => 'Label',
+            'description' => 'Beschreibung',
+            'level_key' => 'Interner Schlüssel',
+            'score_max' => 'Max Wert (∞ = größter Wert)',
+            'color' => 'Farbe des Abzeichens',
         ],
 
-        // -------------------------------------------------------------------------
-        // Konfiguration der Risikobewertung
-        // -------------------------------------------------------------------------
-        'risk_scoring' => [
+        // Verfügbare Farben für Schwellenwerte
+        'colors' => [
+            'success' => 'Grün',
+            'warning' => 'Orange',
+            'danger' => 'Rot',
+            'alert' => 'Dunkelrot',
+            'info' => 'Blau',
+            'secondary' => 'Grau',
+        ],
 
-            // Seitentitel
-            'list' => 'Risikoklassifizierungsmethoden',
-            'create' => 'Neue Klassifizierung',
-            'edit' => 'Klassifizierung bearbeiten',
-            'activate' => 'Diese Konfiguration aktivieren',
+        // Verfügbare Formeln (Bezeichnungen)
+        'formulas' => [
+            'probability_x_impact' => 'Wahrscheinlichkeit × Auswirkung',
+            'likelihood_x_impact' => 'Wahrscheinlichkeit × Auswirkung (BSI 200-3)',
+            'additive' => 'Wahrscheinlichkeit + Auswirkung',
+            'max_pi' => 'max(Wahrscheinlichkeit, Auswirkung)',
+            'monarc' => 'MONARC (Auswirkung × Bedrohung × Verwundbarkeit)',
+        ],
 
-            // Aktionen auf Stufen / Schwellenwerte
-            'add_level' => 'Stufe hinzufügen',
-            'add_threshold' => 'Schwellenwert hinzufügen',
 
-            // Kontexthilfen
-            'levels_hint' => 'Mindestens 2 Stufen. Der Wert muss eine eindeutige ganze Zahl sein.',
-            'thresholds_hint' => 'Der letzte Schwellenwert hat keine Obergrenze (Auffangwert). Vom niedrigsten zum höchsten Score sortieren.',
-
-            // Formularfelder
-            'fields' => [
-                'name' => 'Konfiguration',
-                'formula' => 'Berechnung',
-                'levels' => 'Stufen',
-                'thresholds' => 'Klassifizierungsschwellen',
-                'value' => 'Wert',
-                'label' => 'Bezeichnung',
-                'description' => 'Beschreibung',
-                'level_key' => 'Interner Schlüssel',
-                'score_max' => 'Max. Punktzahl',
-                'color' => 'Farbe',
+        // Standardwerte bei der Erstellung einer neuen Konfiguration
+        'defaults' => [
+            'probability_levels' => [
+                'rare' => 'Selten',
+                'unlikely' => 'Unwahrscheinlich',
+                'possible' => 'Möglich',
+                'likely' => 'Wahrscheinlich',
+                'very_likely' => 'Sehr wahrscheinlich',
             ],
-
-            // Verfügbare Farben für Schwellenwerte
-            'colors' => [
-                'success' => 'Grün',
-                'warning' => 'Orange',
-                'danger' => 'Rot',
-                'alert' => 'Dunkelrot',
-                'info' => 'Blau',
-                'secondary' => 'Grau',
+            'exposure_levels' => [
+                'offline' => 'Offline',
+                'internal' => 'Intern',
+                'internet' => 'Internet',
             ],
-
-            // Verfügbare Formeln (Bezeichnungen)
-            'formulas' => [
-                'probability_x_impact' => 'Wahrscheinlichkeit × Auswirkung',
-                'likelihood_x_impact' => 'Eintrittswahrscheinlichkeit × Auswirkung (BSI 200-3)',
-                'additive' => 'Wahrscheinlichkeit + Auswirkung',
-                'max_pi' => 'max(Wahrscheinlichkeit, Auswirkung)',
+            'vulnerability_levels' => [
+                'none' => 'Keine',
+                'known' => 'Bekannt',
+                'exploitable_int' => 'Intern ausnutzbar',
+                'exploitable_ext' => 'Extern ausnutzbar',
             ],
-
-            // Standardwerte bei der Erstellung einer neuen Konfiguration
-            'defaults' => [
-                'probability_levels' => [
-                    'rare' => 'Selten',
-                    'unlikely' => 'Unwahrscheinlich',
-                    'possible' => 'Möglich',
-                    'likely' => 'Wahrscheinlich',
-                    'very_likely' => 'Sehr wahrscheinlich',
-                ],
-                'exposure_levels' => [
-                    'offline' => 'Offline',
-                    'internal' => 'Intern',
-                    'internet' => 'Internet',
-                ],
-                'vulnerability_levels' => [
-                    'none' => 'Keine',
-                    'known' => 'Bekannt',
-                    'exploitable_int' => 'Intern ausnutzbar',
-                    'exploitable_ext' => 'Extern ausnutzbar',
-                ],
-                'impact_levels' => [
-                    'negligible' => 'Vernachlässigbar',
-                    'low' => 'Gering',
-                    'moderate' => 'Mäßig',
-                    'high' => 'Hoch',
-                    'critical' => 'Kritisch',
-                ],
-                'risk_thresholds' => [
-                    'low' => 'Gering',
-                    'medium' => 'Mittel',
-                    'high' => 'Hoch',
-                    'critical' => 'Kritisch',
-                ],
+            'impact_levels' => [
+                'negligible' => 'Vernachlässigbar',
+                'low' => 'Gering',
+                'moderate' => 'Mäßig',
+                'high' => 'Hoch',
+                'critical' => 'Kritisch',
+            ],
+            'risk_thresholds' => [
+                'low' => 'Gering',
+                'medium' => 'Mittel',
+                'high' => 'Hoch',
+                'critical' => 'Kritisch',
+            ],
+            'monarc_impact_levels' => [
+                0 => ['label' => 'Vernachlässigbar', 'description' => 'Keine nennenswerten Auswirkungen auf Ruf, Betrieb, rechtliche oder finanzielle Aspekte oder Personen'],
+                1 => ['label' => 'Gering',         'description' => 'Begrenzte Folgen, die ohne spürbare Unterbrechung des Geschäftsbetriebs bewältigt werden können'],
+                2 => ['label' => 'Erheblich',     'description' => 'Spürbare Unterbrechung des Geschäftsbetriebs, messbare Reputationsschäden, erhebliche finanzielle oder rechtliche Folgen'],
+                3 => ['label' => 'Kritisch',       'description' => 'Schwere Störung des Geschäftsbetriebs, massiver Reputationsschaden, erhebliche rechtliche oder finanzielle Folgen oder Schäden für Personen'],
+                4 => ['label' => 'Vital',          'description' => 'Gefährdet die Organisation, irreversible Folgen oder schwere Schäden für Personen'],
+            ],
+            'monarc_threat_levels' => [
+                0 => ['label' => 'Nicht anwendbar', 'description' => 'Bedrohung in diesem Kontext unmöglich'],
+                1 => ['label' => 'Unwahrscheinlich', 'description' => 'Ist noch nie aufgetreten, sehr unwahrscheinlich'],
+                2 => ['label' => 'Möglich',         'description' => 'Keine eindeutigen Beweise, könnte aber eintreten'],
+                3 => ['label' => 'Wahrscheinlich',  'description' => 'Ist in der Organisation oder ihrer Umgebung bereits aufgetreten'],
+                4 => ['label' => 'Sehr wahrscheinlich', 'description' => 'Ist bereits mehrfach aufgetreten'],
+            ],
+            'monarc_vulnerability_levels' => [
+                0 => ['label' => 'Nicht vorhanden', 'description' => 'Alle Sicherheitskontrollen sind eingerichtet, dokumentiert und wirksam'],
+                1 => ['label' => 'Sehr gering',     'description' => 'Kontrollen sind eingerichtet und werden überwacht, geringfügige Verbesserungen möglich'],
+                2 => ['label' => 'Gering',          'description' => 'Kontrollen weitgehend vorhanden, werden aber nicht systematisch überwacht'],
+                3 => ['label' => 'Mittel',          'description' => 'Kontrollen teilweise vorhanden, Lücken identifiziert'],
+                4 => ['label' => 'Hoch',            'description' => 'Kontrollen in der Entstehung begriffen oder unwirksam'],
+                5 => ['label' => 'Sehr hoch',       'description' => 'Vollständiges Fehlen von Sicherheitskontrollen'],
             ],
         ],
+    ],
+
     'exception' => [
         'list' => 'Ausnahmebehandlung',
         'create' => 'Neue Ausnahme',
@@ -507,6 +537,12 @@ return [
         'confirm_submit' => 'Diese Ausnahme zur Validierung einreichen?',
         'confirm_approve' => 'Diese Ausnahme genehmigen?',
         'confirm_reject' => 'Diese Ausnahme ablehnen?',
+        'actions' => [
+            'submit' => 'Absenden',
+            'approve' => 'Genehmigen',
+            'reject' => 'Ablehnen',
+        ],
+
         'status' => [
             'draft' => 'Entwurf',
             'submitted' => 'Eingereicht',
@@ -514,14 +550,10 @@ return [
             'rejected' => 'Abgelehnt',
             'expired' => 'Abgelaufen',
         ],
-        'actions' => [
-            'submit' => 'Absenden',
-            'approve' => 'Genehmigen',
-            'reject' => 'Ablehnen',
-        ],
+
         'fields' => [
             'name' => 'Name',
-            'measure' => 'Verknüpft control',
+            'measure' => 'Verknüpfte Kontrolle',
             'no_measure' => 'Keine Kontrollmaßnahme',
             'description' => 'Beschreibung',
             'justification' => 'Begründung',
@@ -539,6 +571,7 @@ return [
             'choose_status' => 'Filtern nach Status',
             'choose_measure' => 'Nach Kontrollgruppe filtern',
             'expired_only' => 'Nur abgelaufene',
-            ],
         ],
-    ];
+    ],
+
+];
