@@ -1,6 +1,8 @@
 @extends("layout")
 
 @section("content")
+    @include('partials.errors')
+
     <div data-role="panel" data-title-caption="{{ trans('cruds.user.show') }}" data-collapsible="false" data-title-icon="<span class='mif-person'></span>">
 		<div class="grid">
 	    	<div class="row">
