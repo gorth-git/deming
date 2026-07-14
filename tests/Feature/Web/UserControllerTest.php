@@ -101,6 +101,72 @@ test('admin can delete a user', function () {
     $this->assertDatabaseMissing('users', ['id' => $target->id]);
 });
 
+test('admin cannot delete a user assigned to an action', function () {
+    // Regression test: deleting a user still owning an action used to fail with
+    // SQLSTATE[23000] Integrity constraint violation on the action_user pivot table.
+    // The user must now be blocked from deleting with an explicit error message instead.
+    $target = User::factory()->create();
+    $action = \App\Models\Action::factory()->create();
+    $action->owners()->attach($target->id);
+
+    $this->actingAs($this->admin)
+        ->from("/users/{$target->id}")
+        ->delete("/users/{$target->id}")
+        ->assertRedirect("/users/{$target->id}")
+        ->assertSessionHasErrors('actions');
+
+    $this->assertDatabaseHas('users', ['id' => $target->id]);
+    $this->assertDatabaseHas('action_user', ['user_id' => $target->id]);
+});
+
+test('admin cannot delete a user belonging to a group', function () {
+    $target = User::factory()->create();
+    $group = \App\Models\UserGroup::factory()->create();
+    $group->users()->attach($target->id);
+
+    $this->actingAs($this->admin)
+        ->from("/users/{$target->id}")
+        ->delete("/users/{$target->id}")
+        ->assertRedirect("/users/{$target->id}")
+        ->assertSessionHasErrors('groups');
+
+    $this->assertDatabaseHas('users', ['id' => $target->id]);
+});
+
+test('admin cannot delete a user assigned to a measure', function () {
+    $target = User::factory()->create();
+    $measure = \App\Models\Measure::factory()->create();
+    $measure->users()->attach($target->id);
+
+    $this->actingAs($this->admin)
+        ->from("/users/{$target->id}")
+        ->delete("/users/{$target->id}")
+        ->assertRedirect("/users/{$target->id}")
+        ->assertSessionHasErrors('measures');
+
+    $this->assertDatabaseHas('users', ['id' => $target->id]);
+});
+
+test('admin sees one error message per type of link when deleting a user', function () {
+    $target = User::factory()->create();
+
+    $group = \App\Models\UserGroup::factory()->create();
+    $group->users()->attach($target->id);
+
+    $measure = \App\Models\Measure::factory()->create();
+    $measure->users()->attach($target->id);
+
+    $action = \App\Models\Action::factory()->create();
+    $action->owners()->attach($target->id);
+
+    $response = $this->actingAs($this->admin)
+        ->from("/users/{$target->id}")
+        ->delete("/users/{$target->id}");
+
+    $response->assertSessionHasErrors(['groups', 'measures', 'actions']);
+    $this->assertDatabaseHas('users', ['id' => $target->id]);
+});
+
 test('non-admin cannot delete a user', function () {
     $target = User::factory()->create();
     $this->actingAs($this->user)->delete("/users/{$target->id}")->assertStatus(403);

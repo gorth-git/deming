@@ -185,6 +185,27 @@ class UserController extends Controller
     {
         // Only for administrator role
         abort_if(! $this->isAdmin(), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        // Refuse deletion if the user is still linked to other resources,
+        // one message per type of link, instead of silently detaching them.
+        $errors = [];
+
+        if ($user->groups()->exists()) {
+            $errors['groups'] = __("Cet utilisateur appartient à un ou plusieurs groupes d'utilisateurs.");
+        }
+
+        if ($user->measures()->exists()) {
+            $errors['measures'] = __('Cet utilisateur est associé à une ou plusieurs mesures.');
+        }
+
+        if ($user->actions()->exists()) {
+            $errors['actions'] = __('Cet utilisateur est associé à une ou plusieurs actions.');
+        }
+
+        if (! empty($errors)) {
+            return back()->withErrors($errors);
+        }
+
         $user->delete();
         return redirect('/users');
     }
