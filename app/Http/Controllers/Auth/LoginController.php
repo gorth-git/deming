@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use LdapRecord\Auth\BindException;
 use LdapRecord\Container;
 use LdapRecord\Models\Entry as LdapEntry;
+use LdapRecord\Query\Builder as LdapQueryBuilder;
 
 class LoginController extends Controller
 {
@@ -32,6 +33,38 @@ class LoginController extends Controller
     }
 
     /**
+     * Construit la requête LDAP de recherche de l'utilisateur : restriction
+     * de base DN et de groupe optionnelles (AND), combinées à un filtre OR
+     * isolé sur les attributs de login configurés.
+     */
+    protected function buildLdapUserQuery(string $appUsername, array $attrs): LdapQueryBuilder
+    {
+        $query = LdapEntry::query();
+
+        // Optionnel : restreindre à une OU si configuré
+        $base = trim((string) config('app.ldap_users_base_dn'));
+        if ($base !== '') {
+            $query->in($base);
+        }
+
+        // Optionel : resteindre à un group si configuré
+        $group = trim((string) config('app.ldap_group'));
+        if ($group !== '') {
+            $query->where('memberOf', $group);
+        }
+
+        // Filtre OR sur les attributs configurés, isolé dans son propre
+        // groupe LDAP pour ne pas "déborder" sur la restriction memberOf
+        $query->orFilter(function ($q) use ($attrs, $appUsername) {
+            foreach ($attrs as $attr) {
+                $q->orWhereEquals($attr, $appUsername);
+            }
+        });
+
+        return $query;
+    }
+
+    /**
      * LDAP bind (LDAPRecord v2)
      */
     protected function ldapBindAndGetUser(string $appUsername, string $password): ?LdapEntry
@@ -42,20 +75,6 @@ class LoginController extends Controller
         }
 
         try {
-            $query = LdapEntry::query();
-
-            // Optionnel : restreindre à une OU si configuré
-            $base = trim((string) config('app.ldap_users_base_dn'));
-            if ($base !== '') {
-                $query->in($base);
-            }
-
-            // Optionel : resteindre à un group si configuré
-            $group = trim((string) config('app.ldap_group'));
-            if ($group !== '') {
-                $query->where('memberOf', $group);
-            }
-
             // Attributs de login à tester côté LDAP (uid, sAMAccountName, etc.)
             $attrs = array_values(array_filter(array_map('trim', explode(',', (string) config('app.ldap_login_attributes')))));
             if (empty($attrs)) {
@@ -63,12 +82,7 @@ class LoginController extends Controller
                 return null;
             }
 
-            // Filtre OR sur les attributs configurés
-            $query->where(function ($q) use ($attrs, $appUsername) {
-                foreach ($attrs as $attr) {
-                    $q->orWhereEquals($attr, $appUsername);
-                }
-            });
+            $query = $this->buildLdapUserQuery($appUsername, $attrs);
 
             // Collision guard
             $results = $query->limit(2)->get();
