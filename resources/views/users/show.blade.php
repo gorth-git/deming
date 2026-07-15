@@ -157,6 +157,13 @@
 	            </button>
 	        </form>
 	        @endif
+			@if (Auth::User()->role==1)
+			<a class="button" href="/logs/history/user/{{ $user->id }}">
+				<span class="mif-log-file"></span>
+				&nbsp;
+				{{ trans('common.history') }}
+			</a>
+			@endif
             <a class="button" href="/users">
 				<span class="mif-cancel"></span>
 				&nbsp;
