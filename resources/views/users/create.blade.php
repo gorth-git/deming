@@ -52,9 +52,10 @@
                     <select name="role" data-role="select">
 					    <option value="1" {{ old('role')==1 ? "selected" : "" }}>{{ trans('cruds.user.roles.admin') }}</option>
 					    <option value="2" {{ old('role')==2 ? "selected" : "" }}>{{ trans('cruds.user.roles.user') }}</option>
-                        <option value="5" {{ old('role')==3 ? "selected" : "" }}>{{ trans('cruds.user.roles.auditee') }}</option>
+                        <option value="5" {{ old('role')==5 ? "selected" : "" }}>{{ trans('cruds.user.roles.auditee') }}</option>
 					    <option value="3" {{ old('role')==3 ? "selected" : "" }}>{{ trans('cruds.user.roles.auditor') }}</option>
 					    <option value="4" {{ old('role')==4 ? "selected" : "" }}>{{ trans('cruds.user.roles.api') }}</option>
+					    <option value="0" {{ old('role')==0 ? "selected" : "" }}>{{ trans('cruds.user.roles.disabled') }}</option>
 					</select>
 				</div>
 			</div>

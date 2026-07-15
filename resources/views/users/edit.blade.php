@@ -62,6 +62,7 @@
                         <option value="5" {{ $user->role==5 ? "selected" : "" }}>{{ trans('cruds.user.roles.auditee') }}</option>
 					    <option value="3" {{ $user->role==3 ? "selected" : "" }}>{{ trans('cruds.user.roles.auditor') }}</option>
 					    <option value="4" {{ $user->role==4 ? "selected" : "" }}>{{ trans('cruds.user.roles.api') }}</option>
+					    <option value="0" {{ $user->role==0 ? "selected" : "" }}>{{ trans('cruds.user.roles.disabled') }}</option>
 					</select>
 				</div>
 			</div>

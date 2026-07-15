@@ -17,6 +17,7 @@ class User extends Authenticatable implements OAuthenticatable
     /**
      * User role constants
      */
+    public const ROLE_DISABLED = 0;
     public const ROLE_ADMIN = 1;
     public const ROLE_USER = 2;
     public const ROLE_AUDITOR = 3;
@@ -29,6 +30,7 @@ class User extends Authenticatable implements OAuthenticatable
      * @var array<int, string>
      */
     public const ROLES = [
+        self::ROLE_DISABLED => 'Disabled',
         self::ROLE_ADMIN => 'Administrator',
         self::ROLE_USER => 'User',
         self::ROLE_AUDITOR => 'Auditor',
@@ -122,6 +124,11 @@ class User extends Authenticatable implements OAuthenticatable
     /**
      * Role checks
      */
+    public function isDisabled(): bool
+    {
+        return $this->role === self::ROLE_DISABLED;
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === self::ROLE_ADMIN;
@@ -147,38 +154,4 @@ class User extends Authenticatable implements OAuthenticatable
         return $this->role === self::ROLE_AUDITEE;
     }
 
-    /**
-     * Check if the user has a specific role
-     */
-    public function hasRole(int $role): bool
-    {
-        return $this->role === $role;
-    }
-
-    /**
-     * Check if the user has any of the specified roles
-     *
-     * @param array<int> $roles
-     */
-    public function hasAnyRole(array $roles): bool
-    {
-        return in_array($this->role, $roles, true);
-    }
-
-    /**
-     * Check if the user has at least the equivalent access level
-     * (Admin > User > Auditee > Auditor according to Deming hierarchy)
-     */
-    public function hasMinimumRole(int $minimumRole): bool
-    {
-        $hierarchy = [
-            self::ROLE_ADMIN => 4,
-            self::ROLE_USER => 3,
-            self::ROLE_AUDITEE => 2,
-            self::ROLE_AUDITOR => 1,
-            self::ROLE_API => 0,
-        ];
-
-        return ($hierarchy[$this->role] ?? 0) >= ($hierarchy[$minimumRole] ?? 0);
-    }
 }

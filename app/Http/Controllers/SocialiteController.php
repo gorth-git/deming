@@ -111,6 +111,11 @@ class SocialiteController extends Controller
                 $this->updateUser($user, $socialite_user, $provider, $role_claim, $default_role);
             }
 
+            if ($user->isDisabled()) {
+                Log::warning("User '{$user->login}' login refused with {$provider} provider: account disabled");
+                return redirect('login')->withErrors(['socialite' => trans('cruds.login.error.account_disabled')]);
+            }
+
             Log::info("User '{$user->login}' login with {$provider} provider");
 
             Auth::guard('web')->login($user);

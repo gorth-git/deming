@@ -270,6 +270,7 @@ return [
         'connection_with' => 'Verbinden mit',
          'error' => [
             'user_not_exist' => 'Benutzer nicht vorhanden',
+            'account_disabled' => 'Dieses Konto wurde deaktiviert.',
         ],
      ],
     'report' => [
@@ -305,6 +306,7 @@ return [
              'auditor' => 'Auditor',
              'api' => 'API',
              'auditee' => 'Auditierte',
+             'disabled' => 'Deaktiviert',
          ],
     ],
     'config' => [

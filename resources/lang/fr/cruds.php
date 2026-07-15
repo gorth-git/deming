@@ -268,6 +268,7 @@ return [
         'connection_with' => 'Connexion avec',
         'error' => [
             'user_not_exist' => 'L\'utilisateur n\'existe pas',
+            'account_disabled' => 'Ce compte a été désactivé.',
         ],
     ],
     'report' => [
@@ -303,6 +304,7 @@ return [
             'auditor' => 'Auditeur',
             'api' => 'API',
             'auditee' => 'Audité',
+            'disabled' => 'Désactivé',
         ],
     ],
     'config' => [

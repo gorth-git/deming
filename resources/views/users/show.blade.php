@@ -51,6 +51,7 @@
                     {{ $user->role==5 ? trans('cruds.user.roles.auditee') : "" }}
 		    		{{ $user->role==3 ? trans('cruds.user.roles.auditor') : "" }}
 		    		{{ $user->role==4 ? trans('cruds.user.roles.api') : "" }}
+		    		{{ $user->role==0 ? trans('cruds.user.roles.disabled') : "" }}
 	    		</div>
 		    </div>
 

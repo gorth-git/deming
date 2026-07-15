@@ -269,6 +269,7 @@ return [
          'connection_with' => 'Connection with',
          'error' => [
             'user_not_exist' => 'User not exist',
+            'account_disabled' => 'This account has been disabled.',
         ],
      ],
     'report' => [
@@ -304,6 +305,7 @@ return [
              'auditor' => 'Auditor',
              'api' => 'API',
              'auditee' => 'Auditee',
+             'disabled' => 'Disabled',
          ],
     ],
     'config' => [

@@ -60,7 +60,7 @@ class UserController extends Controller
             'name' => 'required|min:1|max:90',
             'title' => 'required|min:1|max:30',
             'email' => 'required|unique:users|email:rfc',
-            'role' => 'required|min:1|max:5',
+            'role' => 'required|in:0,1,2,3,4,5',
         ]);
 
         // Custom password validation if LDAP is not enabled
@@ -140,7 +140,7 @@ class UserController extends Controller
             'name' => 'required|min:1|max:90',
             'title' => 'nullable|min:1|max:30',
             'email' => 'required|email:rfc|unique:users,email,'.$user->id,
-            'role' => 'min:1|max:5',
+            'role' => 'in:0,1,2,3,4,5',
         ]);
 
         // Custom password validation if LDAP is not enabled
