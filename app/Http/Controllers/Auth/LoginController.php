@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use LdapRecord\Auth\BindException;
 use LdapRecord\Container;
 use LdapRecord\Models\Entry as LdapEntry;
@@ -153,6 +154,7 @@ class LoginController extends Controller
                 }
 
                 if ($local) {
+                    $this->rejectIfDisabled($local);
                     $this->guard()->login($local, $remember);
                     return true;
                 }
@@ -168,10 +170,34 @@ class LoginController extends Controller
         }
 
         // Auth locale (Laravel) — utilisera ['login' => ..., 'password' => ...]
-        return $this->guard()->attempt(
+        if ($this->guard()->attempt(
             $this->credentials($request), // credentials() retournera login + password car username() = 'login'
             $remember
-        );
+        )) {
+            $this->rejectIfDisabled($this->guard()->user());
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Refuse la connexion des comptes désactivés (role = 0), y compris
+     * si l'utilisateur vient d'être authentifié par le guard.
+     */
+    protected function rejectIfDisabled(?User $user): void
+    {
+        if ($user && $user->isDisabled()) {
+            if ($this->guard()->check()) {
+                $this->guard()->logout();
+            }
+
+            Log::warning('Login refused: account disabled.', ['login' => $user->login]);
+
+            throw ValidationException::withMessages([
+                $this->username() => [trans('cruds.login.error.account_disabled')],
+            ]);
+        }
     }
 
 
